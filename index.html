@@ -3,21 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <title>MDCS - Mobile Digital Communications System v.PCMSS_20121121 (MDC13744)</title>
-
-<!-- Firebase v9 compat (works as plain scripts, no bundler needed) -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;font-size:12px;background:#3a3a3a;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:10px;gap:8px}
-#login-screen{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:30px 40px;width:360px;margin-top:60px}
+#login-screen{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:30px 40px;width:380px;margin-top:60px}
 #login-screen h2{background:linear-gradient(to right,#000080,#1084d0);color:#fff;margin:-30px -40px 20px;padding:4px 10px;font-size:12px;font-weight:bold}
+#denied-screen{display:none;background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;padding:30px 40px;width:380px;margin-top:60px;text-align:center}
+#denied-screen h2{background:linear-gradient(to right,#800000,#c00000);color:#fff;margin:-30px -40px 20px;padding:4px 10px;font-size:12px;font-weight:bold}
 .lbl{font-size:11px;font-weight:bold;display:block;margin-bottom:3px}
 .linp{background:#c8e4ff;border:2px inset #808080;width:100%;height:24px;font-size:11px;font-family:'Courier New',monospace;padding:1px 4px;outline:none;margin-bottom:12px}
 .lbtn{background:#000080;color:#fff;border:none;padding:5px 20px;font-weight:bold;font-size:11px;cursor:pointer;width:100%}
 .lbtn:hover{background:#1084d0}
-#firebase-notice{font-size:10px;color:#555;margin-top:10px;text-align:center;line-height:1.5}
+.lbtn.red{background:#800000}
+.lbtn.red:hover{background:#c00000}
+.err-msg{color:#cc0000;font-size:11px;margin-top:8px;text-align:center;display:none}
 .win{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;width:1060px;min-width:900px;display:none;flex-direction:column;box-shadow:2px 2px 8px rgba(0,0,0,0.6)}
 .titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;padding:3px 6px;display:flex;align-items:center;justify-content:space-between;user-select:none;height:22px}
 .title-text{font-size:11px;font-weight:bold}
@@ -78,8 +79,6 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#3a3a3a;display:flex
 .hit{color:#cc0000;font-weight:bold}
 .clear-txt{color:#006600;font-weight:bold}
 .detail-text{padding:6px;font-family:'Courier New',monospace;font-size:11px;line-height:1.7;white-space:pre-wrap}
-.online-bar{background:#000080;color:#7af;font-size:10px;padding:2px 8px;display:flex;gap:12px;align-items:center}
-.online-dot{width:7px;height:7px;border-radius:50%;background:#4f4;display:inline-block;margin-right:4px}
 ::-webkit-scrollbar{width:14px;background:#d4d0c8}
 ::-webkit-scrollbar-thumb{background:#808080;border:1px solid #fff}
 </style>
@@ -102,7 +101,17 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#3a3a3a;display:flex
     <option>CARSON</option><option>LAKEWOOD</option><option>PALMDALE</option>
   </select>
   <button class="lbtn" onclick="doLogin()">LOG IN TO MDC</button>
-  <div id="firebase-notice">&#9432; Enter your Firebase config below before sharing with friends.<br>See the README instructions in the downloaded file.</div>
+  <div class="err-msg" id="login-err">ACCESS DENIED — Unit not authorized. Contact your supervisor.</div>
+</div>
+
+<!-- ACCESS DENIED -->
+<div id="denied-screen">
+  <h2>MDCS — ACCESS DENIED</h2>
+  <div style="font-family:'Courier New',monospace;font-size:11px;margin:16px 0;line-height:1.8">
+    <div style="color:#cc0000;font-weight:bold;font-size:13px">&#9888; UNAUTHORIZED UNIT</div>
+    <br>Your Unit ID has not been approved.<br>Contact your supervisor to request access.
+  </div>
+  <button class="lbtn red" onclick="backToLogin()">BACK</button>
 </div>
 
 <!-- MAIN WINDOW -->
@@ -114,11 +123,6 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#3a3a3a;display:flex
       <div class="wbtn">&#9633;</div>
       <div class="wbtn close" onclick="doLogout()">&#x2715;</div>
     </div>
-  </div>
-  <div class="online-bar" id="online-bar">
-    <span><span class="online-dot"></span>CONNECTED</span>
-    <span id="online-units">ONLINE: —</span>
-    <span id="my-unit-display"></span>
   </div>
   <div class="topbtns">
     <div class="tbtn" onclick="clearDispWindow()">CLEAR&#10;DISP&#10;WINDOW</div>
@@ -173,87 +177,98 @@ body{font-family:Arial,sans-serif;font-size:12px;background:#3a3a3a;display:flex
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-//  FIREBASE CONFIG — replace with your own from Firebase console
-//  Instructions at the bottom of this file
+//  FIREBASE CONFIG — paste your values here
 // ═══════════════════════════════════════════════════════════════
 var FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyAwqST-qpcn1idC3r7FUawKDRVtlgsGKtE",
-  authDomain:        "mdsc-6d3c3.firebaseapp.com",
-  databaseURL:       "https://mdsc-6d3c3-default-rtdb.firebaseio.com",
-  projectId:         "mdsc-6d3c3",
-  storageBucket:     "mdsc-6d3c3.firebasestorage.app",
-  messagingSenderId: "391596748279",
-  appId:             "1:391596748279:web:854dd3f1681e1c0c7c52f2"
+  apiKey:            "PASTE_YOUR_API_KEY_HERE",
+  authDomain:        "PASTE_YOUR_AUTH_DOMAIN_HERE",
+  databaseURL:       "PASTE_YOUR_DATABASE_URL_HERE",
+  projectId:         "PASTE_YOUR_PROJECT_ID_HERE",
+  storageBucket:     "PASTE_YOUR_STORAGE_BUCKET_HERE",
+  messagingSenderId: "PASTE_YOUR_MESSAGING_SENDER_ID_HERE",
+  appId:             "PASTE_YOUR_APP_ID_HERE"
 };
 
-var db, dbRef;
-var ME = { unit:'', name:'', station:'' };
+// ═══════════════════════════════════════════════════════════════
+//  APPROVED UNITS — add/remove unit IDs here to control access
+//  The unit marked admin:true can manage dispatches
+// ═══════════════════════════════════════════════════════════════
+var APPROVED_UNITS = {
+  "4L22":  { name:"SUPERVISOR",  station:"CENTURY",   admin:true  },
+  "4L14":  { name:"DEPUTY",      station:"CENTURY",   admin:false },
+  "4L31":  { name:"DEPUTY",      station:"CENTURY",   admin:false },
+  "4L09":  { name:"DEPUTY",      station:"COMPTON",   admin:false },
+  "4K43":  { name:"DEPUTY",      station:"COMPTON",   admin:false },
+  "40S7":  { name:"SERGEANT",    station:"FIRESTONE",  admin:true  },
+  "DISP":  { name:"DISPATCH",    station:"ALL",        admin:true  },
+};
+
+var db;
+var ME = { unit:'', name:'', station:'', isAdmin:false };
 var selectedDisp = null;
 var unreadCount  = 0;
 var currentForm  = '';
 var lastFormKey  = '';
-var localMessages = [];   // local cache for display
-var localDispatches = []; // local cache
-var seenMsgKeys  = {};
-var isFirstLoad  = true;
+var localMessages    = [];
+var localDispatches  = [];
+var isFirstLoad = true;
 
 // ── Audio ───────────────────────────────────────────────────────
 function playAlert(){ try{ var a=document.getElementById('snd-alert'); a.currentTime=0; a.play(); }catch(e){} }
 function playSend(){  try{ var a=document.getElementById('snd-send');  a.currentTime=0; a.play(); }catch(e){} }
 
-// ── Login ───────────────────────────────────────────────────────
+// ── Login / access control ──────────────────────────────────────
 function doLogin(){
   var unit    = document.getElementById('inp-unit').value.trim().toUpperCase();
   var name    = document.getElementById('inp-name').value.trim().toUpperCase();
   var station = document.getElementById('inp-station').value;
   if(!unit||!name){ alert('Enter your Unit ID and Name.'); return; }
-  ME = { unit:unit, name:name, station:station };
 
-  // Init Firebase
+  // Check if unit is approved
+  if(!APPROVED_UNITS[unit]){
+    document.getElementById('login-err').style.display='block';
+    return;
+  }
+
+  ME = { unit:unit, name:name, station:station, isAdmin: !!APPROVED_UNITS[unit].admin };
+
   try {
     firebase.initializeApp(FIREBASE_CONFIG);
     db = firebase.database();
-    dbRef = {
-      dispatches: db.ref('dispatches'),
-      messages:   db.ref('messages'),
-      units:      db.ref('units')
-    };
     connectFirebase();
   } catch(e) {
-    // Offline / no config — run in local demo mode
     runLocalMode();
   }
 
   document.getElementById('login-screen').style.display='none';
   document.getElementById('mdc-win').style.display='flex';
-  document.getElementById('my-unit-display').textContent='MY UNIT: '+unit+' — '+name;
 
-  // Set unit online
   if(db){
     var uRef = db.ref('units/'+unit);
-    uRef.set({ unit:unit, name:name, station:station, status:'AVAILABLE', online:true, ts: Date.now() });
+    uRef.set({ unit:unit, name:name, station:station, status:'AVAILABLE', online:true, ts:Date.now() });
     uRef.onDisconnect().update({ online:false, status:'OFFLINE' });
   }
+}
+
+function backToLogin(){
+  document.getElementById('denied-screen').style.display='none';
+  document.getElementById('login-screen').style.display='block';
 }
 
 function doLogout(){
   if(db && ME.unit){ db.ref('units/'+ME.unit).update({online:false,status:'OFFLINE'}); }
   document.getElementById('mdc-win').style.display='none';
   document.getElementById('login-screen').style.display='block';
+  document.getElementById('login-err').style.display='none';
+  localMessages=[]; localDispatches=[]; isFirstLoad=true;
+  try{ firebase.app().delete(); }catch(e){}
+  db=null;
 }
 
-// ── Firebase realtime listeners ─────────────────────────────────
+// ── Firebase ────────────────────────────────────────────────────
 function connectFirebase(){
-  // Units online
-  dbRef.units.on('value', function(snap){
-    var units = snap.val()||{};
-    var online = Object.values(units).filter(function(u){ return u.online; });
-    document.getElementById('online-units').textContent =
-      'ONLINE: ' + online.map(function(u){ return u.unit; }).join(' | ');
-  });
-
-  // Dispatches
-  dbRef.dispatches.on('value', function(snap){
+  // Dispatches — shared for all
+  db.ref('dispatches').on('value', function(snap){
     var data = snap.val()||{};
     localDispatches = Object.entries(data)
       .map(function(e){ return Object.assign({_key:e[0]},e[1]); })
@@ -261,11 +276,11 @@ function connectFirebase(){
     renderDispIndex();
   });
 
-  // Messages — play alert for NEW incoming messages only
-  dbRef.messages.on('child_added', function(snap){
-    var m = snap.val();
-    m._key = snap.key;
-    if(!isFirstLoad && m.from !== ME.unit){
+  // Shared messages (chat/status) — alert only for messages NOT from self
+  db.ref('messages').on('child_added', function(snap){
+    var m = snap.val(); m._key = snap.key;
+    var isOwn = (m.from === ME.unit);
+    if(!isFirstLoad && !isOwn){
       m.unread = true;
       unreadCount++;
       updateUnread();
@@ -274,72 +289,92 @@ function connectFirebase(){
       m.unread = false;
     }
     localMessages.unshift(m);
-    if(localMessages.length>60) localMessages.pop();
+    if(localMessages.length>80) localMessages.pop();
     renderMsgIndex();
   });
 
-  setTimeout(function(){ isFirstLoad=false; }, 2000);
-
-  // Seed dispatches if empty
-  dbRef.dispatches.once('value', function(snap){
-    if(!snap.val()){
-      seedDispatches();
+  // Private query responses — only this unit sees them
+  db.ref('private/'+ME.unit).on('child_added', function(snap){
+    var m = snap.val(); m._key = snap.key; m.unread=true; m.isPrivate=true;
+    if(!isFirstLoad){
+      unreadCount++;
+      updateUnread();
+      playAlert();
+    } else {
+      m.unread=false;
     }
+    localMessages.unshift(m);
+    if(localMessages.length>80) localMessages.pop();
+    renderMsgIndex();
+    // Show the result in main panel immediately
+    if(!isFirstLoad) showQueryResult(m.result, m.text);
   });
 
-  showMain('<div class="detail-text" style="padding:20px;text-align:center;color:#888"><br><br>MDCS — MOBILE DIGITAL COMMUNICATIONS SYSTEM\nv.PCMSS_20121121\n\nMDC13744 — UNIT '+ME.unit+'\n\nSELECT A FUNCTION OR CLICK A DISPATCH CALL\nTO BEGIN\n\nMULTIPLAYER: LIVE</div>');
+  setTimeout(function(){ isFirstLoad=false; }, 2500);
+
+  db.ref('dispatches').once('value', function(snap){ if(!snap.val()) seedDispatches(); });
+
+  showMain('<div class="detail-text" style="padding:20px;text-align:center;color:#888"><br><br>MDCS — MOBILE DIGITAL COMMUNICATIONS SYSTEM\nv.PCMSS_20121121\n\nMDC13744 — UNIT '+ME.unit+' — '+ME.name+'\n\nSELECT A FUNCTION OR CLICK A DISPATCH CALL\nTO BEGIN</div>');
 }
 
 function runLocalMode(){
-  // Demo data when Firebase not configured
-  document.getElementById('online-units').textContent = 'ONLINE: LOCAL DEMO MODE';
-  localDispatches = [
+  localDispatches=[
     {_key:'d1',id:'CPT4853',time:'08:48',code:'415',pri:'D',unit:'110A',addr:'456 OAK AVE, CPT #3',rmk:'LOUD PARTY COMPLAINT',ts:Date.now()-600000},
     {_key:'d2',id:'CPT1615',time:'08:48',code:'415',pri:'D',unit:'285B',addr:'1234 MAIN ST, CPT #11',rmk:'LOUD MUSIC COMPLAINT',ts:Date.now()-500000},
     {_key:'d3',id:'CPT2201',time:'08:51',code:'459',pri:'A',unit:'142C',addr:'789 ELM BLVD, CPT #7',rmk:'BURGLARY ALARM',ts:Date.now()-400000},
   ];
-  localMessages = [
-    {_key:'m1',time:'08:50',from:'DISPATCH',text:'UNIT '+ME.unit+' — WELCOME TO MDCS',date:getTodayDate(),unread:false},
-    {_key:'m2',time:'08:49',from:'SYSTEM',text:'LOCAL DEMO MODE — Add Firebase config for multiplayer',date:getTodayDate(),unread:false},
+  localMessages=[
+    {_key:'m1',time:'08:50',from:'DISPATCH',text:'UNIT '+ME.unit+' — WELCOME TO MDCS (LOCAL MODE)',date:getTodayDate(),unread:false},
   ];
-  renderDispIndex();
-  renderMsgIndex();
-  showMain('<div class="detail-text" style="padding:20px;text-align:center;color:#888"><br><br>MDCS — LOCAL DEMO MODE\n\nFirebase not configured.\nSee README at bottom of HTML file\nto enable multiplayer.\n\nUNIT: '+ME.unit+'</div>');
+  renderDispIndex(); renderMsgIndex();
+  showMain('<div class="detail-text" style="padding:20px;text-align:center;color:#888"><br><br>MDCS — LOCAL DEMO MODE\n\nFirebase not configured.\nUNIT: '+ME.unit+'</div>');
 }
 
 function seedDispatches(){
   var seeds=[
     {id:'CPT4853',time:'08:48',code:'415',pri:'D',unit:'110A',addr:'456 OAK AVE, CPT #3 R:1 H:0',rmk:'LOUD PARTY COMPLAINT',ts:Date.now()-600000},
     {id:'CPT1615',time:'08:48',code:'415',pri:'D',unit:'285B',addr:'1234 MAIN ST, CPT #11 R:2 H:1',rmk:'LOUD MUSIC COMPLAINT',ts:Date.now()-500000},
-    {id:'CPT2201',time:'08:51',code:'459',pri:'A',unit:'142C',addr:'789 ELM BLVD, CPT #7 R:0 H:0',rmk:'BURGLARY ALARM ACTIVATED',ts:Date.now()-400000},
+    {id:'CPT2201',time:'08:51',code:'459',pri:'A',unit:'142C',addr:'789 ELM BLVD CPT #7 R:0 H:0',rmk:'BURGLARY ALARM ACTIVATED',ts:Date.now()-400000},
     {id:'CPT3302',time:'08:53',code:'10851',pri:'B',unit:'305A',addr:'ROSECRANS / CENTRAL AVE',rmk:'STOLEN VEHICLE REPORT',ts:Date.now()-300000},
   ];
-  seeds.forEach(function(s){ dbRef.dispatches.push(s); });
+  seeds.forEach(function(s){ db.ref('dispatches').push(s); });
 }
 
-// ── Push to Firebase (or local) ─────────────────────────────────
-function pushMessage(obj){
-  obj.ts = Date.now();
-  obj.date = getTodayDate();
-  if(db){ dbRef.messages.push(obj); }
-  else { obj._key='local'+Date.now(); obj.unread=false; localMessages.unshift(obj); if(localMessages.length>60)localMessages.pop(); renderMsgIndex(); }
+// ── Push helpers ────────────────────────────────────────────────
+// Shared message (everyone sees it - for chat/status/dispatch)
+function pushSharedMsg(obj){
+  obj.ts=Date.now(); obj.date=getTodayDate(); obj.from=ME.unit;
+  if(db){ db.ref('messages').push(obj); }
+  else { obj._key='local'+Date.now(); obj.unread=false; localMessages.unshift(obj); renderMsgIndex(); }
+}
+
+// Private message (only the requesting unit sees it)
+function pushPrivateMsg(obj){
+  obj.ts=Date.now(); obj.date=getTodayDate();
+  if(db){ db.ref('private/'+ME.unit).push(obj); }
+  else {
+    obj._key='local'+Date.now(); obj.unread=true;
+    localMessages.unshift(obj); renderMsgIndex();
+    showQueryResult(obj.result, obj.text);
+    playAlert();
+  }
 }
 
 function pushDispatch(obj){
-  obj.ts = Date.now();
-  if(db){ dbRef.dispatches.push(obj); }
+  obj.ts=Date.now();
+  if(db){ db.ref('dispatches').push(obj); }
   else { obj._key='local'+Date.now(); localDispatches.unshift(obj); renderDispIndex(); }
 }
 
 function updateUnitStatus(status){
-  if(db){ db.ref('units/'+ME.unit).update({status:status, ts:Date.now()}); }
+  if(db){ db.ref('units/'+ME.unit).update({status:status,ts:Date.now()}); }
 }
 
 // ── Render ──────────────────────────────────────────────────────
 function renderDispIndex(){
   var el=document.getElementById('disp-index');
-  el.innerHTML = localDispatches.map(function(d,i){
-    var sel = selectedDisp===d._key;
+  el.innerHTML=localDispatches.map(function(d){
+    var sel=selectedDisp===d._key;
     return '<div class="disp-row'+(sel?' selected':'')+'" onclick="selectDisp(\''+d._key+'\')">'
       +'<span style="min-width:38px">'+d.time+'</span>'
       +'<span style="min-width:66px">'+d.id+'</span>'
@@ -351,23 +386,22 @@ function renderDispIndex(){
 }
 
 function selectDisp(key){
-  selectedDisp = key;
+  selectedDisp=key;
   renderDispIndex();
-  var d = localDispatches.find(function(x){ return x._key===key; });
+  var d=localDispatches.find(function(x){return x._key===key;});
   if(!d) return;
-  document.getElementById('disp-detail').innerHTML =
-    '<div class="detail-text">'+d.id+' '+d.code+'\n('+d.pri+') '+d.unit+'\n'+d.addr+'\n'+d.rmk+'</div>';
+  document.getElementById('disp-detail').innerHTML='<div class="detail-text">'+d.id+' '+d.code+'\n('+d.pri+') '+d.unit+'\n'+d.addr+'\n'+d.rmk+'</div>';
   showMain('<div class="detail-text"><b>--- DISPATCH DETAIL ---</b>\n\nCALL #: '+d.id+'\nTIME:   '+d.time+'\nCODE:   '+d.code+'\nPRIO:   '+d.pri+'\nUNIT:   '+d.unit+'\nADDR:   '+d.addr+'\nRMK:    '+d.rmk+'</div>');
 }
 
 function renderMsgIndex(){
   var el=document.getElementById('msg-index');
-  el.innerHTML = localMessages.map(function(m,i){
+  el.innerHTML=localMessages.map(function(m,i){
     var cls='msg-row'+(m.unread?' unread':'')+(m.isError?' error':'');
-    var label = m.from ? (m.from+': '+m.text) : m.text;
+    var label=(m.isPrivate?'[PRIVATE] ':'')+( m.from?(m.from+': '+m.text):m.text );
     return '<div class="'+cls+'" onclick="selectMsg('+i+')">'
       +'<span style="min-width:60px;font-size:10px">'+m.time+'</span>'
-      +'<span style="flex:1">'+label+'</span>'
+      +'<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+label+'</span>'
       +'<span style="font-size:10px;color:#555">'+m.date+'</span>'
       +'</div>';
   }).join('');
@@ -375,10 +409,15 @@ function renderMsgIndex(){
 }
 
 function selectMsg(i){
-  var m=localMessages[i];
-  if(!m) return;
+  var m=localMessages[i]; if(!m) return;
   if(m.unread){ m.unread=false; unreadCount=Math.max(0,unreadCount-1); renderMsgIndex(); }
-  showMain('<div class="detail-text"><b>'+(m.from||'')+'</b>'+(m.from?'\n\n':'')+m.text+'\n\nDATE: '+m.date+'\nTIME: '+m.time+'</div>');
+  if(m.result){ showQueryResult(m.result, m.text); }
+  else { showMain('<div class="detail-text"><b>'+(m.from||'')+'</b>'+(m.from?'\n\n':'')+m.text+'\n\nDATE: '+m.date+'\nTIME: '+m.time+'</div>'); }
+}
+
+function showQueryResult(result, fallback){
+  if(result){ document.getElementById('main-panel').innerHTML=result; }
+  else { showMain('<div class="detail-text">'+(fallback||'')+'</div>'); }
 }
 
 function updateUnread(){
@@ -386,16 +425,13 @@ function updateUnread(){
   document.getElementById('unread-box').style.background=unreadCount>0?'#f9a825':'#43a047';
 }
 
-function showMain(html){
-  document.getElementById('main-panel').innerHTML=html;
-  document.getElementById('compose-area').innerHTML='';
-}
+function showMain(html){ document.getElementById('main-panel').innerHTML=html; document.getElementById('compose-area').innerHTML=''; }
 
-// ── Top bar status buttons ──────────────────────────────────────
+// ── Status buttons ──────────────────────────────────────────────
 function doStatus(code){
   var t=getTime();
   updateUnitStatus(code);
-  pushMessage({time:t,from:ME.unit,text:'STATUS: '+code,isError:false});
+  pushSharedMsg({time:t,text:'STATUS: '+code});
   showMain('<div class="detail-text"><b>STATUS SENT</b>\n\nUNIT:   '+ME.unit+'\nSTATUS: '+code+'\nTIME:   '+t+'</div>');
 }
 
@@ -409,7 +445,7 @@ function openStatusTxt(){
 }
 function sendStatusTxt(){
   var txt=document.getElementById('status-txt-area');
-  if(txt&&txt.value.trim()){ pushMessage({time:getTime(),from:ME.unit,text:'STATUS TXT: '+txt.value.trim(),isError:false}); showMain('<div class="detail-text"><b>STATUS TEXT SENT</b>\n\n'+txt.value+'</div>'); }
+  if(txt&&txt.value.trim()){ pushSharedMsg({time:getTime(),text:'STATUS TXT: '+txt.value.trim()}); showMain('<div class="detail-text"><b>STATUS TEXT SENT</b>\n\n'+txt.value+'</div>'); }
 }
 
 // ── NEW MESSAGE ─────────────────────────────────────────────────
@@ -428,29 +464,30 @@ function openNewMessage(){
 function sendNewMsg(){
   var to=document.getElementById('nm-to'); var msg=document.getElementById('nm-msg');
   if(!msg||!msg.value.trim()) return;
-  pushMessage({time:getTime(),from:ME.unit,text:'TO '+(to?to.value.toUpperCase():'ALL')+': '+msg.value.trim(),isError:false});
-  showMain('<div class="detail-text"><b>MESSAGE SENT</b>\n\nTO:  '+(to?to.value.toUpperCase():'ALL')+'\nMSG: '+msg.value+'\nTIME: '+getTime()+'</div>');
+  var toVal=to?to.value.toUpperCase():'ALL';
+  pushSharedMsg({time:getTime(),text:'TO '+toVal+': '+msg.value.trim()});
+  showMain('<div class="detail-text"><b>MESSAGE SENT</b>\n\nTO:  '+toVal+'\nMSG: '+msg.value+'\nTIME: '+getTime()+'</div>');
 }
 
 // ── SEND (bottom bar) ───────────────────────────────────────────
 function doSend(){
   var inp=document.getElementById('msg-input'); var val=inp.value.trim(); if(!val) return;
-  if(currentForm==='want'||currentForm==='veh'||currentForm==='dmv'||currentForm==='inquiries'||currentForm==='gun'||currentForm==='prop'||currentForm==='boat'){
+  // Query forms: send as private, don't push to shared feed
+  if(currentForm==='want'||currentForm==='veh'||currentForm==='dmv'
+     ||currentForm==='inquiries'||currentForm==='gun'||currentForm==='prop'||currentForm==='boat'){
     playSend();
-    pushMessage({time:getTime(),from:ME.unit,text:'QUERY: '+val,isError:false});
-    setTimeout(function(){ fakeQueryResponse(val); },1800);
+    showMain('<div class="detail-text">QUERYING DATABASE...\n\nPlease wait...</div>');
+    setTimeout(function(){
+      pushPrivateMsg({time:getTime(),from:'DATABASE',text:'QUERY RESPONSE: '+val.toUpperCase(),result:'<div class="detail-text">QUERY: '+val.toUpperCase()+'\n\nNO RECORD FOUND</div>',isError:false});
+    },1800);
   } else {
-    pushMessage({time:getTime(),from:ME.unit,text:val,isError:false});
+    pushSharedMsg({time:getTime(),text:val});
     showMain('<div class="detail-text"><b>MESSAGE SENT</b>\n\n'+val+'</div>');
   }
   inp.value='';
 }
-function fakeQueryResponse(q){
-  pushMessage({time:getTime(),from:'DATABASE',text:'RESPONSE TO: '+q.toUpperCase()+' — NO RECORD FOUND',isError:false});
-  showMain('<div class="detail-text">DATABASE RESPONSE\n\nQUERY: '+q.toUpperCase()+'\nRESULT: NO RECORD FOUND</div>');
-}
 
-// ── ADD DISPATCH (any user can add a new call) ──────────────────
+// ── ADD DISPATCH ────────────────────────────────────────────────
 function openAddDispatch(){
   showMain('<div class="veh-form"><b>ADD NEW DISPATCH CALL</b><br><br>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">CALL ID:</span><input id="nd-id" class="want-input" style="width:100px" placeholder="CPT5001"></div>'
@@ -462,24 +499,17 @@ function openAddDispatch(){
     +'<br><div class="want-actions"><div class="want-action-btn" style="background:#cc0000" onclick="submitNewDispatch()">BROADCAST DISPATCH</div></div></div>');
 }
 function submitNewDispatch(){
-  var id=document.getElementById('nd-id').value||('CPT'+Math.floor(Math.random()*9000+1000));
-  var code=document.getElementById('nd-code').value||'415';
-  var pri=document.getElementById('nd-pri').value||'D';
-  var unit=document.getElementById('nd-unit').value||ME.unit;
-  var addr=document.getElementById('nd-addr').value||'UNKNOWN LOCATION';
-  var rmk=document.getElementById('nd-rmk').value||'CALL FOR SERVICE';
-  var t=getTime();
+  var id=val('nd-id')||('CPT'+Math.floor(Math.random()*9000+1000));
+  var code=val('nd-code')||'415'; var pri=val('nd-pri')||'D';
+  var unit=val('nd-unit')||ME.unit; var addr=val('nd-addr')||'UNKNOWN';
+  var rmk=val('nd-rmk')||'CALL FOR SERVICE'; var t=getTime();
   pushDispatch({id:id,time:t,code:code,pri:pri,unit:unit,addr:addr,rmk:rmk});
-  pushMessage({time:t,from:'DISPATCH',text:'NEW CALL — '+code+' '+addr+' UNIT: '+unit,isError:false});
+  pushSharedMsg({time:t,text:'NEW CALL — '+code+' '+addr+' UNIT: '+unit});
   showMain('<div class="detail-text"><b>DISPATCH BROADCAST</b>\n\nCALL: '+id+'\nCODE: '+code+'\nUNIT: '+unit+'\nADDR: '+addr+'</div>');
 }
 
 // ── WANT ────────────────────────────────────────────────────────
-function openWant(){
-  lastFormKey='want'; currentForm='want';
-  document.getElementById('main-panel').innerHTML=buildWantForm();
-  document.getElementById('compose-area').innerHTML='';
-}
+function openWant(){ lastFormKey='want'; currentForm='want'; document.getElementById('main-panel').innerHTML=buildWantForm(); document.getElementById('compose-area').innerHTML=''; }
 function buildWantForm(){
   return '<div class="want-form">'
     +'<div class="want-title">WANTS/WPS/NCIC/CWS/APPS/CA DMV</div>'
@@ -506,31 +536,27 @@ function buildWantForm(){
 function eraseWantField(){ var f=document.activeElement; if(f&&f.tagName==='INPUT') f.value=''; }
 function eraseWantData(){ document.querySelectorAll('.want-input,.want-select').forEach(function(e){e.value='';}); }
 function submitWant(){
-  var last=val('w-last'), first=val('w-first'), dob=val('w-dob'), dl=val('w-dl');
+  var last=val('w-last'),first=val('w-first'),dob=val('w-dob'),dl=val('w-dl');
   if(!last&&!dl){ alert('Enter Last Name or DL#.'); return; }
   playSend();
   var query=(last||dl).toUpperCase();
-  pushMessage({time:getTime(),from:ME.unit,text:'WANT QUERY: '+query,isError:false});
   showMain('<div class="detail-text">QUERYING WANTS/WPS/NCIC/CWS...\n\nPlease wait...</div>');
   setTimeout(function(){
     var hit=last.toUpperCase()==='MARTINEZ'||dl.toUpperCase().indexOf('D429')===0;
-    var t=getTime();
-    var resp, txt;
+    var t=getTime(); var html, txt;
     if(hit){
       txt='HIT — WARRANT: '+query;
-      resp='<div class="detail-text"><span class="hit">*** HIT ***</span>\n\nNAME:    MARTINEZ, CARLOS E\nDOB:     04/12/1989\nSEX:     M   RACE: H\nHAIR:    BLK  EYES: BRN\nHGT:     507  WGT:  165\n\n<span class="hit">WARRANT: FELONY — LA SUPERIOR COURT\nCASE#:   2024-CR-04812\nCHARGE:  PC 211 — ROBBERY\nBAIL:    $150,000</span>\n\nARMED/DANGEROUS: YES — USE CAUTION\n\nTIME: '+t+'</div>';
+      html='<div class="detail-text"><span class="hit">*** HIT ***</span>\n\nNAME:    MARTINEZ, CARLOS E\nDOB:     04/12/1989\nSEX:     M   RACE: H\nHAIR:    BLK  EYES: BRN\nHGT:     507  WGT:  165\n\n<span class="hit">WARRANT: FELONY — LA SUPERIOR COURT\nCASE#:   2024-CR-04812\nCHARGE:  PC 211 — ROBBERY\nBAIL:    $150,000</span>\n\nARMED/DANGEROUS: YES — USE CAUTION\n\nTIME: '+t+'</div>';
     } else {
       txt='NO RECORD — '+query;
-      resp='<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNAME: '+query+'\nWANTS: NONE  WARRANTS: NONE\nNCIC: NO RECORD  CWS: NO RECORD\n\nTIME: '+t+'</div>';
+      html='<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNAME: '+query+'\nWANTS: NONE  WARRANTS: NONE\nNCIC: NO RECORD  CWS: NO RECORD\n\nTIME: '+t+'</div>';
     }
-    pushMessage({time:t,from:'PERS DATABASE',text:txt,isError:hit});
-    showMain(resp);
+    pushPrivateMsg({time:t,from:'PERS DATABASE',text:txt,result:html,isError:hit});
   },2000);
 }
 
 // ── VEH ─────────────────────────────────────────────────────────
-function openVeh(){
-  lastFormKey='veh'; currentForm='veh';
+function openVeh(){ lastFormKey='veh'; currentForm='veh';
   showMain('<div class="veh-form"><b>VEHICLE INQUIRY</b><br><br>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">PLATE:</span><input id="v-plate" class="want-input" style="width:120px"> <span style="font-weight:bold">ST</span><input id="v-state" class="want-input" style="width:30px" value="CA"></div>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">VIN:</span><input id="v-vin" class="want-input" style="width:200px"></div>'
@@ -539,29 +565,23 @@ function openVeh(){
 }
 function clearVeh(){ ['v-plate','v-vin','v-year','v-make','v-color'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';}); }
 function submitVeh(){
-  var plate=val('v-plate'), vin=val('v-vin');
-  if(!plate&&!vin){ alert('Enter plate or VIN.'); return; }
-  playSend();
-  pushMessage({time:getTime(),from:ME.unit,text:'VEH QUERY: '+(plate||vin),isError:false});
-  showMain('<div class="detail-text">QUERYING CLETS/NCIC VEHICLE...\n\nPlease wait...</div>');
+  var plate=val('v-plate'),vin=val('v-vin'); if(!plate&&!vin){alert('Enter plate or VIN.');return;}
+  playSend(); showMain('<div class="detail-text">QUERYING CLETS/NCIC VEHICLE...\n\nPlease wait...</div>');
   setTimeout(function(){
-    var stolen=plate.toUpperCase()==='8NCD412';
-    var t=getTime(); var resp, txt;
+    var stolen=plate.toUpperCase()==='8NCD412'; var t=getTime(); var html,txt;
     if(stolen){
       txt='HIT — STOLEN: '+plate.toUpperCase();
-      resp='<div class="detail-text"><span class="hit">*** STOLEN VEHICLE — BOLO ACTIVE ***</span>\n\nPLATE: 8NCD412 CA\nYEAR:  2021  MAKE: HONDA  MODEL: ACCORD\nCOLOR: SILVER\nVIN:   1HGBH41JXMN109186\n\nREG:   MARTINEZ, CARLOS E\nADDR:  4821 S GRAPE ST, COMPTON CA 90220\n\n<span class="hit">STATUS: STOLEN — RPT# 2025-041822\nDATE:   11/10/2025</span>\n\nTIME: '+t+'</div>';
+      html='<div class="detail-text"><span class="hit">*** STOLEN VEHICLE — BOLO ACTIVE ***</span>\n\nPLATE: 8NCD412 CA\nYEAR:  2021  MAKE: HONDA  MODEL: ACCORD\nCOLOR: SILVER\nVIN:   1HGBH41JXMN109186\n\nREG:   MARTINEZ, CARLOS E\nADDR:  4821 S GRAPE ST, COMPTON CA 90220\n\n<span class="hit">STATUS: STOLEN — RPT# 2025-041822</span>\n\nTIME: '+t+'</div>';
     } else {
       txt='CLEAR — '+(plate||vin).toUpperCase();
-      resp='<div class="detail-text"><span class="clear-txt">*** VEHICLE — NO WANTS ***</span>\n\nPLATE:  '+(plate||vin).toUpperCase()+'\nSTATUS: CLEAR\n\nTIME: '+t+'</div>';
+      html='<div class="detail-text"><span class="clear-txt">*** VEHICLE — NO WANTS ***</span>\n\nPLATE: '+(plate||vin).toUpperCase()+'\nSTATUS: CLEAR\n\nTIME: '+t+'</div>';
     }
-    pushMessage({time:t,from:'VEH DATABASE',text:txt,isError:stolen});
-    showMain(resp);
+    pushPrivateMsg({time:t,from:'VEH DATABASE',text:txt,result:html,isError:stolen});
   },2000);
 }
 
 // ── DMV ─────────────────────────────────────────────────────────
-function openDmv(){
-  lastFormKey='dmv'; currentForm='dmv';
+function openDmv(){ lastFormKey='dmv'; currentForm='dmv';
   showMain('<div class="veh-form"><b>CA DMV INQUIRY</b><br><br>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">DL #:</span><input id="d-dl" class="want-input" style="width:150px"> <span style="font-weight:bold">ST</span><input id="d-state" class="want-input" style="width:30px" value="CA"></div>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">LAST:</span><input id="d-last" class="want-input" style="width:160px"></div>'
@@ -571,29 +591,23 @@ function openDmv(){
 }
 function clearDmv(){ ['d-dl','d-last','d-first','d-mid','d-dob'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';}); }
 function submitDmv(){
-  var dl=val('d-dl'), last=val('d-last');
-  if(!dl&&!last){ alert('Enter DL# or Last Name.'); return; }
-  playSend();
-  pushMessage({time:getTime(),from:ME.unit,text:'DMV QUERY: '+(last||dl),isError:false});
-  showMain('<div class="detail-text">QUERYING CA DMV...\n\nPlease wait...</div>');
+  var dl=val('d-dl'),last=val('d-last'); if(!dl&&!last){alert('Enter DL# or Last Name.');return;}
+  playSend(); showMain('<div class="detail-text">QUERYING CA DMV...\n\nPlease wait...</div>');
   setTimeout(function(){
-    var susp=last.toUpperCase()==='MARTINEZ'||dl.toUpperCase()==='D4291047';
-    var t=getTime(); var resp, txt;
+    var susp=last.toUpperCase()==='MARTINEZ'||dl.toUpperCase()==='D4291047'; var t=getTime(); var html,txt;
     if(susp){
       txt='DMV SUSPENDED — '+(last||dl).toUpperCase();
-      resp='<div class="detail-text">DMV RESPONSE:\n\nDL#:   D4291047 CA\nNAME:  MARTINEZ, CARLOS E\nDOB:   04/12/1989\nCLASS: C  EXP: 04/12/2026\n\n<span class="hit">STATUS: SUSPENDED — FTA 03/15/2024</span>\n\nTIME: '+t+'</div>';
+      html='<div class="detail-text">DMV RESPONSE:\n\nDL#:   D4291047 CA\nNAME:  MARTINEZ, CARLOS E\nDOB:   04/12/1989\nCLASS: C  EXP: 04/12/2026\n\n<span class="hit">STATUS: SUSPENDED — FTA 03/15/2024</span>\n\nTIME: '+t+'</div>';
     } else {
       txt='DMV VALID — '+(last||dl).toUpperCase();
-      resp='<div class="detail-text">DMV RESPONSE:\n\nNAME:   '+(last||dl).toUpperCase()+'\n\n<span class="clear-txt">STATUS: VALID</span>\nNO ADVERSE ACTION ON FILE\n\nTIME: '+t+'</div>';
+      html='<div class="detail-text">DMV RESPONSE:\n\nNAME: '+(last||dl).toUpperCase()+'\n\n<span class="clear-txt">STATUS: VALID</span>\nNO ADVERSE ACTION ON FILE\n\nTIME: '+t+'</div>';
     }
-    pushMessage({time:t,from:'DMV',text:txt,isError:susp});
-    showMain(resp);
+    pushPrivateMsg({time:t,from:'DMV',text:txt,result:html,isError:susp});
   },2000);
 }
 
 // ── INQUIRIES ───────────────────────────────────────────────────
-function openInquiries(){
-  lastFormKey='inquiries'; currentForm='inquiries';
+function openInquiries(){ lastFormKey='inquiries'; currentForm='inquiries';
   showMain('<div class="veh-form"><b>INQUIRY MENU</b><br><br>'
     +'<div style="display:flex;flex-direction:column;gap:6px">'
     +'<button class="want-action-btn" onclick="openWant()" style="text-align:left;padding:5px 10px">1. PERSON (WANTS/WPS/NCIC/CWS)</button>'
@@ -604,73 +618,76 @@ function openInquiries(){
     +'<button class="want-action-btn" style="background:#2e7d32;text-align:left;padding:5px 10px" onclick="openBoat()">6. BOAT / VESSEL</button>'
     +'</div></div>');
 }
-function openGun(){
-  currentForm='gun';
+function openGun(){ currentForm='gun';
   showMain('<div class="veh-form"><b>FIREARM INQUIRY</b><br><br>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:80px">SERIAL #:</span><input id="g-ser" class="want-input" style="width:180px"></div>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:80px">MAKE:</span><input id="g-make" class="want-input" style="width:120px"> <span style="font-weight:bold">CAL</span><input id="g-cal" class="want-input" style="width:50px"></div>'
     +'<br><div class="want-actions"><div class="want-action-btn" style="background:#6a1b9a" onclick="submitGun()">SUBMIT QUERY</div></div></div>');
 }
 function submitGun(){
-  playSend(); pushMessage({time:getTime(),from:ME.unit,text:'GUN QUERY: '+val('g-ser'),isError:false});
-  showMain('<div class="detail-text">QUERYING NCIC FIREARMS...\nPlease wait...</div>');
-  setTimeout(function(){ var t=getTime(); pushMessage({time:t,from:'GUN DATABASE',text:'CLEAR — NO STOLEN RECORD',isError:false}); showMain('<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nFIREARM: NOT ON STOLEN FILE\n\nTIME: '+t+'</div>'); },1800);
+  playSend(); showMain('<div class="detail-text">QUERYING NCIC FIREARMS...\nPlease wait...</div>');
+  setTimeout(function(){ var t=getTime(); var html='<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nFIREARM: NOT ON STOLEN FILE\n\nTIME: '+t+'</div>'; pushPrivateMsg({time:t,from:'GUN DATABASE',text:'CLEAR — NO STOLEN RECORD',result:html,isError:false}); },1800);
 }
-function openProp(){
-  currentForm='prop';
+function openProp(){ currentForm='prop';
   showMain('<div class="veh-form"><b>PROPERTY INQUIRY</b><br><br>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:80px">SERIAL #:</span><input id="p-ser" class="want-input" style="width:180px"></div>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:80px">DESCRIPTION:</span><input id="p-desc" class="want-input" style="width:240px"></div>'
     +'<br><div class="want-actions"><div class="want-action-btn" style="background:#00838f" onclick="submitProp()">SUBMIT QUERY</div></div></div>');
 }
 function submitProp(){
-  playSend(); pushMessage({time:getTime(),from:ME.unit,text:'PROP QUERY: '+val('p-ser'),isError:false});
-  showMain('<div class="detail-text">QUERYING NCIC PROPERTY...\nPlease wait...</div>');
-  setTimeout(function(){ var t=getTime(); pushMessage({time:t,from:'PROPERTY DATABASE',text:'CLEAR — NOT ON STOLEN FILE',isError:false}); showMain('<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nPROPERTY: NOT ON STOLEN FILE\n\nTIME: '+t+'</div>'); },1800);
+  playSend(); showMain('<div class="detail-text">QUERYING NCIC PROPERTY...\nPlease wait...</div>');
+  setTimeout(function(){ var t=getTime(); var html='<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nPROPERTY: NOT ON STOLEN FILE\n\nTIME: '+t+'</div>'; pushPrivateMsg({time:t,from:'PROPERTY DATABASE',text:'CLEAR',result:html,isError:false}); },1800);
 }
-function openBoat(){
-  currentForm='boat';
+function openBoat(){ currentForm='boat';
   showMain('<div class="veh-form"><b>VESSEL INQUIRY</b><br><br>'
     +'<div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:80px">VESSEL #:</span><input id="b-num" class="want-input" style="width:150px"> <span style="font-weight:bold">ST</span><input id="b-st" class="want-input" style="width:30px" value="CA"></div>'
     +'<br><div class="want-actions"><div class="want-action-btn" style="background:#2e7d32" onclick="submitBoat()">SUBMIT QUERY</div></div></div>');
 }
 function submitBoat(){
-  playSend(); pushMessage({time:getTime(),from:ME.unit,text:'VESSEL QUERY: '+val('b-num'),isError:false});
-  showMain('<div class="detail-text">QUERYING BOAT/VESSEL DB...\nPlease wait...</div>');
-  setTimeout(function(){ var t=getTime(); pushMessage({time:t,from:'VESSEL DATABASE',text:'CLEAR — NOT ON STOLEN FILE',isError:false}); showMain('<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nVESSEL: NOT ON STOLEN FILE\n\nTIME: '+t+'</div>'); },1800);
+  playSend(); showMain('<div class="detail-text">QUERYING BOAT/VESSEL DB...\nPlease wait...</div>');
+  setTimeout(function(){ var t=getTime(); var html='<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nVESSEL: NOT ON STOLEN FILE\n\nTIME: '+t+'</div>'; pushPrivateMsg({time:t,from:'VESSEL DATABASE',text:'CLEAR',result:html,isError:false}); },1800);
 }
 
 // ── CALL & LOG ──────────────────────────────────────────────────
-function openCallLog(){
-  lastFormKey='calllog'; currentForm='calllog';
+function openCallLog(){ lastFormKey='calllog'; currentForm='calllog';
   showMain('<div class="veh-form"><b>CALL &amp; LOG FUNCTIONS</b><br><br>'
     +'<div style="display:flex;flex-direction:column;gap:6px">'
     +'<button class="want-action-btn" onclick="viewCallLog()" style="text-align:left;padding:5px 10px">1. VIEW CALL LOG</button>'
-    +'<button class="want-action-btn" style="background:#cc0000;text-align:left;padding:5px 10px" onclick="clearCall()">2. CLEAR CALL</button>'
+    +(ME.isAdmin?'<button class="want-action-btn" style="background:#cc0000;text-align:left;padding:5px 10px" onclick="clearCall()">2. CLEAR CALL</button>':'<button class="want-action-btn" style="background:#555;text-align:left;padding:5px 10px;cursor:not-allowed">2. CLEAR CALL (ADMIN ONLY)</button>')
     +'<button class="want-action-btn" style="background:#1976d2;text-align:left;padding:5px 10px" onclick="addSupp()">3. ADD SUPPLEMENTAL</button>'
-    +'<button class="want-action-btn" style="background:#2e7d32;text-align:left;padding:5px 10px" onclick="transferCall()">4. TRANSFER CALL</button>'
-    +'<button class="want-action-btn" style="background:#6a1b9a;text-align:left;padding:5px 10px" onclick="closeCall()">5. CLOSE CALL</button>'
-    +'<button class="want-action-btn" style="background:#e65100;text-align:left;padding:5px 10px" onclick="openAddDispatch()">6. ADD NEW DISPATCH CALL</button>'
+    +(ME.isAdmin?'<button class="want-action-btn" style="background:#2e7d32;text-align:left;padding:5px 10px" onclick="transferCall()">4. TRANSFER CALL</button>':'<button class="want-action-btn" style="background:#555;text-align:left;padding:5px 10px;cursor:not-allowed">4. TRANSFER CALL (ADMIN ONLY)</button>')
+    +(ME.isAdmin?'<button class="want-action-btn" style="background:#6a1b9a;text-align:left;padding:5px 10px" onclick="closeCall()">5. CLOSE CALL</button>':'<button class="want-action-btn" style="background:#555;text-align:left;padding:5px 10px;cursor:not-allowed">5. CLOSE CALL (ADMIN ONLY)</button>')
+    +(ME.isAdmin?'<button class="want-action-btn" style="background:#e65100;text-align:left;padding:5px 10px" onclick="openAddDispatch()">6. ADD NEW DISPATCH CALL</button>':'<button class="want-action-btn" style="background:#555;text-align:left;padding:5px 10px;cursor:not-allowed">6. ADD DISPATCH (ADMIN ONLY)</button>')
     +'</div></div>');
 }
 function viewCallLog(){
   var log=localDispatches.map(function(d){ return d.time+' '+d.id+' CODE:'+d.code+' UNIT:'+d.unit+'\n  '+d.addr+'\n  '+d.rmk; }).join('\n\n');
   showMain('<div class="detail-text"><b>--- CALL LOG ---</b>\n\n'+(log||'NO ACTIVE CALLS')+'</div>');
 }
-function clearCall(){ if(selectedDisp){ if(db){ db.ref('dispatches/'+selectedDisp).remove(); } else { localDispatches=localDispatches.filter(function(d){return d._key!==selectedDisp;}); renderDispIndex(); } selectedDisp=null; document.getElementById('disp-detail').innerHTML=''; showMain('<div class="detail-text">CALL CLEARED.</div>'); } else { showMain('<div class="detail-text">NO CALL SELECTED.\nClick a call in the DISPATCH INDEX first.</div>'); } }
+function clearCall(){
+  if(!ME.isAdmin){showMain('<div class="detail-text">ACCESS DENIED — Admin only.</div>');return;}
+  if(selectedDisp){ if(db){db.ref('dispatches/'+selectedDisp).remove();}else{localDispatches=localDispatches.filter(function(d){return d._key!==selectedDisp;});renderDispIndex();} selectedDisp=null; document.getElementById('disp-detail').innerHTML=''; showMain('<div class="detail-text">CALL CLEARED.</div>'); }
+  else{ showMain('<div class="detail-text">NO CALL SELECTED.</div>'); }
+}
 function addSupp(){ showMain('<div class="veh-form"><b>ADD SUPPLEMENTAL</b><br><br><textarea style="width:100%;height:100px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:4px" id="supp-txt" placeholder="Enter supplemental information..."></textarea><br><br><button onclick="submitSupp()" class="want-action-btn" style="background:#1976d2">SUBMIT SUPPLEMENTAL</button></div>'); }
-function submitSupp(){ var t=document.getElementById('supp-txt'); if(t&&t.value){ pushMessage({time:getTime(),from:ME.unit,text:'SUPPLEMENTAL: '+t.value,isError:false}); showMain('<div class="detail-text"><b>SUPPLEMENTAL ADDED</b>\n\n'+t.value+'</div>'); } }
-function transferCall(){ showMain('<div class="veh-form"><b>TRANSFER CALL</b><br><br><span style="font-weight:bold">TO UNIT:</span><input class="want-input" style="width:120px;margin-left:8px" id="xfer-unit"><br><br><button onclick="doTransfer()" class="want-action-btn" style="background:#2e7d32">TRANSFER</button></div>'); }
-function doTransfer(){ var u=document.getElementById('xfer-unit'); if(u&&u.value){ pushMessage({time:getTime(),from:ME.unit,text:'CALL TRANSFERRED TO UNIT '+u.value.toUpperCase(),isError:false}); showMain('<div class="detail-text"><b>CALL TRANSFERRED TO '+u.value.toUpperCase()+'</b></div>'); } }
-function closeCall(){ if(selectedDisp){ clearCall(); pushMessage({time:getTime(),from:ME.unit,text:'CALL CLOSED BY '+ME.unit,isError:false}); } else { showMain('<div class="detail-text">NO CALL SELECTED.</div>'); } }
+function submitSupp(){ var t=document.getElementById('supp-txt'); if(t&&t.value){ pushSharedMsg({time:getTime(),text:'SUPPLEMENTAL: '+t.value}); showMain('<div class="detail-text"><b>SUPPLEMENTAL ADDED</b>\n\n'+t.value+'</div>'); } }
+function transferCall(){
+  if(!ME.isAdmin){showMain('<div class="detail-text">ACCESS DENIED — Admin only.</div>');return;}
+  showMain('<div class="veh-form"><b>TRANSFER CALL</b><br><br><span style="font-weight:bold">TO UNIT:</span><input class="want-input" style="width:120px;margin-left:8px" id="xfer-unit"><br><br><button onclick="doTransfer()" class="want-action-btn" style="background:#2e7d32">TRANSFER</button></div>');
+}
+function doTransfer(){ var u=document.getElementById('xfer-unit'); if(u&&u.value){ pushSharedMsg({time:getTime(),text:'CALL TRANSFERRED TO UNIT '+u.value.toUpperCase()}); showMain('<div class="detail-text"><b>CALL TRANSFERRED TO '+u.value.toUpperCase()+'</b></div>'); } }
+function closeCall(){
+  if(!ME.isAdmin){showMain('<div class="detail-text">ACCESS DENIED — Admin only.</div>');return;}
+  if(selectedDisp){ clearCall(); pushSharedMsg({time:getTime(),text:'CALL CLOSED BY '+ME.unit}); }
+  else{ showMain('<div class="detail-text">NO CALL SELECTED.</div>'); }
+}
 
 // ── OTHER FUNCTIONS ─────────────────────────────────────────────
-function openOther(){
-  lastFormKey='other'; currentForm='other';
+function openOther(){ lastFormKey='other'; currentForm='other';
   showMain('<div class="veh-form"><b>OTHER FUNCTIONS</b><br><br>'
     +'<div style="display:flex;flex-direction:column;gap:6px">'
     +'<button class="want-action-btn" style="text-align:left;padding:5px 10px" onclick="openUnitStatus()">1. UNIT STATUS BOARD</button>'
-    +'<button class="want-action-btn" style="background:#1976d2;text-align:left;padding:5px 10px" onclick="openBroadcast()">2. BROADCAST MESSAGE</button>'
+    +(ME.isAdmin?'<button class="want-action-btn" style="background:#1976d2;text-align:left;padding:5px 10px" onclick="openBroadcast()">2. BROADCAST MESSAGE</button>':'<button class="want-action-btn" style="background:#555;text-align:left;padding:5px 10px;cursor:not-allowed">2. BROADCAST (ADMIN ONLY)</button>')
     +'<button class="want-action-btn" style="background:#2e7d32;text-align:left;padding:5px 10px" onclick="openPriors()">3. PRIORS CHECK</button>'
     +'<button class="want-action-btn" style="background:#f9a825;color:#000;text-align:left;padding:5px 10px" onclick="openFI()">4. FIELD INTERVIEW (FI)</button>'
     +'<button class="want-action-btn" style="background:#cc0000;text-align:left;padding:5px 10px" onclick="openTow()">5. TOW REQUEST</button>'
@@ -678,30 +695,28 @@ function openOther(){
     +'</div></div>');
 }
 function openUnitStatus(){
-  if(db){
-    db.ref('units').once('value',function(snap){
-      var units=Object.values(snap.val()||{});
-      showMain('<div class="detail-text"><b>--- UNIT STATUS BOARD ---</b>\n\n'+units.map(function(u){ return u.unit+'\t'+(u.online?'ONLINE':'OFFLINE')+'\t'+u.status+'\t'+u.name; }).join('\n')+'</div>');
-    });
-  } else {
-    showMain('<div class="detail-text"><b>--- UNIT STATUS BOARD ---</b>\n\n'+ME.unit+'\tONLINE\tAVAILABLE\t'+ME.name+'\n\n(Firebase required for all units)</div>');
-  }
+  if(db){ db.ref('units').once('value',function(snap){ var units=Object.values(snap.val()||{}); showMain('<div class="detail-text"><b>--- UNIT STATUS BOARD ---</b>\n\n'+units.map(function(u){return u.unit+'\t'+(u.online?'ONLINE ':'OFFLINE')+'\t'+u.status+'\t'+u.name;}).join('\n')+'</div>'); }); }
+  else{ showMain('<div class="detail-text"><b>--- UNIT STATUS BOARD ---</b>\n\n'+ME.unit+'\tONLINE\tAVAILABLE\t'+ME.name+'</div>'); }
 }
-function openBroadcast(){ showMain('<div class="veh-form"><b>BROADCAST MESSAGE</b><br><br><textarea style="width:100%;height:80px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:4px" id="bc-txt" placeholder="Enter broadcast message for all units..."></textarea><br><br><button onclick="sendBroadcast()" class="want-action-btn" style="background:#1976d2">SEND BROADCAST</button></div>'); }
-function sendBroadcast(){ var t=document.getElementById('bc-txt'); if(t&&t.value.trim()){ pushMessage({time:getTime(),from:'BROADCAST',text:t.value.trim(),isError:false}); showMain('<div class="detail-text"><b>BROADCAST SENT TO ALL UNITS</b>\n\n'+t.value+'</div>'); } }
+function openBroadcast(){
+  if(!ME.isAdmin){showMain('<div class="detail-text">ACCESS DENIED — Admin only.</div>');return;}
+  showMain('<div class="veh-form"><b>BROADCAST MESSAGE</b><br><br><textarea style="width:100%;height:80px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:4px" id="bc-txt" placeholder="Enter broadcast message for all units..."></textarea><br><br><button onclick="sendBroadcast()" class="want-action-btn" style="background:#1976d2">SEND BROADCAST</button></div>');
+}
+function sendBroadcast(){
+  if(!ME.isAdmin){return;}
+  var t=document.getElementById('bc-txt'); if(t&&t.value.trim()){ pushSharedMsg({time:getTime(),text:'BROADCAST: '+t.value.trim()}); showMain('<div class="detail-text"><b>BROADCAST SENT TO ALL UNITS</b>\n\n'+t.value+'</div>'); }
+}
 function openPriors(){ showMain('<div class="veh-form"><b>PRIORS CHECK</b><br><br><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">LAST:</span><input id="pr-last" class="want-input" style="width:160px"></div><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">FIRST:</span><input id="pr-first" class="want-input" style="width:130px"></div><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">DOB:</span><input id="pr-dob" class="want-input" style="width:100px" placeholder="MM/DD/YYYY"></div><br><div class="want-actions"><div class="want-action-btn" style="background:#2e7d32" onclick="submitPriors()">CHECK PRIORS</div></div></div>'); }
 function submitPriors(){
-  var last=val('pr-last'); playSend();
-  pushMessage({time:getTime(),from:ME.unit,text:'PRIORS CHECK: '+last,isError:false});
-  showMain('<div class="detail-text">QUERYING CRIMINAL HISTORY...\nPlease wait...</div>');
-  setTimeout(function(){ var t=getTime(); pushMessage({time:t,from:'PRIORS DATABASE',text:'RESPONSE — '+last.toUpperCase(),isError:false}); showMain('<div class="detail-text"><b>PRIORS RESPONSE</b>\n\nNAME: '+last.toUpperCase()+'\n\nCRIMINAL HISTORY: ON FILE\n  2019 - PC211 ROBBERY - CONVICTED\n  2021 - HS11350 POSS NARCOTICS - PLEA\n  2023 - PC148 OBSTRUCT OFFICER - DISMISSED\n\nARRESTS: 3  CONVICTIONS: 1\n\nTIME: '+t+'</div>'); },2000);
+  var last=val('pr-last'); playSend(); showMain('<div class="detail-text">QUERYING CRIMINAL HISTORY...\nPlease wait...</div>');
+  setTimeout(function(){ var t=getTime(); var html='<div class="detail-text"><b>PRIORS RESPONSE</b>\n\nNAME: '+last.toUpperCase()+'\n\nCRIMINAL HISTORY: ON FILE\n  2019 - PC211 ROBBERY - CONVICTED\n  2021 - HS11350 POSS NARCOTICS - PLEA\n  2023 - PC148 OBSTRUCT OFFICER - DISMISSED\n\nARRESTS: 3  CONVICTIONS: 1\n\nTIME: '+t+'</div>'; pushPrivateMsg({time:t,from:'PRIORS DATABASE',text:'RESPONSE — '+last.toUpperCase(),result:html,isError:false}); },2000);
 }
 function openFI(){ showMain('<div class="veh-form"><b>FIELD INTERVIEW CARD</b><br><br><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">LOCATION:</span><input id="fi-loc" class="want-input" style="width:220px"></div><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">LAST:</span><input id="fi-last" class="want-input" style="width:160px"></div><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">FIRST:</span><input id="fi-first" class="want-input" style="width:130px"></div><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">REASON:</span><textarea id="fi-reason" class="want-input" style="width:240px;height:50px;vertical-align:top"></textarea></div><br><div class="want-actions"><div class="want-action-btn" style="background:#f9a825;color:#000" onclick="submitFI()">SUBMIT FI CARD</div></div></div>'); }
-function submitFI(){ var l=val('fi-last'); pushMessage({time:getTime(),from:ME.unit,text:'FI CARD: '+l,isError:false}); showMain('<div class="detail-text"><b>FI CARD SUBMITTED</b>\n\nSUBJECT: '+l.toUpperCase()+'\nFI RECORD ADDED TO DATABASE</div>'); }
+function submitFI(){ var l=val('fi-last'); pushSharedMsg({time:getTime(),text:'FI CARD: '+l}); showMain('<div class="detail-text"><b>FI CARD SUBMITTED</b>\n\nSUBJECT: '+l.toUpperCase()+'</div>'); }
 function openTow(){ showMain('<div class="veh-form"><b>TOW REQUEST</b><br><br><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">PLATE:</span><input id="t-plate" class="want-input" style="width:120px"> <span style="font-weight:bold">ST</span><input id="t-st" class="want-input" style="width:30px" value="CA"></div><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">LOCATION:</span><input id="t-loc" class="want-input" style="width:220px"></div><div style="margin-bottom:5px"><span style="font-weight:bold;display:inline-block;width:70px">REASON:</span><select class="want-select" id="t-reason" style="width:160px"><option>ABANDONED</option><option>EVIDENCE</option><option>ILLEGALLY PARKED</option><option>COLLISION</option><option>STOLEN RECOVERY</option></select></div><br><div class="want-actions"><div class="want-action-btn" style="background:#cc0000" onclick="submitTow()">REQUEST TOW</div></div></div>'); }
-function submitTow(){ var p=val('t-plate'); pushMessage({time:getTime(),from:ME.unit,text:'TOW REQUEST: '+p,isError:false}); showMain('<div class="detail-text"><b>TOW REQUESTED</b>\n\nPLATE: '+p.toUpperCase()+'\nETA: APPROX 20-30 MIN\nTOW COMPANY: COMPTON AUTO\nCASE#: T-'+(Math.floor(Math.random()*90000)+10000)+'</div>'); }
-function openPanic(){ showMain('<div style="background:#cc0000;color:#fff;padding:20px;font-family:Courier New,monospace;font-size:14px;text-align:center"><br><b>*** OFFICER NEEDS HELP ***</b><br><br>UNIT: '+ME.unit+'<br>TIME: '+getTime()+'<br><br>TRANSMITTING LOCATION...<br><br><button onclick="cancelPanic()" style="background:#fff;color:#cc0000;border:none;padding:8px 24px;font-weight:bold;font-size:13px;cursor:pointer;margin-top:10px">CANCEL</button></div>'); pushMessage({time:getTime(),from:ME.unit,text:'*** OFFICER NEEDS HELP — '+ME.unit+' ***',isError:true}); playAlert(); setTimeout(playAlert,600); setTimeout(playAlert,1200); }
-function cancelPanic(){ pushMessage({time:getTime(),from:ME.unit,text:'OFFICER NEEDS HELP — CANCELLED',isError:false}); showMain('<div class="detail-text">OFFICER NEEDS HELP — CANCELLED\n\nTIME: '+getTime()+'</div>'); }
+function submitTow(){ var p=val('t-plate'); pushSharedMsg({time:getTime(),text:'TOW REQUEST: '+p}); showMain('<div class="detail-text"><b>TOW REQUESTED</b>\n\nPLATE: '+p.toUpperCase()+'\nETA: APPROX 20-30 MIN\nCASE#: T-'+(Math.floor(Math.random()*90000)+10000)+'</div>'); }
+function openPanic(){ showMain('<div style="background:#cc0000;color:#fff;padding:20px;font-family:Courier New,monospace;font-size:14px;text-align:center"><br><b>*** OFFICER NEEDS HELP ***</b><br><br>UNIT: '+ME.unit+'<br>TIME: '+getTime()+'<br><br>TRANSMITTING LOCATION...<br><br><button onclick="cancelPanic()" style="background:#fff;color:#cc0000;border:none;padding:8px 24px;font-weight:bold;font-size:13px;cursor:pointer;margin-top:10px">CANCEL</button></div>'); pushSharedMsg({time:getTime(),text:'*** OFFICER NEEDS HELP — '+ME.unit+' ***'}); playAlert(); setTimeout(playAlert,600); setTimeout(playAlert,1200); }
+function cancelPanic(){ pushSharedMsg({time:getTime(),text:'OFFICER NEEDS HELP — CANCELLED BY '+ME.unit}); showMain('<div class="detail-text">OFFICER NEEDS HELP — CANCELLED</div>'); }
 
 // ── Misc ────────────────────────────────────────────────────────
 function openLastForm(){ if(lastFormKey==='want')openWant(); else if(lastFormKey==='veh')openVeh(); else if(lastFormKey==='dmv')openDmv(); else if(lastFormKey==='inquiries')openInquiries(); }
@@ -716,42 +731,30 @@ function getTodayDate(){ var d=new Date(); return (d.getMonth()+1).toString().pa
 
 <!--
 ════════════════════════════════════════════════════════════════════
-  README — HOW TO SET UP FIREBASE MULTIPLAYER
+  HOW TO ADD / REMOVE USERS
 ════════════════════════════════════════════════════════════════════
+  Find the APPROVED_UNITS object near the top of this file.
+  Add a line for each unit you want to allow:
 
-STEP 1 — Create a Firebase project (free)
-  1. Go to https://console.firebase.google.com
-  2. Click "Add project" → name it (e.g. "lasd-mdc") → Continue
-  3. Disable Google Analytics (optional) → Create project
+    "4L22":  { name:"SUPERVISOR", station:"CENTURY",  admin:true  },
+    "4L14":  { name:"DEPUTY",     station:"CENTURY",  admin:false },
 
-STEP 2 — Enable Realtime Database
-  1. In your project, click "Build" → "Realtime Database"
-  2. Click "Create Database"
-  3. Choose "Start in test mode" → Enable
-  4. Copy the database URL shown (looks like https://lasd-mdc-xxxxx-default-rtdb.firebaseio.com)
+  admin:true  = can add dispatches, clear calls, broadcast, transfer
+  admin:false = can message, query databases, send status
 
-STEP 3 — Get your Firebase config
-  1. Click the gear icon → "Project settings"
-  2. Scroll to "Your apps" → click the </> web icon → Register app
-  3. Copy the firebaseConfig object values
+  Anyone who tries to log in with a Unit ID NOT in this list
+  will see ACCESS DENIED and cannot enter the MDC.
 
-STEP 4 — Paste into this file
-  Open this HTML file in a text editor and find:
-    var FIREBASE_CONFIG = { ... }
-  Replace each "PASTE_YOUR_..." value with your real Firebase values.
-
-STEP 5 — Host on GitHub Pages
-  1. Go to https://github.com → create a new repository (e.g. "lasd-mdc")
-  2. Upload this HTML file, rename it to  index.html
-  3. Go to Settings → Pages → Source: "Deploy from branch" → main → / (root)
-  4. Your URL will be: https://YOUR-USERNAME.github.io/lasd-mdc/
-  5. Share that URL with your friends — everyone opens it in their browser
-
-NOTES:
-  • Firebase free tier (Spark plan) supports 100 simultaneous connections — plenty for a group
-  • All dispatches, messages, and unit statuses sync live across everyone
-  • Each person logs in with their own Unit ID and name
-  • The Alert sound plays when anyone receives a new message
+════════════════════════════════════════════════════════════════════
+  FIREBASE DATABASE RULES (paste into Firebase console → Rules tab)
+════════════════════════════════════════════════════════════════════
+{
+  "rules": {
+    ".read": true,
+    ".write": true
+  }
+}
+  (Keep test mode rules for now — upgrade when ready for production)
 ════════════════════════════════════════════════════════════════════
 -->
 </body>
