@@ -626,10 +626,11 @@ function submitChgl(){
 function mdcWorksheet(){
   showMain('<div class="want-form"><b>WORKSHEET STATUS (WS)</b><br><br>'
     +'<textarea id="ws-txt" style="width:100%;height:220px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:6px;outline:none" placeholder="Notes and worksheet data..."></textarea>'
-    +'<br><br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="saveWS()">SAVE</div><div class="want-action-btn" style="background:#cc0000;max-width:100px" onclick="gi('ws-txt').value=''">CLEAR</div></div></div>');
+    +'<br><br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="saveWS()">SAVE</div><div class="want-action-btn" style="background:#cc0000;max-width:100px" onclick="clearWorksheet()">CLEAR</div></div></div>');
   var s=localStorage.getItem('mdcs_ws_'+ME.uid)||''; gi('ws-txt').value=s;
 }
 function saveWS(){ localStorage.setItem('mdcs_ws_'+ME.uid,gi('ws-txt').value); showMain('<div class="detail-text">WORKSHEET SAVED.\n\nTIME: '+now()+'</div>'); }
+function clearWorksheet(){ var t=gi('ws-txt'); if(t) t.value=''; }
 function mdcViewHits(){
   var hits=S.localMsgs.filter(function(m){return m.isPrivate&&m.isHit;});
   showMain(hits.length?'<div class="want-form"><b>ACTIVE HITS</b><br><br>'+hits.map(function(m){return '<div style="background:#f8d7da;border:1px solid #f5c6cb;padding:6px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'+m.text+'</div>';}).join('')+'</div>':'<div class="detail-text">NO ACTIVE HITS ON FILE.</div>');
@@ -885,7 +886,7 @@ function submitVehReg(){
 function mdcOpenDmv(){
   S.currentForm='dmv'; S.lastForm='dmv';
   showMain('<div class="want-form"><b>DRIVER / DMV — DRIVER HISTORY INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
-    +'<div class="want-row"><span class="want-label">DRIVER'S LIC #</span><input class="want-input" id="d-dl" style="width:120px"></div>'
+    +'<div class="want-row"><span class="want-label">DRIVERS LIC #</span><input class="want-input" id="d-dl" style="width:120px"></div>'
     +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="d-last" style="width:180px"></div>'
     +'<div class="want-row"><span class="want-label">FIRST</span><input class="want-input" id="d-first" style="width:140px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="d-mi" style="width:24px"></div>'
     +'<div class="want-row"><span class="want-label">SUF</span><input class="want-input" id="d-suf" style="width:30px"></div>'
