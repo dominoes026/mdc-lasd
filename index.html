@@ -1026,15 +1026,15 @@ function openUserMgmt(){
     pending.forEach(function(u){
       html+='<div style="background:#fff9e6;border:1px solid #c8b400;padding:8px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'
         +'<b>'+u.unit+'</b> — '+u.name+' ('+u.station+')<br><span style="font-size:10px;color:#666">'+u.email+'</span><br><br>'
-        +'<button onclick="approveUser(''+u.uid+'')" style="background:#2e7d32;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;margin-right:6px;font-size:11px">APPROVE</button>'
-        +'<button onclick="denyUser(''+u.uid+'')" style="background:#cc0000;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;font-size:11px">DENY</button></div>';
++'<button onclick="approveUser(\''+u.uid+'\')" style="background:#2e7d32;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;margin-right:6px;font-size:11px">APPROVE</button>'
++'<button onclick="denyUser(\''+u.uid+'\')" style="background:#cc0000;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;font-size:11px">DENY</button></div>';
     });
     html+='<br><b style="color:#2e7d32">APPROVED ('+approved.length+')</b><br><br>';
     approved.forEach(function(u){
       html+='<div style="background:#f0fff0;border:1px solid #2e7d32;padding:8px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'
         +'<b>'+u.unit+'</b> — '+u.name+(u.isAdmin?' [ADMIN]':'')+'<br><span style="font-size:10px;color:#666">'+u.email+'</span><br><br>'
-        +'<button onclick="revokeUser(''+u.uid+'')" style="background:#cc0000;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer;margin-right:4px">REVOKE</button>'
-        +'<button onclick="toggleAdmin(''+u.uid+'','+(!u.isAdmin)+')" style="background:#1565c0;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer">'+(!u.isAdmin?'MAKE ADMIN':'REMOVE ADMIN')+'</button></div>';
+        +'<button onclick="revokeUser(\''+u.uid+'\')" style="background:#cc0000;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer;margin-right:4px">REVOKE</button>'
+        +'<button onclick="toggleAdmin(\''+u.uid+'\','+(!u.isAdmin)+')" style="background:#1565c0;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer">'+(!u.isAdmin?'MAKE ADMIN':'REMOVE ADMIN')+'</button></div>';
     });
     main.innerHTML=html+'</div>';
   });
