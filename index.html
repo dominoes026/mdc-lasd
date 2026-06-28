@@ -1,48 +1,52 @@
-html = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LACRS — Los Angeles County Roleplay System</title>
+<title>MDCS - Mobile Digital Communications System v.PCMSS_20121121 (MDC13744)</title>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;width:100%;overflow:hidden}
-
+html,body{height:100%;width:100%;overflow:hidden;background:#1a1a2e;font-family:Arial,sans-serif;font-size:12px}
+""")
+    f.write("""
 /* ── Night mode ── */
-body{font-family:Arial,sans-serif;font-size:12px;background:#1a1a2e;display:flex;align-items:center;justify-content:center;min-height:100vh}
 body.night{background:#000}
-body.night .win{background:#111;border-top-color:#333;border-left-color:#333;border-right-color:#000;border-bottom-color:#000}
+body.night .win{background:#111;border-color:#222}
+body.night .win-titlebar{background:linear-gradient(to right,#000,#003300)}
 body.night .sec-label{background:#1a1a00;border-color:#554400;color:#ff0}
 body.night .panel{background:#0a0a0a;color:#ff0}
+body.night .mdc-topbtns{background:#002200}
 body.night .tbtn{background:#003300;border-color:#005500;color:#ff0}
-body.night .tbtn.white-btn{background:#1a1a00;color:#ff0;border-color:#554400}
-body.night .rbtn.red{background:#550000}
-body.night .rbtn.green{background:#003300}
-body.night .rbtn.yellow{background:#554400;color:#ff0}
-body.night .rbtn.blue{background:#00003a}
-body.night .rbtn.blue2{background:#00002a}
-body.night .rbtn.purple{background:#2a003a}
-body.night .mdc-bottombar,body.night .nav-bar{background:#0a0a0a}
-body.night .msg-input-box{background:#001a00}
+body.night .tbtn.white-btn{background:#1a1a00;color:#ff0;border-color:#443300}
+body.night .rbtn.red{background:#440000}
+body.night .rbtn.green{background:#002200}
+body.night .rbtn.yellow{background:#443300;color:#ff0}
+body.night .rbtn.blue,.win.night .rbtn.blue2{background:#00002a}
+body.night .rbtn.purple{background:#1a0030}
+body.night .mdc-bottombar{background:#0a0a0a;border-color:#333}
+body.night .msg-input-box{background:#001500;border-color:#003300}
 body.night .msg-input-box input{color:#ff0}
 body.night .detail-text{color:#ff0}
-body.night .want-form,.night .veh-form,.night .form-section{background:#111;color:#ff0}
-body.night .want-input,.night .want-select{background:#003300;color:#ff0;border-color:#005500}
-body.night .win-titlebar{background:linear-gradient(to right,#000,#003300)}
-body.night .nav-tab{background:#0a0a0a;color:#ff0}
-body.night .nav-tab.active{background:#003300;color:#ff0}
-body.night .disp-row{background:#0a0a0a;color:#ff0}
+body.night .want-form,.win.night .obs-form{color:#ff0;background:#111}
+body.night .want-input,.win.night .want-select{background:#003300;color:#ff0;border-color:#005500}
+body.night .disp-row{background:#0a0a0a;color:#ff0;border-color:#222}
 body.night .disp-row.selected{background:#003300}
-body.night .msg-row{color:#ff0}
-body.night .unread-box{background:#554400;color:#ff0;border-color:#887700}
-body.night .plain-btn{background:#0a0a0a;color:#ff0}
-body.night .icobtn{background:#0a0a0a;color:#ff0}
+body.night .msg-row{color:#ff0;border-color:#222}
+body.night .msg-row:hover{background:#001500}
+body.night .unread-box{background:#443300;color:#ff0;border-color:#665500}
+body.night .plain-btn,.win.night .icobtn{background:#0a0a0a;color:#ff0;border-color:#333}
+body.night .popup{background:#111;border-color:#333}
+body.night .popup-titlebar{background:linear-gradient(to right,#000,#003300)}
+body.night .popup-subtitle{background:#443300;color:#ff0}
+body.night .grid-btn{background:#1a1a0a;border-color:#333;color:#ff0}
+body.night .grid-btn:hover{background:#002200}
+body.night .obs-input{background:#003300;color:#ff0;border-color:#005500}
+body.night .want-action-btn{border-color:#333}
 
 /* ── Auth ── */
-.auth-wrap{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;width:420px;box-shadow:6px 6px 20px rgba(0,0,0,0.8)}
+.auth-wrap{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;width:420px;box-shadow:6px 6px 20px rgba(0,0,0,.8);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 .auth-titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;padding:4px 10px;font-size:12px;font-weight:bold}
 .auth-body{padding:24px 28px 20px}
 .auth-tabs{display:flex;margin-bottom:18px;border-bottom:2px solid #808080}
@@ -57,156 +61,127 @@ body.night .icobtn{background:#0a0a0a;color:#ff0}
 .auth-err{color:#cc0000;font-size:10px;margin-top:8px;text-align:center;min-height:16px;font-weight:bold}
 .auth-info{color:#006600;font-size:10px;margin-top:8px;text-align:center;min-height:16px;font-weight:bold}
 .auth-note{font-size:10px;color:#555;text-align:center;margin-top:8px;line-height:1.5}
-.auth-divider{height:1px;background:#999;margin:12px 0}
+.pending-wrap{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;width:380px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
 
-/* ── Hub ── */
-#hub-screen{display:none;flex-direction:column;align-items:center;justify-content:center;width:100vw;height:100vh}
-.hub-title{color:#fff;font-size:22px;font-weight:bold;letter-spacing:3px;margin-bottom:6px;text-align:center}
-.hub-sub{color:#7af;font-size:12px;letter-spacing:1px;margin-bottom:40px;text-align:center}
-.hub-cards{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
-.hub-card{width:200px;background:#d4d0c8;border-top:3px solid #fff;border-left:3px solid #fff;border-right:3px solid #404040;border-bottom:3px solid #404040;cursor:pointer;transition:transform 0.1s;box-shadow:4px 4px 12px rgba(0,0,0,0.6)}
-.hub-card:hover{transform:translateY(-3px)}
-.hub-card-banner{height:80px;display:flex;align-items:center;justify-content:center;font-size:36px}
-.hub-card-body{padding:12px;text-align:center}
-.hub-card-title{font-size:13px;font-weight:bold;margin-bottom:4px}
-.hub-card-desc{font-size:10px;color:#555;line-height:1.4}
-.hub-logout{color:#aaa;font-size:10px;margin-top:30px;cursor:pointer;text-decoration:underline}
-.hub-session-info{color:#888;font-size:10px;margin-top:8px}
+/* ── MDC Window — full screen ── */
+.win{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  background:#d4d0c8;
+  border:none;
+  display:none;flex-direction:column;
+}
 
-/* ── Windows ── */
-.win{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;width:96vw;max-width:1300px;height:94vh;max-height:900px;display:none;flex-direction:column;box-shadow:4px 4px 16px rgba(0,0,0,0.8);position:fixed;top:50%;left:50%;transform:translate(-50%,-50%)}
-.win-titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;padding:3px 8px;display:flex;align-items:center;justify-content:space-between;user-select:none;height:24px;flex-shrink:0}
+/* ── Titlebar ── */
+.win-titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;padding:3px 8px;display:flex;align-items:center;justify-content:space-between;user-select:none;height:22px;flex-shrink:0}
 .win-title{font-size:11px;font-weight:bold}
 .win-btns{display:flex;gap:2px}
 .wbtn{width:16px;height:14px;background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;font-weight:bold}
 .wbtn.red{background:#c0392b;color:#fff;font-size:8px}
+
+/* ── Top buttons ── */
+.mdc-topbtns{display:flex;background:#1a6fbd;flex-shrink:0}
+.tbtn{flex:1;background:#2196f3;color:#fff;border-top:1px solid #64b5f6;border-left:1px solid #64b5f6;border-right:1px solid #0d47a1;border-bottom:1px solid #0d47a1;padding:4px 2px;text-align:center;font-size:10px;font-weight:bold;cursor:pointer;line-height:1.2;text-transform:uppercase;min-height:46px;display:flex;align-items:center;justify-content:center;white-space:pre-line}
+.tbtn:hover{background:#1976d2}
+.tbtn:active{background:#0d47a1;border-top-color:#0d47a1;border-left-color:#0d47a1;border-right-color:#64b5f6;border-bottom-color:#64b5f6}
+.tbtn.white-btn{background:#e0e0e0;color:#000;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080}
+.tbtn.white-btn:hover{background:#d0d0d0}
+
+/* ── Shared ── */
 .sec-label{background:#fffacd;border-top:1px solid #c8b400;border-bottom:1px solid #c8b400;padding:1px 4px;font-size:10px;font-weight:bold;text-align:center;color:#000;flex-shrink:0}
 .panel{background:#fff;border:2px inset #808080;overflow-y:auto}
 .detail-text{padding:6px;font-family:'Courier New',monospace;font-size:11px;line-height:1.7;white-space:pre-wrap}
 
-/* ── Popup windows (Windows 98 dialog style) ── */
-.popup-overlay{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:1000;pointer-events:none}
-.popup-overlay.active{display:block;pointer-events:all}
-.popup{position:absolute;background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;box-shadow:4px 4px 12px rgba(0,0,0,0.5);min-width:400px;cursor:default;user-select:none}
-.popup-titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;padding:3px 8px;font-size:11px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;cursor:move;height:22px}
-.popup-close{width:14px;height:12px;background:#c0392b;border:1px solid #fff;display:flex;align-items:center;justify-content:center;font-size:8px;cursor:pointer;color:#fff;font-weight:bold}
-.popup-subtitle{background:#f9a825;color:#000;padding:4px 8px;font-size:11px;font-weight:bold}
-.popup-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:4px}
-.popup-grid.cols3{grid-template-columns:repeat(3,1fr)}
-.popup-grid.cols2{grid-template-columns:repeat(2,1fr)}
-.grid-btn{background:#c8c4bc;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;padding:14px 8px;text-align:center;font-size:11px;font-weight:bold;cursor:pointer;min-height:64px;display:flex;align-items:center;justify-content:center;line-height:1.3}
-.grid-btn:hover{background:#b8b4ac}
-.grid-btn:active{border-top:1px solid #808080;border-left:1px solid #808080;border-right:1px solid #fff;border-bottom:1px solid #fff;background:#a8a49c}
-.grid-btn.bold{font-weight:900}
-
-/* OBS form */
-.obs-form{padding:10px 14px;font-size:11px;font-family:Arial,sans-serif}
-.obs-row{display:flex;align-items:center;gap:6px;margin-bottom:7px}
-.obs-label{font-weight:bold;font-size:11px;min-width:50px;white-space:nowrap}
-.obs-input{background:#00bcd4;border:2px inset #006080;height:22px;font-size:11px;font-family:'Courier New',monospace;padding:1px 4px;color:#000;outline:none}
-.obs-input:focus{background:#00d4ee}
-.obs-compose{background:#fffacd;border-top:1px solid #c8b400;padding:6px 10px;font-family:'Courier New',monospace;font-size:11px;color:#333}
-
-/* Nav + forms */
-.nav-bar{display:flex;background:#1a3a5c;flex-shrink:0}
-.nav-tab{padding:6px 14px;color:#adf;font-size:11px;font-weight:bold;cursor:pointer;border-right:1px solid #0d2040;letter-spacing:0.5px}
-.nav-tab:hover{background:#1e4a72;color:#fff}
-.nav-tab.active{background:#2196f3;color:#fff}
-.form-section{padding:10px 14px;font-size:11px}
-.form-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap}
-.form-label{font-weight:bold;font-size:11px;min-width:100px;white-space:nowrap}
-.form-input{background:#c8e4ff;border:2px inset #808080;height:22px;font-size:11px;font-family:'Courier New',monospace;padding:1px 4px;outline:none}
-.form-input:focus{background:#d8eeff}
-.form-select{background:#c8e4ff;border:2px inset #808080;height:22px;font-size:11px;font-family:'Courier New',monospace;padding:0 4px;outline:none}
-.form-btn{background:#1565c0;color:#fff;border:none;padding:4px 16px;font-weight:bold;font-size:11px;cursor:pointer}
-.form-btn:hover{filter:brightness(1.15)}
-.form-btn.green{background:#2e7d32}
-.form-btn.red{background:#cc0000}
-.form-btn.yellow{background:#f9a825;color:#000}
-.section-divider{height:1px;background:#999;margin:10px 0}
-.hit{color:#cc0000;font-weight:bold}
-.clear-txt{color:#006600;font-weight:bold}
-.record-card{background:#fff;border:1px solid #ccc;padding:10px;margin-bottom:8px;font-size:11px}
-.record-card-header{font-weight:bold;border-bottom:1px solid #eee;padding-bottom:4px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
-.badge{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:bold}
-.badge-green{background:#d4edda;color:#155724;border:1px solid #c3e6cb}
-.badge-red{background:#f8d7da;color:#721c24;border:1px solid #f5c6cb}
-.badge-yellow{background:#fff3cd;color:#856404;border:1px solid #ffeeba}
-.badge-blue{background:#cce5ff;color:#004085;border:1px solid #b8daff}
-.disabled-btn{background:#555!important;cursor:not-allowed!important;color:#aaa!important}
-
-/* MDC specific */
-.mdc-topbtns{display:flex;background:#1a6fbd;flex-shrink:0}
-.tbtn{flex:1;background:#2196f3;color:#fff;border-top:1px solid #64b5f6;border-left:1px solid #64b5f6;border-right:1px solid #0d47a1;border-bottom:1px solid #0d47a1;padding:4px 2px;text-align:center;font-size:10px;font-weight:bold;cursor:pointer;line-height:1.2;text-transform:uppercase;min-height:44px;display:flex;align-items:center;justify-content:center;white-space:pre-line}
-.tbtn:hover{background:#1976d2}
-.tbtn:active{background:#0d47a1}
-.tbtn.white-btn{background:#e0e0e0;color:#000;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080}
-.mdc-content{flex:1;display:flex;overflow:hidden}
-.mdc-left{width:32%;min-width:220px;border-right:1px solid #808080;display:flex;flex-direction:column;flex-shrink:0}
+/* ── Main area ── */
+.mdc-content{display:flex;flex:1;overflow:hidden;min-height:0}
+.mdc-left{width:340px;flex-shrink:0;border-right:1px solid #808080;display:flex;flex-direction:column}
 .mdc-mid{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.mdc-right{width:88px;flex-shrink:0;display:flex;flex-direction:column}
-.rbtn{flex:1;color:#fff;font-weight:bold;font-size:12px;text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(0,0,0,0.3);text-transform:uppercase;line-height:1.2}
-.rbtn:active{filter:brightness(0.8)}
+.mdc-right{width:96px;flex-shrink:0;display:flex;flex-direction:column}
+
+/* ── Right sidebar buttons ── */
+.rbtn{flex:1;color:#fff;font-weight:bold;font-size:13px;text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(0,0,0,.3);text-transform:uppercase;line-height:1.2;user-select:none}
+.rbtn:active{filter:brightness(.82)}
 .rbtn.red{background:#cc0000}
 .rbtn.green{background:#2e7d32}
 .rbtn.yellow{background:#f9a825;color:#000}
 .rbtn.blue{background:#1565c0;font-size:11px}
 .rbtn.blue2{background:#0d47a1;font-size:9px;line-height:1.3}
 .rbtn.purple{background:#6a1b9a}
-.mdc-bottombar{display:grid;grid-template-columns:1fr 32px 32px 130px 1fr 1fr;background:#d4d0c8;border-top:1px solid #808080;height:42px;align-items:center;flex-shrink:0}
-.msg-input-box{background:#c8e4ff;border:2px inset #808080;margin:4px;height:30px;display:flex;align-items:center;padding:0 6px}
+
+/* ── Bottom bar ── */
+.mdc-bottombar{display:grid;grid-template-columns:1fr 34px 34px 150px 1fr 1fr;background:#d4d0c8;border-top:1px solid #808080;height:46px;align-items:center;flex-shrink:0}
+.msg-input-box{background:#c8e4ff;border:2px inset #808080;margin:5px;height:32px;display:flex;align-items:center;padding:0 6px}
 .msg-input-box input{border:none;background:transparent;width:100%;font-size:11px;outline:none;color:#000;font-family:'Courier New',monospace}
-.icobtn{width:26px;height:26px;background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;margin:2px}
-.unread-box{background:#f9a825;margin:3px;height:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid #c8880a;font-weight:bold;font-size:8px;line-height:1.2;color:#000}
-.plain-btn{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:9px;font-weight:bold;text-align:center;display:flex;align-items:center;justify-content:center;margin:3px;cursor:pointer;line-height:1.3;color:#000;padding:2px;height:32px}
-.disp-row{display:flex;gap:4px;padding:2px 4px;cursor:pointer;font-size:10px;font-family:'Courier New',monospace;border-bottom:1px solid #f0f0f0}
+.icobtn{width:28px;height:28px;background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;margin:2px}
+.unread-box{background:#f9a825;margin:4px;height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid #c8880a;font-weight:bold;font-size:8px;line-height:1.2;color:#000}
+.plain-btn{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:9px;font-weight:bold;text-align:center;display:flex;align-items:center;justify-content:center;margin:4px;cursor:pointer;line-height:1.3;color:#000;padding:2px;height:36px}
+
+/* ── Dispatch/Msg rows ── */
+.disp-row{display:flex;gap:4px;padding:2px 4px;cursor:pointer;font-size:10px;font-family:'Courier New',monospace;border-bottom:1px solid #f0f0f0;user-select:none}
 .disp-row:hover{background:#c8deff}
 .disp-row.selected{background:#000080;color:#fff}
-.msg-row{padding:2px 4px;cursor:pointer;font-size:10px;font-family:'Courier New',monospace;border-bottom:1px solid #eee;display:flex;gap:4px}
+.msg-row{padding:2px 4px;cursor:pointer;font-size:10px;font-family:'Courier New',monospace;border-bottom:1px solid #eee;display:flex;gap:4px;align-items:baseline}
 .msg-row:hover{background:#c8deff}
 .msg-row.unread{font-weight:bold}
-.want-form{padding:8px 10px;font-size:11px}
+.msg-row.is-hit{color:#cc0000;font-weight:bold}
+
+/* ── Forms ── */
+.want-form{padding:8px 10px;font-size:11px;overflow-y:auto;height:100%}
+.want-form b{font-size:12px}
 .want-row{display:flex;align-items:center;gap:4px;margin-bottom:5px;flex-wrap:wrap}
-.want-label{font-size:11px;font-weight:bold;white-space:nowrap;min-width:55px}
+.want-label{font-size:11px;font-weight:bold;white-space:nowrap;min-width:54px}
 .want-input{background:#00bcd4;border:2px inset #006080;height:20px;font-size:11px;font-family:'Courier New',monospace;padding:1px 4px;color:#000;outline:none}
 .want-input:focus{background:#00d4ee}
+.want-input.dark{background:#008fa0}
 .want-select{background:#00bcd4;border:2px inset #006080;height:20px;font-size:11px;font-family:'Courier New',monospace;padding:0 2px;color:#000;outline:none}
+.want-note{font-size:10px;color:#555;margin:3px 0;font-style:italic}
 .want-actions{display:flex;gap:0;margin-top:6px}
 .want-action-btn{flex:1;background:#1565c0;color:#fff;font-weight:bold;font-size:11px;padding:5px;text-align:center;cursor:pointer;border:1px solid #0d47a1}
 .want-action-btn:hover{filter:brightness(1.15)}
-.want-note{font-size:10px;color:#555;margin:3px 0;font-style:italic}
+.obs-form{padding:8px 10px;font-size:11px;overflow-y:auto;height:100%}
+.obs-row{display:flex;align-items:center;gap:4px;margin-bottom:6px}
+.obs-label{font-weight:bold;font-size:11px;white-space:nowrap;min-width:42px}
+.obs-input{background:#00bcd4;border:2px inset #006080;height:21px;font-size:11px;font-family:'Courier New',monospace;padding:1px 4px;color:#000;outline:none}
+.obs-input:focus{background:#00d4ee}
+.obs-rmk{background:#00bcd4;border:2px inset #006080;font-size:11px;font-family:'Courier New',monospace;padding:2px 4px;color:#000;outline:none;width:100%;resize:none}
+.hit{color:#cc0000;font-weight:bold}
+.clear-txt{color:#006600;font-weight:bold}
+.disabled-btn{background:#555!important;cursor:not-allowed!important;color:#aaa!important}
 
-/* Dispatch */
-.disp-content{flex:1;display:flex;overflow:hidden}
-.disp-left{width:340px;flex-shrink:0;border-right:1px solid #808080;display:flex;flex-direction:column}
-.disp-right{flex:1;display:flex;flex-direction:column}
-.disp-call-item{padding:6px 8px;border-bottom:1px solid #ddd;cursor:pointer;font-size:11px;font-family:'Courier New',monospace}
-.disp-call-item:hover{background:#c8deff}
-.disp-call-item.selected{background:#000080;color:#fff}
-.disp-call-item.priority-a{border-left:4px solid #cc0000}
-.disp-call-item.priority-b{border-left:4px solid #f9a825}
-.disp-call-item.priority-d{border-left:4px solid #2e7d32}
-.unit-status-row{display:flex;align-items:center;gap:6px;padding:4px 8px;border-bottom:1px solid #eee;font-size:11px;font-family:'Courier New',monospace}
-.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.status-avail{background:#2e7d32}
-.status-busy{background:#f9a825}
-.status-offline{background:#ccc}
+/* ── Popup dialogs ── */
+.popup-overlay{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:500;pointer-events:none}
+.popup-overlay.active{display:block;pointer-events:all}
+.popup{position:absolute;background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;box-shadow:4px 4px 12px rgba(0,0,0,.5);user-select:none;min-width:420px}
+.popup-titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;padding:3px 8px;font-size:11px;font-weight:bold;display:flex;justify-content:space-between;align-items:center;cursor:move;height:22px}
+.popup-close{width:14px;height:12px;background:#c0392b;border:1px solid #fff;display:flex;align-items:center;justify-content:center;font-size:8px;cursor:pointer;color:#fff;font-weight:bold}
+.popup-subtitle{background:#f9a825;color:#000;padding:4px 10px;font-size:11px;font-weight:bold}
+.popup-grid{display:grid;gap:2px;padding:4px;background:#a8a49c}
+.popup-grid.cols4{grid-template-columns:repeat(4,1fr)}
+.popup-grid.cols3{grid-template-columns:repeat(3,1fr)}
+.popup-grid.cols2{grid-template-columns:repeat(2,1fr)}
+.grid-btn{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;padding:12px 6px;text-align:center;font-size:11px;font-weight:bold;cursor:pointer;min-height:60px;display:flex;align-items:center;justify-content:center;line-height:1.3}
+.grid-btn:hover{background:#c0bcb4}
+.grid-btn:active{border-top-color:#808080;border-left-color:#808080;border-right-color:#fff;border-bottom-color:#fff;background:#b0aca4}
+.grid-btn.bold{font-size:14px;font-weight:900}
 
-/* Civ */
-.civ-content{flex:1;display:flex;overflow:hidden}
-
-::-webkit-scrollbar{width:12px;background:#d4d0c8}
+/* ── Scrollbar ── */
+::-webkit-scrollbar{width:14px;background:#d4d0c8}
 ::-webkit-scrollbar-thumb{background:#808080;border:1px solid #fff}
+::-webkit-scrollbar-button{background:#d4d0c8;height:14px;border:1px solid #fff}
 </style>
 </head>
 <body>
+""")
 
-<audio id="snd-alert" src="data:audio/mp3;base64,ALERT_B64_PLACEHOLDER"></audio>
-<audio id="snd-send"  src="data:audio/mp3;base64,SEND_B64_PLACEHOLDER"></audio>
+    f.write(f"""
+<audio id="snd-alert" src="data:audio/mp3;base64,{alert_b64}"></audio>
+<audio id="snd-send"  src="data:audio/mp3;base64,{send_b64}"></audio>
+<audio id="snd-dispatch" src="data:audio/mp3;base64,{send_b64}"></audio>
+""")
 
+    f.write("""
 <!-- ════ POPUP OVERLAY ════ -->
-<div class="popup-overlay" id="popup-overlay" onclick="closePopupOnOverlay(event)">
-  <div class="popup" id="active-popup" style="top:120px;left:200px">
+<div class="popup-overlay" id="popup-overlay">
+  <div class="popup" id="active-popup" style="top:110px;left:160px">
     <div class="popup-titlebar" id="popup-titlebar" onmousedown="startDrag(event)">
       <span id="popup-title">POPUP</span>
       <div class="popup-close" onclick="closePopup()">✕</div>
@@ -219,131 +194,72 @@ body.night .icobtn{background:#0a0a0a;color:#ff0}
 <!-- ════ AUTH ════ -->
 <div id="auth-screen">
   <div class="auth-wrap">
-    <div class="auth-titlebar">LACRS — Los Angeles County Roleplay System</div>
+    <div class="auth-titlebar">MDCS — Mobile Digital Communications System v.PCMSS_20121121</div>
     <div class="auth-body">
       <div class="auth-tabs">
         <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">SIGN IN</div>
-        <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">CREATE ACCOUNT</div>
+        <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">REQUEST ACCESS</div>
       </div>
       <div id="panel-login">
         <label class="lbl">EMAIL</label>
-        <input class="linp" id="li-email" type="email" placeholder="email@example.com" autocomplete="email">
+        <input class="linp" id="li-email" type="email" placeholder="deputy@lasd.gov" autocomplete="email">
         <label class="lbl">PASSWORD</label>
         <input class="linp" id="li-pass" type="password" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doSignIn()">
-        <button class="lbtn" onclick="doSignIn()">SIGN IN</button>
+        <button class="lbtn" onclick="doSignIn()">SIGN IN TO MDC</button>
         <div class="auth-err" id="li-err"></div>
       </div>
       <div id="panel-signup" style="display:none">
         <label class="lbl">EMAIL</label>
-        <input class="linp" id="su-email" type="email" placeholder="email@example.com">
+        <input class="linp" id="su-email" type="email" placeholder="deputy@lasd.gov">
         <label class="lbl">PASSWORD (min 6 chars)</label>
         <input class="linp" id="su-pass" type="password" placeholder="••••••••">
-        <label class="lbl">DISPLAY NAME</label>
-        <input class="linp" id="su-dname" placeholder="e.g. Deputy Smith or John Doe">
-        <label class="lbl">ROLE</label>
-        <select class="lsel" id="su-role" onchange="toggleUnitField()">
-          <option value="civilian">Civilian</option>
-          <option value="lasd">LASD Deputy</option>
-          <option value="dispatch">Dispatch</option>
-        </select>
-        <div id="su-unit-wrap" style="display:none">
-          <label class="lbl">UNIT ID</label>
-          <input class="linp" id="su-unit" placeholder="e.g. 4L22" style="text-transform:uppercase">
-        </div>
-        <button class="lbtn" onclick="doSignUp()">CREATE ACCOUNT</button>
+        <label class="lbl">DEPUTY NAME</label>
+        <input class="linp" id="su-dname" placeholder="LAST, FIRST">
+        <label class="lbl">UNIT ID</label>
+        <input class="linp" id="su-unit" placeholder="e.g. 4L22" style="text-transform:uppercase">
+        <label class="lbl">STATION</label>
+        <select class="lsel" id="su-station"><option>CENTURY</option><option>COMPTON</option><option>FIRESTONE</option><option>CARSON</option><option>LAKEWOOD</option><option>PALMDALE</option></select>
+        <button class="lbtn" onclick="doSignUp()">REQUEST ACCESS</button>
         <div class="auth-err" id="su-err"></div>
         <div class="auth-info" id="su-info"></div>
-        <div class="auth-note">LASD and Dispatch accounts require admin approval.</div>
+        <div class="auth-note">Accounts require admin approval before access is granted.</div>
       </div>
     </div>
   </div>
 </div>
 
 <!-- ════ PENDING ════ -->
-<div id="pending-screen" style="display:none;flex-direction:column;align-items:center;justify-content:center;width:100vw;height:100vh">
-  <div class="auth-wrap">
-    <div class="auth-titlebar">LACRS — Access Pending</div>
-    <div class="auth-body" style="text-align:center;padding:30px">
-      <div style="font-size:32px;margin-bottom:12px">⏳</div>
+<div id="pending-screen" style="display:none">
+  <div class="pending-wrap">
+    <div class="auth-titlebar">MDCS — Access Pending</div>
+    <div style="padding:28px;text-align:center">
+      <div style="font-size:30px;margin-bottom:12px">⏳</div>
       <div style="font-weight:bold;font-size:13px;margin-bottom:8px">ACCOUNT PENDING APPROVAL</div>
-      <div style="font-size:11px;color:#444;line-height:1.8;margin-bottom:16px">Your account is awaiting admin approval.<br>Contact your supervisor to get approved.</div>
+      <div style="font-size:11px;color:#444;line-height:1.8;margin-bottom:16px">Your request is awaiting admin approval.<br>Contact your supervisor to get approved.</div>
       <button class="lbtn" onclick="doSignOut()" style="background:#800000">SIGN OUT</button>
     </div>
   </div>
 </div>
 
-<!-- ════ HUB ════ -->
-<div id="hub-screen">
-  <div class="hub-title">LACRS</div>
-  <div class="hub-sub">LOS ANGELES COUNTY ROLEPLAY SYSTEM</div>
-  <div class="hub-cards" id="hub-cards"></div>
-  <div class="hub-session-info" id="session-info"></div>
-  <div class="hub-logout" onclick="doSignOut()">Sign out</div>
-</div>
-
-<!-- ════ CIVILIAN WINDOW ════ -->
-<div class="win" id="civ-win">
-  <div class="win-titlebar">
-    <span class="win-title">LACRS — Civilian Portal</span>
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:10px;color:#adf" id="civ-name-display"></span>
-      <div class="win-btns"><div class="wbtn red" onclick="backToHub()">✕</div></div>
-    </div>
-  </div>
-  <div class="nav-bar">
-    <div class="nav-tab active" onclick="civNav('profile')">MY PROFILE</div>
-    <div class="nav-tab" onclick="civNav('vehicles')">VEHICLES</div>
-    <div class="nav-tab" onclick="civNav('record')">CRIMINAL RECORD</div>
-    <div class="nav-tab" onclick="civNav('incidents')">REPORT INCIDENT</div>
-    <div class="nav-tab" onclick="civNav('myincidents')">MY INCIDENTS</div>
-  </div>
-  <div style="flex:1;overflow-y:auto;background:#f0ede8" id="civ-content"></div>
-</div>
-
-<!-- ════ DISPATCH WINDOW ════ -->
-<div class="win" id="disp-win">
-  <div class="win-titlebar">
-    <span class="win-title">LACRS — Dispatch / 911 Communications Center</span>
-    <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:10px;color:#adf" id="disp-name-display"></span>
-      <div class="win-btns"><div class="wbtn red" onclick="backToHub()">✕</div></div>
-    </div>
-  </div>
-  <div class="nav-bar" id="disp-nav-bar">
-    <div class="nav-tab active" onclick="dispNav('intake')">911 INTAKE</div>
-    <div class="nav-tab" onclick="dispNav('calls')">ACTIVE CALLS</div>
-    <div class="nav-tab" onclick="dispNav('units')">UNIT STATUS</div>
-    <div class="nav-tab" onclick="dispNav('log')">CALL LOG</div>
-    <div class="nav-tab" onclick="dispNav('broadcast')">BROADCAST</div>
-    <div id="disp-admin-tab" style="display:none" class="nav-tab" onclick="dispNav('users')">USER MGMT</div>
-  </div>
-  <div class="disp-content">
-    <div class="disp-left">
-      <div class="sec-label">ACTIVE CALLS</div>
-      <div class="panel" id="disp-calls-list" style="flex:1"></div>
-      <div class="sec-label">UNIT STATUS BOARD</div>
-      <div class="panel" id="disp-units-list" style="height:200px;flex:none"></div>
-    </div>
-    <div class="disp-right">
-      <div class="sec-label">DETAIL / WORK AREA</div>
-      <div class="panel" id="disp-main" style="flex:1"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ════ LASD MDC WINDOW ════ -->
+<!-- ════ MDC WINDOW ════ -->
 <div class="win" id="mdc-win">
   <div class="win-titlebar">
     <span class="win-title">MDCS - Mobile Digital Communications System v.PCMSS_20121121 (MDC13744)</span>
     <div style="display:flex;align-items:center;gap:10px">
-      <span style="font-size:10px;color:#adf" id="mdc-unit-display"></span>
-      <div class="win-btns"><div class="wbtn red" onclick="backToHub()">✕</div></div>
+      <span id="mdc-unit-display" style="font-size:10px;color:#adf;font-family:'Courier New',monospace"></span>
+      <div class="win-btns">
+        <div class="wbtn">_</div>
+        <div class="wbtn">□</div>
+        <div class="wbtn red" onclick="doSignOut()">✕</div>
+      </div>
     </div>
   </div>
+
+  <!-- Top status/function buttons — real LASD layout -->
   <div class="mdc-topbtns">
     <div class="tbtn" onclick="clearDispWindow()">CLEAR&#10;DISP&#10;WINDOW</div>
     <div class="tbtn" onclick="mdcStatus('ACK')">ACK</div>
-    <div class="tbtn" onclick="mdcStatus('ENRT')">ENRT</div>
+    <div class="tbtn" onclick="mdcStatus('EN ROUTE')">ENRT</div>
     <div class="tbtn" onclick="mdcStatus('10-97')">10-97</div>
     <div class="tbtn" onclick="mdcStatus('10-98')">10-98</div>
     <div class="tbtn" onclick="openObsForm()">OBS</div>
@@ -352,20 +268,26 @@ body.night .icobtn{background:#0a0a0a;color:#ff0}
     <div class="tbtn white-btn" onclick="mdcOpenNewMsg()">NEW&#10;MESSAGE</div>
     <div class="tbtn" onclick="mdcClearDef()">CLEAR&#10;DEF&#10;WINDOW</div>
   </div>
+
   <div class="mdc-content">
+    <!-- Left column -->
     <div class="mdc-left">
       <div class="sec-label">DISPATCH INDEX</div>
-      <div class="panel" id="mdc-disp-index" style="height:28%;flex:none"></div>
+      <div class="panel" id="mdc-disp-index" style="height:30%;flex:none"></div>
       <div class="sec-label">DISPATCH DETAIL</div>
       <div class="panel" id="mdc-disp-detail" style="height:26%;flex:none"></div>
       <div class="sec-label">MESSAGE INDEX</div>
       <div class="panel" id="mdc-msg-index" style="flex:1"></div>
     </div>
+
+    <!-- Mid column -->
     <div class="mdc-mid">
       <div class="sec-label">MESSAGE DETAIL / DEFAULT WINDOW</div>
       <div class="panel" id="mdc-main" style="flex:1"></div>
-      <div id="obs-compose-bar" style="display:none;flex-shrink:0" class="obs-compose"></div>
+      <div id="mdc-compose-bar" style="height:50px;background:#fffacd;border:2px inset #808080;flex-shrink:0;padding:4px 8px;font-family:'Courier New',monospace;font-size:11px;display:flex;align-items:center;color:#555"></div>
     </div>
+
+    <!-- Right sidebar -->
     <div class="mdc-right">
       <div class="rbtn red"    onclick="openInquiriesPopup()">VEH</div>
       <div class="rbtn green"  onclick="mdcOpenWant()">WANT</div>
@@ -376,12 +298,16 @@ body.night .icobtn{background:#0a0a0a;color:#ff0}
       <div class="rbtn purple" onclick="mdcDoSend()">SEND</div>
     </div>
   </div>
+
   <div class="mdc-bottombar">
-    <div class="msg-input-box"><input type="text" id="mdc-msg-input" placeholder="TO [unit] [message]" onkeydown="if(event.key==='Enter')mdcDoSend()"></div>
-    <div class="icobtn" onclick="mdcDoSearch()">🔍</div>
-    <div class="icobtn" onclick="mdcGoBack()">◀</div>
+    <div class="msg-input-box">
+      <input type="text" id="mdc-msg-input" placeholder="TO [unit] [message]" onkeydown="if(event.key==='Enter')mdcDoSend()">
+    </div>
+    <div class="icobtn" title="Search" onclick="mdcDoSearch()">🔍</div>
+    <div class="icobtn" title="Back"   onclick="mdcGoBack()">◀</div>
     <div class="unread-box" id="mdc-unread-box" onclick="mdcViewUnread()">
-      <div>MESSAGES</div><div>UNREAD:</div><div id="mdc-unread-count" style="font-size:16px">0</div>
+      <div>MESSAGES</div><div>UNREAD:</div>
+      <div id="mdc-unread-count" style="font-size:16px">0</div>
     </div>
     <div class="plain-btn" onclick="mdcOpenLastForm()">LAST<br>FORM USED</div>
     <div class="plain-btn" onclick="document.getElementById('mdc-msg-index').scrollTop=0">SWITCH INDEX<br>RCVD / SENT</div>
@@ -390,7 +316,7 @@ body.night .icobtn{background:#0a0a0a;color:#ff0}
 
 <script>
 // ══════════════════════════════════════════
-//  CONFIG
+//  FIREBASE CONFIG
 // ══════════════════════════════════════════
 var FIREBASE_CONFIG = {
   apiKey: "AIzaSyAwqST-qpcn1idC3r7FUawKDRVtlgsGKtE",
@@ -402,222 +328,267 @@ var FIREBASE_CONFIG = {
   appId: "1:391596748279:web:854dd3f1681e1c0c7c52f2"
 };
 var ADMIN_EMAILS = [];
-var SESSION_HOURS = 8; // session expires after this many hours
+var SESSION_HOURS = 8;
+var SESSION_DURATION = SESSION_HOURS * 3600000;
 
 firebase.initializeApp(FIREBASE_CONFIG);
-var db   = firebase.database();
-var auth = firebase.auth();
+var db = firebase.database(), auth = firebase.auth();
 
-var ME = { uid:'', email:'', displayName:'', role:'', unit:'', isAdmin:false };
-var mdcState = { selectedDisp:null, unreadCount:0, currentForm:'', lastForm:'', localMsgs:[], localDisps:[], isFirstLoad:true, listeners:[] };
-var dispState = { selectedCall:null, listeners:[] };
-var sessionTimer = null;
-var nightMode = false;
+var ME = { uid:'', email:'', name:'', unit:'', station:'', isAdmin:false };
+var S = { selectedDisp:null, unreadCount:0, currentForm:'', lastForm:'', localMsgs:[], localDisps:[], firstLoad:true, listeners:[] };
+var nightMode=false, mdcMuted=false, sessionTimer=null;
 
-// ══════════════════════════════════════════
-//  SESSION MANAGEMENT
-// ══════════════════════════════════════════
-var SESSION_KEY = 'lacrs_session';
-var SESSION_DURATION = SESSION_HOURS * 60 * 60 * 1000;
-
-function saveSession(){
-  localStorage.setItem(SESSION_KEY, JSON.stringify({ uid: ME.uid, loginTime: Date.now() }));
-}
-function clearSession(){ localStorage.removeItem(SESSION_KEY); }
-function isSessionExpired(){
-  try {
-    var s = JSON.parse(localStorage.getItem(SESSION_KEY)||'{}');
-    if(!s.loginTime) return true;
-    return (Date.now() - s.loginTime) > SESSION_DURATION;
-  } catch(e){ return true; }
-}
+// ── Session ────────────────────────────────
+function saveSession(){ localStorage.setItem('mdcs_sess',JSON.stringify({uid:ME.uid,t:Date.now()})); }
+function clearSession(){ localStorage.removeItem('mdcs_sess'); }
+function sessionExpired(){ try{ var s=JSON.parse(localStorage.getItem('mdcs_sess')||'{}'); return !s.t||(Date.now()-s.t)>SESSION_DURATION; }catch(e){return true;} }
 function startSessionTimer(){
   if(sessionTimer) clearTimeout(sessionTimer);
-  sessionTimer = setTimeout(function(){
-    alert('Your session has expired after '+SESSION_HOURS+' hours. Please sign in again.');
-    doSignOut();
-  }, SESSION_DURATION);
-  // Update session info display
-  var info = document.getElementById('session-info');
-  if(info){
-    var expireTime = new Date(Date.now() + SESSION_DURATION);
-    info.textContent = 'Session expires: '+expireTime.toLocaleTimeString();
-  }
+  sessionTimer=setTimeout(function(){ alert('Session expired after '+SESSION_HOURS+' hours. Please sign in again.'); doSignOut(); }, SESSION_DURATION);
 }
 
-// ══════════════════════════════════════════
-//  AUTH STATE
-// ══════════════════════════════════════════
+// ── Auth state ─────────────────────────────
 auth.onAuthStateChanged(function(user){
-  if(!user){ showScreen('auth'); return; }
-  // Check session expiry
-  if(isSessionExpired()){ auth.signOut(); return; }
-  db.ref('users/'+user.uid).once('value', function(snap){
-    var p = snap.val();
-    if(!p){ doSignOut(); return; }
-    // Check if revoked in real time
-    db.ref('users/'+user.uid+'/status').on('value', function(ssnap){
-      var status = ssnap.val();
-      if(status === 'denied' || status === 'pending'){
-        // Only kick if they're currently inside a window
-        if(document.getElementById('mdc-win').style.display==='flex'||
-           document.getElementById('disp-win').style.display==='flex'||
-           document.getElementById('civ-win').style.display==='flex'){
-          alert('Your access has been revoked. You will now be signed out.');
-          doSignOut();
-        }
+  if(!user){ show('auth'); return; }
+  if(sessionExpired()){ auth.signOut(); return; }
+  db.ref('users/'+user.uid).once('value',function(snap){
+    var p=snap.val(); if(!p){ doSignOut(); return; }
+    if(p.status!=='approved'){ show('pending'); return; }
+    ME={uid:user.uid,email:user.email,name:p.name||p.displayName||'',unit:p.unit||'',station:p.station||'',isAdmin:ADMIN_EMAILS.indexOf(user.email)>=0||p.isAdmin===true};
+    // Watch for revocation in real time
+    db.ref('users/'+user.uid+'/status').on('value',function(ss){
+      if(ss.val()!=='approved'&&document.getElementById('mdc-win').style.display==='flex'){
+        alert('Your access has been revoked. Signing out.');doSignOut();
       }
     });
-    ME = { uid:user.uid, email:user.email, displayName:p.displayName||'', role:p.role||'civilian', unit:p.unit||'', isAdmin: ADMIN_EMAILS.indexOf(user.email)>=0||p.isAdmin===true };
-    if(p.role!=='civilian' && p.status!=='approved'){ showScreen('pending'); return; }
-    if(p.role==='civilian' && !p.status){ db.ref('users/'+user.uid).update({status:'approved'}); }
-    // Also watch isAdmin flag in real time
-    db.ref('users/'+user.uid+'/isAdmin').on('value',function(asnap){ ME.isAdmin = asnap.val()===true || ADMIN_EMAILS.indexOf(ME.email)>=0; });
-    saveSession();
-    startSessionTimer();
-    showScreen('hub');
-    renderHub();
+    db.ref('users/'+user.uid+'/isAdmin').on('value',function(as){ ME.isAdmin=as.val()===true||ADMIN_EMAILS.indexOf(ME.email)>=0; });
+    saveSession(); startSessionTimer();
+    launchMDC();
   });
 });
 
-function showScreen(s){
-  document.getElementById('auth-screen').style.display    = s==='auth'    ?'flex':'none';
-  document.getElementById('pending-screen').style.display = s==='pending' ?'flex':'none';
-  document.getElementById('hub-screen').style.display     = s==='hub'     ?'flex':'none';
-  ['civ-win','disp-win','mdc-win'].forEach(function(id){ document.getElementById(id).style.display='none'; });
+function show(s){
+  document.getElementById('auth-screen').style.display    = s==='auth'    ?'block':'none';
+  document.getElementById('pending-screen').style.display = s==='pending' ?'block':'none';
+  document.getElementById('mdc-win').style.display        = s==='mdc'     ?'flex' :'none';
 }
 
-function renderHub(){
-  var cards=[
-    {id:'civilian',icon:'👤',title:'CIVILIAN',   desc:'Manage your profile, vehicles, and report incidents',roles:['civilian','lasd','dispatch']},
-    {id:'dispatch',icon:'📡',title:'DISPATCH',   desc:'911 Communications Center — manage calls and units',roles:['dispatch','lasd']},
-    {id:'lasd',    icon:'⭐',title:'LASD MDC',   desc:'Mobile Data Computer — law enforcement functions',roles:['lasd']},
-  ];
-  var adminCard = ME.isAdmin ? '<div class="hub-card" onclick="openAdminPanel()" style="border-top-color:#f9a825"><div class="hub-card-banner" style="background:#3a2a00">🔧</div><div class="hub-card-body"><div class="hub-card-title">ADMIN</div><div class="hub-card-desc">User management and system settings</div></div></div>' : '';
-  var html = cards.filter(function(c){ return c.roles.indexOf(ME.role)>=0||ME.isAdmin; }).map(function(c){
-    var colors={'civilian':'#1a2e1a','dispatch':'#1a1a2e','lasd':'#2e1a1a'};
-    return '<div class="hub-card" onclick="openHub(\''+c.id+'\')"><div class="hub-card-banner" style="background:'+colors[c.id]+'">'+c.icon+'</div><div class="hub-card-body"><div class="hub-card-title">'+c.title+'</div><div class="hub-card-desc">'+c.desc+'</div></div></div>';
-  }).join('')+adminCard;
-  document.getElementById('hub-cards').innerHTML=html;
-}
-
-function openHub(w){ if(w==='civilian')launchCivilian(); else if(w==='dispatch')launchDispatch(); else if(w==='lasd')launchMDC(); }
-function backToHub(){ closePopup(); detachMdcListeners(); detachDispListeners(); ['civ-win','disp-win','mdc-win'].forEach(function(id){document.getElementById(id).style.display='none';}); showScreen('hub'); }
-
-// ── Auth actions ───────────────────────────────
+// ── Auth actions ───────────────────────────
 function switchTab(t){
   document.getElementById('panel-login').style.display  = t==='login' ?'block':'none';
   document.getElementById('panel-signup').style.display = t==='signup'?'block':'none';
   document.getElementById('tab-login').className  ='auth-tab'+(t==='login' ?' active':'');
   document.getElementById('tab-signup').className ='auth-tab'+(t==='signup'?' active':'');
 }
-function toggleUnitField(){ document.getElementById('su-unit-wrap').style.display=document.getElementById('su-role').value==='lasd'?'block':'none'; }
 function doSignIn(){
-  var e=document.getElementById('li-email').value.trim(),p=document.getElementById('li-pass').value,err=document.getElementById('li-err');
+  var e=gi('li-email').value.trim(),p=gi('li-pass').value,err=gi('li-err');
   err.textContent=''; if(!e||!p){err.textContent='Enter email and password.';return;}
   auth.signInWithEmailAndPassword(e,p).catch(function(){err.textContent='Invalid email or password.';});
 }
 function doSignUp(){
-  var e=document.getElementById('su-email').value.trim(),p=document.getElementById('su-pass').value,dn=document.getElementById('su-dname').value.trim().toUpperCase(),role=document.getElementById('su-role').value,unit=document.getElementById('su-unit').value.trim().toUpperCase();
-  var err=document.getElementById('su-err'),info=document.getElementById('su-info');
-  err.textContent='';info.textContent='';
-  if(!e||!p||!dn){err.textContent='All fields required.';return;}
+  var e=gi('su-email').value.trim(),p=gi('su-pass').value,n=gi('su-dname').value.trim().toUpperCase(),u=gi('su-unit').value.trim().toUpperCase(),st=gi('su-station').value;
+  var err=gi('su-err'),info=gi('su-info'); err.textContent=''; info.textContent='';
+  if(!e||!p||!n||!u){err.textContent='All fields required.';return;}
   if(p.length<6){err.textContent='Password must be 6+ chars.';return;}
-  auth.createUserWithEmailAndPassword(e,p).then(function(cred){
-    var status=role==='civilian'?'approved':'pending';
-    return db.ref('users/'+cred.user.uid).set({uid:cred.user.uid,email:e,displayName:dn,role:role,unit:unit||'',status:status,isAdmin:false,createdAt:Date.now()});
-  }).then(function(){ info.textContent=role==='civilian'?'Account created!':'Request submitted! Awaiting admin approval.'; }).catch(function(ex){
+  auth.createUserWithEmailAndPassword(e,p).then(function(c){
+    return db.ref('users/'+c.user.uid).set({uid:c.user.uid,email:e,name:n,unit:u,station:st,status:'pending',isAdmin:false,createdAt:Date.now()});
+  }).then(function(){info.textContent='Request submitted! Awaiting admin approval.';}).catch(function(ex){
     err.textContent=ex.code==='auth/email-already-in-use'?'Email already registered.':ex.message;
   });
 }
 function doSignOut(){
-  clearSession();
-  if(sessionTimer) clearTimeout(sessionTimer);
+  clearSession(); if(sessionTimer)clearTimeout(sessionTimer);
   closePopup();
+  if(ME.uid){ db.ref('users/'+ME.uid+'/status').off(); db.ref('users/'+ME.uid+'/isAdmin').off(); }
   if(ME.unit) db.ref('units/'+ME.unit).update({online:false,status:'OFFLINE'});
-  detachMdcListeners(); detachDispListeners();
-  // Remove real-time listeners on user node
-  if(ME.uid){
-    db.ref('users/'+ME.uid+'/status').off();
-    db.ref('users/'+ME.uid+'/isAdmin').off();
-  }
-  ME={uid:'',email:'',displayName:'',role:'',unit:'',isAdmin:false};
+  detachListeners();
+  ME={uid:'',email:'',name:'',unit:'',station:'',isAdmin:false};
   auth.signOut();
 }
 
-// ══════════════════════════════════════════
-//  POPUP SYSTEM (draggable Windows-style dialogs)
-// ══════════════════════════════════════════
-var dragOffX=0,dragOffY=0,isDragging=false;
-function openPopup(title,subtitle,bodyHtml,cols){
-  var overlay=document.getElementById('popup-overlay');
-  var popup=document.getElementById('active-popup');
-  document.getElementById('popup-title').textContent=title;
-  var sub=document.getElementById('popup-subtitle-bar');
+// ── Launch MDC ─────────────────────────────
+function launchMDC(){
+  show('mdc');
+  gi('mdc-unit-display').textContent=ME.unit+' — '+ME.name;
+  if(ME.unit){
+    var uRef=db.ref('units/'+ME.unit);
+    uRef.set({unit:ME.unit,name:ME.name,station:ME.station,status:'AVAILABLE',online:true,ts:Date.now()});
+    uRef.onDisconnect().update({online:false,status:'OFFLINE'});
+  }
+  attachListeners();
+  showMain('<div class="detail-text" style="padding:24px;text-align:center;color:#888"><br><br>MDCS — MOBILE DIGITAL COMMUNICATIONS SYSTEM\\nv.PCMSS_20121121\\n\\nMDC13744 — UNIT '+ME.unit+' — '+ME.name+'\\n\\nSELECT A FUNCTION OR CLICK A DISPATCH CALL\\nTO BEGIN</div>');
+}
+
+// ── Firebase listeners ─────────────────────
+function attachListeners(){
+  var l1=db.ref('dispatches').on('value',function(snap){
+    S.localDisps=Object.entries(snap.val()||{}).map(function(e){return Object.assign({_key:e[0]},e[1]);}).sort(function(a,b){return b.ts-a.ts;});
+    renderDisp();
+  });
+  var l2=db.ref('messages').on('child_added',function(snap){
+    var m=snap.val(); m._key=snap.key;
+    var own=m.from===ME.unit;
+    if(!S.firstLoad&&!own){m.unread=true;S.unreadCount++;updUnread();playAlert();}
+    else m.unread=false;
+    S.localMsgs.unshift(m); if(S.localMsgs.length>200)S.localMsgs.pop();
+    renderMsgs();
+  });
+  var l3=db.ref('private/'+ME.uid).on('child_added',function(snap){
+    var m=snap.val(); m._key=snap.key; m.isPrivate=true;
+    if(!S.firstLoad){m.unread=true;S.unreadCount++;updUnread();playAlert();showQueryResult(m.result,m.text);}
+    else m.unread=false;
+    S.localMsgs.unshift(m); if(S.localMsgs.length>200)S.localMsgs.pop();
+    renderMsgs();
+  });
+  S.listeners=[{r:db.ref('dispatches'),h:l1,e:'value'},{r:db.ref('messages'),h:l2,e:'child_added'},{r:db.ref('private/'+ME.uid),h:l3,e:'child_added'}];
+  setTimeout(function(){S.firstLoad=false;},2500);
+}
+function detachListeners(){
+  S.listeners.forEach(function(l){l.r.off(l.e,l.h);}); S.listeners=[];
+  S.localMsgs=[]; S.localDisps=[]; S.firstLoad=true; S.unreadCount=0;
+}
+
+// ── Push helpers ───────────────────────────
+function pushShared(obj){ obj.ts=Date.now();obj.date=today();obj.from=ME.unit; db.ref('messages').push(obj); }
+function pushPrivate(obj){ obj.ts=Date.now();obj.date=today(); db.ref('private/'+ME.uid).push(obj); }
+function pushDispatch(obj){ obj.ts=Date.now(); db.ref('dispatches').push(obj); }
+
+// ── Render ─────────────────────────────────
+function renderDisp(){
+  var el=gi('mdc-disp-index'); if(!el)return;
+  el.innerHTML=S.localDisps.map(function(d){
+    var sel=S.selectedDisp===d._key;
+    return '<div class="disp-row'+(sel?' selected':'')+'" onclick="selectDisp(\''+d._key+'\')">'
+      +'<span style="min-width:36px">'+d.time+'</span>'
+      +'<span style="min-width:60px">'+d.id+'</span>'
+      +'<span style="min-width:32px">'+d.code+'</span>'
+      +'<span style="min-width:14px">'+d.pri+'</span>'
+      +'<span>'+d.unit+'</span></div>';
+  }).join('');
+}
+function selectDisp(key){
+  S.selectedDisp=key; renderDisp();
+  var d=S.localDisps.find(function(x){return x._key===key;}); if(!d)return;
+  gi('mdc-disp-detail').innerHTML='<div class="detail-text">'+d.id+' '+d.code+'\\n('+d.pri+') '+d.unit+'\\n'+d.addr+'\\n'+d.rmk+'</div>';
+  showMain('<div class="detail-text"><b>--- DISPATCH DETAIL ---</b>\\n\\nCALL #: '+d.id+'\\nTIME:   '+d.time+'\\nCODE:   '+d.code+'\\nPRIO:   '+d.pri+'\\nUNIT:   '+d.unit+'\\nADDR:   '+d.addr+'\\nRMK:    '+d.rmk+'</div>');
+}
+function renderMsgs(){
+  var el=gi('mdc-msg-index'); if(!el)return;
+  el.innerHTML=S.localMsgs.map(function(m,i){
+    var cls='msg-row'+(m.unread?' unread':'')+(m.isHit?' is-hit':'');
+    var lbl=(m.isPrivate?'[Q] ':'')+((m.from?m.from+': ':'')+m.text);
+    return '<div class="'+cls+'" onclick="selectMsg('+i+')">'
+      +'<span style="min-width:54px;font-size:9px">'+m.time+'</span>'
+      +'<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+lbl+'</span>'
+      +'<span style="font-size:9px;color:#666">'+m.date+'</span></div>';
+  }).join('');
+  updUnread();
+}
+function selectMsg(i){
+  var m=S.localMsgs[i]; if(!m)return;
+  if(m.unread){m.unread=false;S.unreadCount=Math.max(0,S.unreadCount-1);renderMsgs();}
+  if(m.result) showQueryResult(m.result,m.text);
+  else showMain('<div class="detail-text"><b>'+(m.from||'')+'</b>'+(m.from?'\\n\\n':'')+m.text+'\\n\\nDATE: '+m.date+'\\nTIME: '+m.time+'</div>');
+}
+function showMain(html){ gi('mdc-main').innerHTML=html; gi('mdc-compose-bar').textContent=''; }
+function showQueryResult(r,fb){ gi('mdc-main').innerHTML=r||('<div class="detail-text">'+(fb||'')+'</div>'); }
+function updUnread(){ gi('mdc-unread-count').textContent=S.unreadCount; gi('mdc-unread-box').style.background=S.unreadCount>0?'#f9a825':'#43a047'; }
+
+// ── Audio ──────────────────────────────────
+function playAlert(){ if(mdcMuted)return; try{var a=gi('snd-alert');a.currentTime=0;a.play();}catch(e){} }
+function playDispatch(){ if(mdcMuted)return; try{var a=gi('snd-dispatch');a.currentTime=0;a.play();}catch(e){} }
+function playSend(){  try{var a=gi('snd-send'); a.currentTime=0;a.play();}catch(e){} }
+
+// ── Status functions ───────────────────────
+function mdcStatus(code){
+  var t=now();
+  if(ME.unit) db.ref('units/'+ME.unit).update({status:code,ts:Date.now()});
+  pushShared({time:t,text:'STATUS: '+code});
+  showMain('<div class="detail-text"><b>STATUS SENT</b>\\n\\nUNIT:   '+ME.unit+'\\nSTATUS: '+code+'\\nTIME:   '+t+'</div>');
+}
+function clearDispWindow(){ S.localDisps=[]; gi('mdc-disp-index').innerHTML=''; S.selectedDisp=null; }
+function mdcClearDef(){ showMain(''); S.currentForm=''; gi('mdc-compose-bar').textContent=''; }
+
+// ── POPUP SYSTEM ───────────────────────────
+var dragOX=0,dragOY=0,dragging=false;
+function openPopup(title,subtitle,bodyHtml){
+  gi('popup-title').textContent=title;
+  var sub=gi('popup-subtitle-bar');
   if(subtitle){sub.textContent=subtitle;sub.style.display='block';}else{sub.style.display='none';}
-  document.getElementById('popup-body').innerHTML=bodyHtml;
-  // Center it roughly
-  popup.style.top='100px'; popup.style.left='180px';
-  overlay.className='popup-overlay active';
+  gi('popup-body').innerHTML=bodyHtml;
+  gi('active-popup').style.top='100px'; gi('active-popup').style.left='160px';
+  gi('popup-overlay').className='popup-overlay active';
 }
-function closePopup(){ document.getElementById('popup-overlay').className='popup-overlay'; document.getElementById('popup-body').innerHTML=''; }
-function closePopupOnOverlay(e){ if(e.target===document.getElementById('popup-overlay')) closePopup(); }
-
+function closePopup(){ gi('popup-overlay').className='popup-overlay'; gi('popup-body').innerHTML=''; }
 function startDrag(e){
-  isDragging=true;
-  var popup=document.getElementById('active-popup');
-  var rect=popup.getBoundingClientRect();
-  dragOffX=e.clientX-rect.left; dragOffY=e.clientY-rect.top;
-  document.onmousemove=function(ev){
-    if(!isDragging) return;
-    popup.style.left=(ev.clientX-dragOffX)+'px';
-    popup.style.top=(ev.clientY-dragOffY)+'px';
-  };
-  document.onmouseup=function(){ isDragging=false; document.onmousemove=null; document.onmouseup=null; };
+  dragging=true;
+  var p=gi('active-popup'),r=p.getBoundingClientRect();
+  dragOX=e.clientX-r.left; dragOY=e.clientY-r.top;
+  document.onmousemove=function(ev){ if(!dragging)return; p.style.left=(ev.clientX-dragOX)+'px'; p.style.top=(ev.clientY-dragOY)+'px'; };
+  document.onmouseup=function(){ dragging=false; document.onmousemove=null; document.onmouseup=null; };
 }
+gi('popup-overlay').addEventListener('click',function(e){ if(e.target===gi('popup-overlay'))closePopup(); });
 
-// ── STATUS TXT popup ──────────────────────────
+// ── STATUS TXT popup (real LASD shift keys) ──
 function openStatusTxtPopup(){
-  var body='<div class="popup-grid cols3">'
+  openPopup('STATUS FUNCTIONS','STATUS TXT:',
+    '<div class="popup-grid cols3">'
     +'<div class="grid-btn" onclick="mdcStatus(\'10-7\');closePopup()">10-7</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(\'10-97\');closePopup()">10-97</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(\'HITS\');closePopup()">HITS</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(\'10-98\');closePopup()">10-98</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(\'STA\');closePopup()">STA</div>'
     +'<div class="grid-btn" onclick="mdcStatus(\'10-8\');closePopup()">10-8</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(\'902H\');closePopup()">902H</div>'
     +'<div class="grid-btn" onclick="mdcStatus(\'10-10\');closePopup()">10-10</div>'
     +'<div class="grid-btn" onclick="mdcStatus(\'10-15\');closePopup()">10-15</div>'
-    +'<div class="grid-btn" onclick="dispatchStatusStation()">STATION</div>'
-    +'<div class="grid-btn" onclick="mdcStatus(\'902H\');closePopup()">902H</div>'
-    +'</div>';
-  openPopup('STATUS FUNCTIONS','STATUS TXT:',body);
-}
-function dispatchStatusStation(){
-  var s=prompt('Enter station:'); if(s) mdcStatus('AT STATION: '+s.toUpperCase());
-  closePopup();
-}
-
-// ── OBS form (teal input style like image 1) ──
-function openObsForm(){
-  mdcState.currentForm='obs';
-  mdcShowMain('<div class="obs-form">'
-    +'<div class="obs-row"><span class="obs-label">OBS</span><span class="obs-label" style="min-width:30px">LOC</span><input class="obs-input" id="obs-loc" style="width:340px"></div>'
-    +'<div class="obs-row" style="padding-left:86px"><input class="obs-input" id="obs-loc2" style="width:240px"></div>'
-    +'<div class="obs-row"><span class="obs-label">CODE</span><input class="obs-input" id="obs-code" style="width:90px"> <input class="obs-input" id="obs-code2" style="width:90px"> <input class="obs-input" id="obs-code3" style="width:90px"></div>'
-    +'<div class="obs-row"><span class="obs-label">VEH</span><input class="obs-input" id="obs-veh" style="width:90px"> <span class="obs-label" style="min-width:18px">ST</span><input class="obs-input" id="obs-st" style="width:30px" value="CA"> <span class="obs-label" style="min-width:20px">LC</span><input class="obs-input" id="obs-lc" style="width:30px"> <span class="obs-label" style="min-width:36px">SRCH</span><input class="obs-input" id="obs-srch" style="width:30px"></div>'
-    +'<div class="obs-row"><span class="obs-label">RMK</span><input class="obs-input" id="obs-rmk" style="width:340px"></div>'
-    +'<br><div class="want-actions"><div class="want-action-btn" style="background:#2e7d32;max-width:200px" onclick="submitObs()">SUBMIT OBS</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="clearObs()">CLEAR</div></div>'
+    +'<div class="grid-btn" onclick="mdcStatus(\'UTH\');closePopup()">UTH</div>'
+    +'<div class="grid-btn bold" onclick="mdcEmer()" style="color:#cc0000;grid-column:span 2">EMER</div>'
     +'</div>');
-  document.getElementById('obs-compose-bar').style.display='block';
-  document.getElementById('obs-compose-bar').textContent='';
+}
+function mdcEmer(){
+  closePopup();
+  pushShared({time:now(),text:'*** EMERGENCY STATUS — UNIT '+ME.unit+' ***'});
+  showMain('<div class="detail-text" style="background:#cc0000;color:#fff;padding:20px;text-align:center"><br><b>*** EMERGENCY STATUS TRANSMITTED ***</b><br><br>UNIT: '+ME.unit+'<br>TIME: '+now()+'<br><br>CONTINUOUSLY TRANSMITTING...<br><br><button onclick="cancelEmer()" style="background:#fff;color:#cc0000;border:none;padding:8px 20px;font-weight:bold;cursor:pointer">CANCEL EMERGENCY</button></div>');
+  playAlert(); setTimeout(playAlert,600); setTimeout(playAlert,1200);
+}
+function cancelEmer(){ pushShared({time:now(),text:'EMERGENCY CANCELLED — '+ME.unit}); showMain('<div class="detail-text">EMERGENCY CANCELLED.\\n\\nTIME: '+now()+'</div>'); }
+
+// ── OBS form — real LASD mask ──────────────
+function openObsForm(){
+  S.currentForm='obs';
+  gi('mdc-main').innerHTML='<div class="obs-form">'
+    +'<div style="font-weight:bold;font-size:12px;margin-bottom:8px">OBSERVATION ENTRY</div>'
+    +'<div class="obs-row"><span class="obs-label">OBS LOC</span><input class="obs-input" id="obs-loc1" style="width:360px" placeholder="Location line 1"></div>'
+    +'<div class="obs-row" style="margin-left:50px"><input class="obs-input" id="obs-loc2" style="width:360px" placeholder="Location line 2 (optional)"></div>'
+    +'<div class="obs-row"><span class="obs-label">CODE</span><input class="obs-input" id="obs-code1" style="width:80px"> <input class="obs-input" id="obs-code2" style="width:80px"> <input class="obs-input" id="obs-code3" style="width:80px"></div>'
+    +'<div class="obs-row"><span class="obs-label">VEH</span><input class="obs-input" id="obs-veh" style="width:80px"> <span class="obs-label" style="min-width:18px">ST</span><input class="obs-input" id="obs-st" style="width:28px" value="CA"> <span class="obs-label" style="min-width:18px">LC</span><input class="obs-input" id="obs-lc" style="width:28px"> <span class="obs-label" style="min-width:36px">SRCH</span><input class="obs-input" id="obs-srch" style="width:28px"></div>'
+    +'<div class="obs-row"><span class="obs-label">RMK</span></div>'
+    +'<textarea class="obs-rmk" id="obs-rmk" rows="4" placeholder="Remarks (up to 6 lines)..."></textarea>'
+    +'<div class="obs-row" style="margin-top:6px"><span class="obs-label">10/97</span><span style="font-size:11px;font-weight:bold;margin-right:4px">TIME</span><input class="obs-input" id="obs-97t" style="width:60px" placeholder="'+now()+'"> <span style="font-size:11px;font-weight:bold;margin:0 4px">DATE</span><input class="obs-input" id="obs-97d" style="width:80px" placeholder="'+today()+'"></div>'
+    +'<div class="obs-row"><span class="obs-label">10/98</span><span style="font-size:11px;font-weight:bold;margin-right:4px">TIME</span><input class="obs-input" id="obs-98t" style="width:60px"></div>'
+    +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32;max-width:180px" onclick="submitObs()">SEND OBS</div><div class="want-action-btn" style="background:#1976d2;max-width:100px" onclick="clearObs()">CLEAR</div><div class="want-action-btn" style="background:#808080;max-width:100px" onclick="mdcClearDef()">CANCEL</div></div>'
+    +'</div>';
+  gi('mdc-compose-bar').textContent='OBS MODE — Fill form and press SEND OBS';
 }
 function submitObs(){
-  var loc=gv('obs-loc'),code=gv('obs-code'),veh=gv('obs-veh'),rmk=gv('obs-rmk');
-  if(!loc){alert('Enter a location.');return;}
-  mdcPushShared({time:getTime(),text:'OBS — LOC: '+loc+(code?' CODE:'+code:'')+(veh?' VEH:'+veh:'')+(rmk?' RMK:'+rmk:'')});
+  var loc=gv('obs-loc1'),rmk=gi('obs-rmk').value.trim();
+  if(!loc){alert('Enter location.');return;}
+  var msg='OBS — LOC: '+loc+(gv('obs-loc2')?' / '+gv('obs-loc2'):'')
+    +(gv('obs-code1')?' CODE: '+gv('obs-code1')+(gv('obs-code2')?' '+gv('obs-code2'):'')+(gv('obs-code3')?' '+gv('obs-code3'):''):'')
+    +(gv('obs-veh')?' VEH: '+gv('obs-veh')+' '+gv('obs-st')+(gv('obs-lc')?' LC:'+gv('obs-lc'):'')+(gv('obs-srch')?' SRCH:'+gv('obs-srch'):''):'')
+    +(rmk?' RMK: '+rmk:'');
+  pushShared({time:now(),text:msg});
+  pushDispatch({id:'OBS'+Math.floor(Math.random()*9000+1000),time:now(),code:gv('obs-code1')||'OBS',pri:'D',unit:ME.unit,addr:loc,rmk:rmk||'OBSERVATION',ts:Date.now()});
+  mdcStatus('10-97');
   mdcClearDef();
 }
-function clearObs(){ document.querySelectorAll('[id^="obs-"]').forEach(function(e){e.value=e.id==='obs-st'?'CA':'';}); }
+function clearObs(){ ['obs-loc1','obs-loc2','obs-code1','obs-code2','obs-code3','obs-veh','obs-lc','obs-srch','obs-97t','obs-97d','obs-98t'].forEach(function(id){var e=gi(id);if(e)e.value='';}); gi('obs-rmk').value=''; gi('obs-st').value='CA'; }
 
-// ── INQUIRIES popup (image 2) ─────────────────
+// ── INQUIRIES popup (real LASD layout) ────
 function openInquiriesPopup(){
-  var body='<div class="popup-grid">'
+  openPopup('INQUIRIES','',
+    '<div class="popup-grid cols4">'
     +'<div class="grid-btn" onclick="closePopup();mdcOpenVeh()">VEH</div>'
     +'<div class="grid-btn" onclick="closePopup();mdcOpenDmv()">DMV</div>'
     +'<div class="grid-btn" onclick="closePopup();mdcOpenWant()">WANT</div>'
@@ -626,665 +597,488 @@ function openInquiriesPopup(){
     +'<div class="grid-btn" onclick="closePopup();mdcOpenGun()">GUN</div>'
     +'<div class="grid-btn" onclick="closePopup();mdcOpenBoat()">BOAT</div>'
     +'<div class="grid-btn" onclick="closePopup();mdcOpenBike()">BIKE</div>'
-    +'</div>';
-  openPopup('INQUIRIES','',body);
+    +'</div>');
 }
 
-// ── CALL & LOG popup (image 3) ────────────────
+// ── CALL & LOG popup (real LASD layout) ───
 function openCallLogPopup(){
-  var body='<div class="popup-grid">'
+  openPopup('CALL & LOG FUNCTIONS','',
+    '<div class="popup-grid cols4">'
     +'<div class="grid-btn" onclick="closePopup();mdcClearTag()">CLEAR TAG</div>'
     +'<div class="grid-btn" onclick="closePopup();mdcChangeLog()">CHANGE LOG</div>'
-    +'<div class="grid-btn" onclick="closePopup();mdcOpenWorksheet()">WORKSHEET</div>'
+    +'<div class="grid-btn" onclick="closePopup();mdcWorksheet()">WORKSHEET</div>'
     +'<div class="grid-btn" onclick="closePopup();mdcViewHits()">HITS</div>'
     +'<div class="grid-btn" onclick="closePopup();mdcLogOnOff()">LOG-ON<br>LOG-OFF</div>'
-    +'<div class="grid-btn bold" onclick="closePopup();mdcSignOn()">SIGN ON</div>'
+    +'<div class="grid-btn bold" onclick="closePopup();mdcSignOn()">SIGN<br>ON</div>'
     +'<div class="grid-btn" onclick="closePopup();mdcSignOff(false)" style="font-size:10px">SIGN OFF<br>(delete all<br>message)</div>'
-    +'<div class="grid-btn" onclick="closePopup();mdcSignOff(true)" style="font-size:10px">SIGN OFF/SAVE<br>(retains calls &<br>messages)</div>'
-    +'</div>';
-  openPopup('CALL & LOG FUNCTIONS','',body);
+    +'<div class="grid-btn" onclick="closePopup();mdcSignOff(true)" style="font-size:10px">SIGN<br>OFF/SAVE<br>(retains calls &<br>messages)</div>'
+    +'</div>');
 }
-
-// ── OTHER FUNCTIONS popup (image 4) ──────────
-function openOtherPopup(){
-  var body='<div class="popup-grid">'
-    +'<div class="grid-btn bold" onclick="closePopup();mdcOpenUrn()">URN</div>'
-    +'<div class="grid-btn" onclick="closePopup();mdcBookingNumber()" style="font-size:10px">BOOKING NUMBER</div>'
-    +'<div class="grid-btn" onclick="closePopup();mdcCriticalLocations()" style="font-size:10px">CRITICAL LOCATIONS</div>'
-    +'<div class="grid-btn" onclick="closePopup();mdcClearReadMessages()" style="font-size:10px">CLEAR READ MESSAGES</div>'
-    +'<div class="grid-btn" onclick="closePopup();mdcDayNightMode()" style="font-size:10px">DAY/NIGHT MODE</div>'
-    +'<div class="grid-btn bold" onclick="closePopup();mdcToggleMute()">MUTE/SOUND</div>'
-    +'<div class="grid-btn" onclick="closePopup();mdcSysInput()" style="font-size:10px">**SISI**<br>SYSTEM INPUT</div>'
-    +'<div class="grid-btn" onclick="closePopup();mdcSysQuery()" style="font-size:10px">**SISO**<br>SYSTEM QUERY</div>'
-    +'</div>';
-  openPopup('Other Functions','',body);
+function mdcClearTag(){ S.selectedDisp=null; renderDisp(); gi('mdc-disp-detail').innerHTML=''; showMain('<div class="detail-text">TAG CLEARED.</div>'); }
+function mdcChangeLog(){
+  showMain('<div class="want-form"><b>CHANGE LOG (CHGL)</b><br><br>'
+    +'<div class="want-row"><span class="want-label">UNIT</span><input class="want-input" id="cl-unit" style="width:80px" value="'+ME.unit+'"> <span class="want-label" style="min-width:40px">SHIFT</span><input class="want-input" id="cl-shift" style="width:30px"></div>'
+    +'<div class="want-row"><span class="want-label">CLASS</span><input class="want-input" id="cl-class" style="width:30px"> <span class="want-label" style="min-width:50px">TIME ON</span><input class="want-input" id="cl-ton" style="width:50px"> <span class="want-label" style="min-width:50px">TIME OFF</span><input class="want-input" id="cl-toff" style="width:50px"></div>'
+    +'<div class="want-row"><span class="want-label">VEHICLE</span><input class="want-input" id="cl-veh" style="width:80px"> <span class="want-label" style="min-width:60px">BEG MILE</span><input class="want-input" id="cl-bmile" style="width:70px"> <span class="want-label" style="min-width:60px">END MILE</span><input class="want-input" id="cl-emile" style="width:70px"></div>'
+    +'<div class="want-row"><span class="want-label">DEPUTY #1</span><input class="want-input" id="cl-dep1" style="width:100px"> <span class="want-label" style="min-width:40px">DEP #2</span><input class="want-input" id="cl-dep2" style="width:100px"></div>'
+    +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="submitChgl()">SEND CHGL</div></div></div>');
 }
-
-// ── Other Functions implementations ──────────
-var mdcMuted = false;
-function mdcDayNightMode(){
-  nightMode=!nightMode;
-  document.body.className=nightMode?'night':'';
+function submitChgl(){
+  pushShared({time:now(),text:'CHGL — UNIT: '+gv('cl-unit')+' SHIFT: '+gv('cl-shift')+' CLASS: '+gv('cl-class')+' TON: '+gv('cl-ton')+' TOFF: '+gv('cl-toff')+' VEH: '+gv('cl-veh')+' BEG: '+gv('cl-bmile')+' END: '+gv('cl-emile')});
+  showMain('<div class="detail-text">MODIFY LOG SUCCESSFUL\\n\\nTIME: '+now()+'</div>');
 }
-function mdcToggleMute(){
-  mdcMuted=!mdcMuted;
-  mdcShowMain('<div class="detail-text"><b>SOUND '+(mdcMuted?'MUTED':'ENABLED')+'</b>\n\nAlerts are '+(mdcMuted?'off':'on')+'.</div>');
+function mdcWorksheet(){
+  showMain('<div class="want-form"><b>WORKSHEET STATUS (WS)</b><br><br>'
+    +'<textarea id="ws-txt" style="width:100%;height:220px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:6px;outline:none" placeholder="Notes and worksheet data..."></textarea>'
+    +'<br><br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="saveWS()">SAVE</div><div class="want-action-btn" style="background:#cc0000;max-width:100px" onclick="gi(\'ws-txt\').value=\'\'">CLEAR</div></div></div>');
+  var s=localStorage.getItem('mdcs_ws_'+ME.uid)||''; gi('ws-txt').value=s;
 }
-function mdcClearTag(){ mdcState.selectedDisp=null; mdcRenderDisp(); document.getElementById('mdc-disp-detail').innerHTML=''; mdcShowMain('<div class="detail-text">TAG CLEARED.</div>'); }
-function mdcChangeLog(){ mdcShowMain('<div class="detail-text">CHANGE LOG REQUESTED.\n\nNo pending log changes.</div>'); }
-function mdcOpenWorksheet(){
-  mdcShowMain('<div class="want-form"><b>WORKSHEET</b><br><br>'
-    +'<textarea id="ws-txt" style="width:100%;height:200px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:6px;outline:none" placeholder="Use this space for notes..."></textarea>'
-    +'<br><br><div class="want-actions"><div class="want-action-btn" style="background:#2e7d32" onclick="saveWorksheet()">SAVE</div><div class="want-action-btn" style="background:#cc0000" onclick="document.getElementById(\'ws-txt\').value=\'\'">CLEAR</div></div></div>');
-  var saved=localStorage.getItem('mdc_worksheet_'+ME.uid)||'';
-  var t=document.getElementById('ws-txt'); if(t) t.value=saved;
-}
-function saveWorksheet(){ var t=document.getElementById('ws-txt'); if(t) localStorage.setItem('mdc_worksheet_'+ME.uid,t.value); mdcShowMain('<div class="detail-text">WORKSHEET SAVED.</div>'); }
+function saveWS(){ localStorage.setItem('mdcs_ws_'+ME.uid,gi('ws-txt').value); showMain('<div class="detail-text">WORKSHEET SAVED.\\n\\nTIME: '+now()+'</div>'); }
 function mdcViewHits(){
-  var privMsgs=mdcState.localMsgs.filter(function(m){return m.isPrivate&&m.isError;});
-  if(!privMsgs.length){mdcShowMain('<div class="detail-text">NO ACTIVE HITS ON FILE.</div>');return;}
-  mdcShowMain('<div class="want-form"><b>ACTIVE HITS</b><br><br>'+privMsgs.map(function(m){return '<div style="background:#f8d7da;border:1px solid #f5c6cb;padding:6px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'+m.text+'</div>';}).join('')+'</div>');
+  var hits=S.localMsgs.filter(function(m){return m.isPrivate&&m.isHit;});
+  showMain(hits.length?'<div class="want-form"><b>ACTIVE HITS</b><br><br>'+hits.map(function(m){return '<div style="background:#f8d7da;border:1px solid #f5c6cb;padding:6px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'+m.text+'</div>';}).join('')+'</div>':'<div class="detail-text">NO ACTIVE HITS ON FILE.</div>');
 }
 function mdcLogOnOff(){
-  mdcShowMain('<div class="detail-text"><b>LOG-ON / LOG-OFF</b>\n\nUNIT: '+ME.unit+'\nSTATUS: ONLINE\nTIME: '+getTime()+'</div>');
+  showMain('<div class="want-form"><b>LOG-ON / LOG-OFF MASK</b><br><br>'
+    +'<div class="want-row"><span class="want-label">LOG ON</span><input class="want-input" id="lo-on" style="width:16px" maxlength="1" placeholder="X"> <span class="want-label" style="min-width:50px">LOG OFF</span><input class="want-input" id="lo-off" style="width:16px" maxlength="1" placeholder="X"></div>'
+    +'<div class="want-row"><span class="want-label">UNIT</span><input class="want-input" id="lo-unit" style="width:80px" value="'+ME.unit+'"> <span class="want-label" style="min-width:40px">SHIFT</span><input class="want-input" id="lo-shift" style="width:30px"> <span class="want-label" style="min-width:40px">DATE</span><input class="want-input" id="lo-date" style="width:80px" value="'+today()+'"></div>'
+    +'<div class="want-row"><span class="want-label">CLASS</span><input class="want-input" id="lo-class" style="width:24px"> <span class="want-label" style="min-width:50px">TIME ON</span><input class="want-input" id="lo-ton" style="width:50px"> <span class="want-label" style="min-width:50px">TIME OFF</span><input class="want-input" id="lo-toff" style="width:50px"></div>'
+    +'<div class="want-row"><span class="want-label">DEPUTY #1</span><input class="want-input" id="lo-dep1" style="width:100px" value="'+ME.name+'"> <span class="want-label" style="min-width:70px">PASSWORD</span><input class="want-input" id="lo-pw" type="password" style="width:100px"></div>'
+    +'<div class="want-row"><span class="want-label">BEG MILE</span><input class="want-input" id="lo-bmile" style="width:70px"> <span class="want-label" style="min-width:50px">VEHICLE</span><input class="want-input" id="lo-veh" style="width:80px"></div>'
+    +'<div class="want-row"><span class="want-label">SP EQUIP</span><input class="want-input" id="lo-speq" style="width:240px"></div>'
+    +'<div class="want-row"><span class="want-label">MOB RADIO</span><input class="want-input" id="lo-mob" style="width:80px"> <span class="want-label" style="min-width:50px">PORT1</span><input class="want-input" id="lo-p1" style="width:60px"> <span class="want-label" style="min-width:30px">P2</span><input class="want-input" id="lo-p2" style="width:60px"></div>'
+    +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="submitLogon()">SEND</div></div></div>');
 }
-function mdcSignOn(){ mdcPushShared({time:getTime(),text:ME.unit+' — SIGN ON'}); mdcShowMain('<div class="detail-text"><b>SIGNED ON</b>\n\nUNIT: '+ME.unit+'\nTIME: '+getTime()+'</div>'); }
+function submitLogon(){
+  var on=gv('lo-on'),off=gv('lo-off');
+  pushShared({time:now(),text:(on?'MDT SIGNED ON':'MDT SIGNED OFF')+' — UNIT: '+gv('lo-unit')+' CLASS: '+gv('lo-class')+' VEH: '+gv('lo-veh')});
+  showMain('<div class="detail-text">'+(on?'MDT SIGNED ON':'MDT SIGNED OFF')+'\\n\\nUNIT: '+gv('lo-unit')+'\\nTIME: '+now()+'</div>');
+}
+function mdcSignOn(){ pushShared({time:now(),text:ME.unit+' — SIGN ON'}); showMain('<div class="detail-text"><b>MDT SIGNED ON</b>\\n\\nUNIT: '+ME.unit+'\\nTIME: '+now()+'</div>'); }
 function mdcSignOff(save){
-  if(!save){ mdcState.localMsgs=[]; mdcRenderMsgs(); }
-  mdcPushShared({time:getTime(),text:ME.unit+' — SIGN OFF'+(save?' (SAVE)':'')});
-  mdcShowMain('<div class="detail-text"><b>SIGNED OFF</b>\n\nUNIT: '+ME.unit+'\nTIME: '+getTime()+'</div>');
+  if(!save){S.localMsgs=[];renderMsgs();}
+  pushShared({time:now(),text:ME.unit+' — SIGN OFF'+(save?' (SAVE)':'')});
+  showMain('<div class="detail-text"><b>MDT SIGNED OFF</b>\\n\\nUNIT: '+ME.unit+'\\nTIME: '+now()+'</div>');
 }
+
+// ── OTHER FUNCTIONS popup (real LASD layout) ──
+function openOtherPopup(){
+  openPopup('Other Functions','',
+    '<div class="popup-grid cols4">'
+    +'<div class="grid-btn bold" onclick="closePopup();mdcOpenUrn()">URN</div>'
+    +'<div class="grid-btn" style="font-size:10px" onclick="closePopup();mdcBooking()">BOOKING<br>NUMBER</div>'
+    +'<div class="grid-btn" style="font-size:10px" onclick="closePopup();mdcCritical()">CRITICAL<br>LOCATIONS</div>'
+    +'<div class="grid-btn" style="font-size:10px" onclick="closePopup();mdcClearRead()">CLEAR READ<br>MESSAGES</div>'
+    +'<div class="grid-btn" style="font-size:10px" onclick="closePopup();mdcDayNight()">DAY/NIGHT<br>MODE</div>'
+    +'<div class="grid-btn bold" onclick="closePopup();mdcToggleMute()">MUTE/SOUND</div>'
+    +'<div class="grid-btn" style="font-size:10px" onclick="closePopup();mdcOpenSisi()">**SISI**<br>SYSTEM<br>INPUT</div>'
+    +'<div class="grid-btn" style="font-size:10px" onclick="closePopup();mdcOpenSisq()">**SISQ**<br>SYSTEM<br>QUERY</div>'
+    +'</div>');
+}
+function mdcDayNight(){ nightMode=!nightMode; document.body.className=nightMode?'night':''; showMain('<div class="detail-text">'+(nightMode?'NIGHT MODE ACTIVE\\n\\nDisplay darkened for low-light operation.':'DAY MODE ACTIVE\\n\\nDisplay restored to normal.')+'</div>'); }
+function mdcToggleMute(){ mdcMuted=!mdcMuted; showMain('<div class="detail-text"><b>SOUND '+(mdcMuted?'MUTED':'ENABLED')+'</b>\\n\\nAudible alerts are '+(mdcMuted?'OFF':'ON')+'.</div>'); }
+function mdcClearRead(){ S.localMsgs=S.localMsgs.filter(function(m){return m.unread;}); renderMsgs(); showMain('<div class="detail-text">READ MESSAGES CLEARED.\\n\\nTIME: '+now()+'</div>'); }
+function mdcCritical(){ showMain('<div class="detail-text"><b>CRITICAL LOCATIONS — '+ME.station.toUpperCase()+' STATION</b>\\n\\nHOSPITAL: MLK COMMUNITY HOSPITAL\\n  1680 E 120TH ST, LOS ANGELES\\n\\nJAIL: CENTURY REGIONAL DETENTION\\n  11705 S ALAMEDA ST, LYNWOOD\\n\\nCORONER: DEPT OF MEDICAL EXAMINER\\n  1104 N MISSION RD, LOS ANGELES\\n\\nEMERGENCY: 911\\nNON-EMERGENCY: (323) 564-4151</div>'); }
 function mdcOpenUrn(){
-  mdcShowMain('<div class="want-form"><b>URN — UNIQUE REPORT NUMBER</b><br><br>'
-    +'<div class="want-row"><span class="want-label">CASE #:</span><input class="want-input" id="urn-case" style="width:180px" placeholder="2025-CR-XXXXX"></div>'
-    +'<br><div class="want-actions"><div class="want-action-btn" style="background:#2e7d32" onclick="lookupUrn()">LOOK UP</div></div></div>');
+  S.currentForm='urn'; S.lastForm='urn';
+  showMain('<div class="want-form"><b>URN NUMBER REQUEST</b><br><br>'
+    +'<div class="want-row"><span class="want-label">RETENTION</span><input class="want-input" id="urn-ret" style="width:20px"> <span class="want-label" style="min-width:18px">RD</span><input class="want-input" id="urn-rd" style="width:40px"> <span class="want-label" style="min-width:60px">STATCODE</span><input class="want-input" id="urn-stat" style="width:40px"></div>'
+    +'<div class="want-row"><span class="want-label">RPT FORM TYPE</span><input class="want-input" id="urn-rft" style="width:30px"> <span class="want-label" style="min-width:70px">KIND CODE</span><input class="want-input" id="urn-kc" style="width:30px"></div>'
+    +'<div class="want-row"><span class="want-label">LAST</span><input class="want-input" id="urn-last" style="width:160px"> <span class="want-label" style="min-width:40px">FIRST</span><input class="want-input" id="urn-first" style="width:120px"></div>'
+    +'<div class="want-row"><span class="want-label">MIDDLE</span><input class="want-input" id="urn-mid" style="width:100px"> <span class="want-label" style="min-width:40px">SUF</span><input class="want-input" id="urn-suf" style="width:30px"></div>'
+    +'<div class="want-row"><span class="want-label">SEX</span><select class="want-select" id="urn-sex"><option></option><option>M</option><option>F</option></select> <span class="want-label" style="min-width:34px">RACE</span><select class="want-select" id="urn-race"><option></option><option>W</option><option>B</option><option>H</option><option>A</option><option>O</option></select></div>'
+    +'<div class="want-row"><span class="want-label">TAG</span><input class="want-input" id="urn-tag" style="width:120px"></div>'
+    +'<div class="want-row"><span class="want-label">TOTAL URNS</span><input class="want-input" id="urn-total" style="width:30px"> <span class="want-label" style="min-width:130px">COURTESY REPORT</span><input class="want-input" id="urn-cr" style="width:20px" maxlength="1"></div>'
+    +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="submitUrn()">REQUEST URN</div><div class="want-action-btn" style="background:#1976d2;max-width:100px" onclick="eraseForm()">ERASE</div></div></div>');
 }
-function lookupUrn(){ var c=gv('urn-case'); mdcShowMain('<div class="detail-text">URN LOOKUP: '+c+'\n\nNO MATCHING RECORD FOUND\n\nTIME: '+getTime()+'</div>'); }
-function mdcBookingNumber(){
-  var num='BK'+Date.now().toString().slice(-8);
-  mdcShowMain('<div class="detail-text"><b>BOOKING NUMBER ISSUED</b>\n\nBOOKING #: '+num+'\nISSUED TO: '+ME.unit+'\nTIME: '+getTime()+'</div>');
+function submitUrn(){
+  playSend();
+  showMain('<div class="detail-text">REQUESTING URN...\\nPlease wait...</div>');
+  setTimeout(function(){
+    var urn='URN'+Date.now().toString().slice(-8);
+    pushPrivate({time:now(),from:'CAD',text:'URN ISSUED: '+urn,result:'<div class="detail-text"><b>URN NUMBER ISSUED</b>\\n\\nURN: '+urn+'\\nUNIT: '+ME.unit+'\\nTIME: '+now()+'</div>',isError:false});
+  },1500);
 }
-function mdcCriticalLocations(){
-  mdcShowMain('<div class="detail-text"><b>CRITICAL LOCATIONS — CENTURY STATION</b>\n\nHOSPITAL: MLK COMMUNITY HOSPITAL\n  1680 E 120TH ST, LOS ANGELES\n\nJAIL: CENTURY REGIONAL DETENTION\n  11705 S ALAMEDA ST, LYNWOOD\n\nCORONER: DEPT OF MEDICAL EXAMINER\n  1104 N MISSION RD, LOS ANGELES\n\nEMERGENCY: 911\nNON-EMERGENCY: (323) 564-4151</div>');
+function mdcBooking(){
+  S.currentForm='booking'; S.lastForm='booking';
+  showMain('<div class="want-form"><b>BOOKING NUMBER REQUEST (BOOK1)</b><br><br>'
+    +'<div class="want-row"><span class="want-label">BOOKING LOC</span><input class="want-input" id="bk-loc" style="width:80px" placeholder="CEN"></div>'
+    +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="bk-last" style="width:180px"></div>'
+    +'<div class="want-row"><span class="want-label">FIRST</span><input class="want-input" id="bk-first" style="width:140px"> <span class="want-label" style="min-width:50px">MIDDLE</span><input class="want-input" id="bk-mid" style="width:100px"></div>'
+    +'<div class="want-row"><span class="want-label">SUFFIX</span><input class="want-input" id="bk-suf" style="width:40px"></div>'
+    +'<div class="want-row"><span class="want-label">UO CODE</span><input class="want-input" id="bk-uo" style="width:60px"></div>'
+    +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="submitBooking()">REQUEST BOOKING #</div><div class="want-action-btn" style="background:#1976d2;max-width:100px" onclick="eraseForm()">ERASE</div></div></div>');
 }
-function mdcClearReadMessages(){
-  mdcState.localMsgs=mdcState.localMsgs.filter(function(m){return m.unread;});
-  mdcRenderMsgs();
-  mdcShowMain('<div class="detail-text">READ MESSAGES CLEARED.</div>');
+function submitBooking(){
+  playSend();
+  showMain('<div class="detail-text">REQUESTING BOOKING NUMBER...\\nPlease wait...</div>');
+  setTimeout(function(){
+    var bk='BK'+Date.now().toString().slice(-8);
+    pushPrivate({time:now(),from:'JDS',text:'BOOKING # ISSUED: '+bk,result:'<div class="detail-text"><b>BOOKING NUMBER ISSUED</b>\\n\\nBOOKING #: '+bk+'\\nSUBJECT: '+gv('bk-last')+', '+gv('bk-first')+'\\nLOCATION: '+gv('bk-loc')+'\\nUNIT: '+ME.unit+'\\nTIME: '+now()+'</div>',isError:false});
+  },1500);
 }
-function mdcSysInput(){ mdcShowMain('<div class="detail-text"><b>**SISI** SYSTEM INPUT</b>\n\nEnter system command in the message bar below.\nPrefix with **SISI** to send to system.</div>'); }
-function mdcSysQuery(){ mdcShowMain('<div class="detail-text"><b>**SISO** SYSTEM QUERY</b>\n\nEnter query in the message bar below.\nPrefix with **SISO** to query system.</div>'); }
-
-// ══════════════════════════════════════════
-//  CIVILIAN HUB
-// ══════════════════════════════════════════
-function launchCivilian(){
-  document.getElementById('civ-win').style.display='flex';
-  document.getElementById('civ-name-display').textContent=ME.displayName;
-  civNav('profile');
+function mdcOpenSisi(){
+  S.currentForm='sisi';
+  showMain('<div class="want-form"><b>**SISI** — SUBJECT INFORMATION INPUT</b><br><br>'
+    +'<div class="want-row"><span class="want-label">INC #</span><input class="want-input" id="si-inc" style="width:160px"></div>'
+    +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="si-last" style="width:180px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="si-first" style="width:120px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="si-mi" style="width:24px"></div>'
+    +'<div class="want-row"><span class="want-label">AKA LAST</span><input class="want-input" id="si-aka" style="width:180px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="si-akaf" style="width:120px"></div>'
+    +'<div class="want-row"><span class="want-label">SEX</span><select class="want-select" id="si-sex"><option></option><option>M</option><option>F</option></select> <span class="want-label" style="min-width:36px">RACE</span><select class="want-select" id="si-race"><option></option><option>W</option><option>B</option><option>H</option><option>A</option><option>O</option></select> <span class="want-label" style="min-width:30px">HAIR</span><input class="want-input" id="si-hair" style="width:40px"> <span class="want-label" style="min-width:28px">EYE</span><input class="want-input" id="si-eye" style="width:40px"></div>'
+    +'<div class="want-row"><span class="want-label">HGT</span><input class="want-input" id="si-hgt" style="width:40px"> <span class="want-label" style="min-width:28px">WGT</span><input class="want-input" id="si-wgt" style="width:40px"> <span class="want-label" style="min-width:28px">AGE</span><input class="want-input" id="si-age" style="width:36px"> <span style="font-size:11px;font-weight:bold">-</span><input class="want-input" id="si-age2" style="width:36px"></div>'
+    +'<div class="want-row"><span class="want-label">DL</span><input class="want-input" id="si-dl" style="width:160px"> <span class="want-label" style="min-width:36px">DLST</span><input class="want-input" id="si-dlst" style="width:30px" value="CA"></div>'
+    +'<div class="want-row"><span class="want-label">DOB</span><input class="want-input dark" id="si-dob" style="width:80px" placeholder="MM/DD/YY"> <span class="want-label" style="min-width:28px">SSN</span><input class="want-input" id="si-ssn" style="width:120px"></div>'
+    +'<div class="want-row"><span class="want-label">VEH</span><input class="want-input" id="si-veh" style="width:80px"> <span class="want-label" style="min-width:18px">ST</span><input class="want-input" id="si-vst" style="width:28px" value="CA"> <span class="want-label" style="min-width:28px">MAK</span><input class="want-input" id="si-mak" style="width:60px"> <span class="want-label" style="min-width:28px">MOD</span><input class="want-input" id="si-mod" style="width:60px"> <span class="want-label" style="min-width:18px">YR</span><input class="want-input" id="si-yr" style="width:36px"> <span class="want-label" style="min-width:36px">COL</span><input class="want-input" id="si-col" style="width:40px"></div>'
+    +'<div class="want-row"><span class="want-label">GANG</span><input class="want-input" id="si-gang" style="width:240px"></div>'
+    +'<div class="want-row"><span class="want-label">NAR</span></div>'
+    +'<textarea class="obs-rmk" id="si-nar" rows="3" placeholder="Narrative..."></textarea>'
+    +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="submitSisi()">SEND SISI</div><div class="want-action-btn" style="background:#1976d2;max-width:100px" onclick="eraseForm()">ERASE</div></div></div>');
 }
-function civNav(page){
-  document.querySelectorAll('#civ-win .nav-tab').forEach(function(t,i){
-    var pages=['profile','vehicles','record','incidents','myincidents'];
-    t.className='nav-tab'+(pages[i]===page?' active':'');
-  });
-  var c=document.getElementById('civ-content');
-  if(page==='profile')civShowProfile(c);
-  else if(page==='vehicles')civShowVehicles(c);
-  else if(page==='record')civShowRecord(c);
-  else if(page==='incidents')civShowIncidentForm(c);
-  else if(page==='myincidents')civShowMyIncidents(c);
+function submitSisi(){
+  playSend();
+  var last=gv('si-last'),first=gv('si-first');
+  pushShared({time:now(),text:'SISI — '+last+', '+first+' INC: '+gv('si-inc')});
+  showMain('<div class="detail-text">SISI INPUT SENT\\n\\nSUBJECT: '+last+', '+first+'\\nTIME: '+now()+'</div>');
 }
-function civShowProfile(c){
-  db.ref('civilians/'+ME.uid).once('value',function(snap){
-    var p=snap.val()||{};
-    c.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">MY CIVILIAN PROFILE</h3>'
-      +'<div style="font-size:10px;color:#666;margin-bottom:12px">This information is searchable by LASD when they run a name/DMV check.</div>'
-      +'<div class="form-row"><span class="form-label">FULL NAME</span><input class="form-input" id="cp-name" style="width:240px" value="'+(p.name||ME.displayName||'')+'" placeholder="LAST, FIRST MIDDLE"></div>'
-      +'<div class="form-row"><span class="form-label">DATE OF BIRTH</span><input class="form-input" id="cp-dob" style="width:120px" value="'+(p.dob||'')+'" placeholder="MM/DD/YYYY"></div>'
-      +'<div class="form-row"><span class="form-label">ADDRESS</span><input class="form-input" id="cp-addr" style="width:320px" value="'+(p.address||'')+'" placeholder="1234 MAIN ST, COMPTON CA 90220"></div>'
-      +'<div class="form-row"><span class="form-label">OCCUPATION</span><input class="form-input" id="cp-occ" style="width:200px" value="'+(p.occupation||'')+'" placeholder="e.g. MECHANIC"></div>'
-      +'<div class="section-divider"></div>'
-      +'<div style="font-weight:bold;margin-bottom:8px;font-size:11px">PHYSICAL DESCRIPTION</div>'
-      +'<div class="form-row"><span class="form-label">SEX</span><select class="form-select" id="cp-sex"><option '+(p.sex==='M'?'selected':'')+'>M</option><option '+(p.sex==='F'?'selected':'')+'>F</option></select>'
-      +'<span class="form-label" style="min-width:40px">RACE</span><select class="form-select" id="cp-race"><option '+(p.race==='W'?'selected':'')+'>W</option><option '+(p.race==='B'?'selected':'')+'>B</option><option '+(p.race==='H'?'selected':'')+'>H</option><option '+(p.race==='A'?'selected':'')+'>A</option><option '+(p.race==='O'?'selected':'')+'>O</option></select></div>'
-      +'<div class="form-row"><span class="form-label">HAIR</span><select class="form-select" id="cp-hair"><option '+(p.hair==='BLK'?'selected':'')+'>BLK</option><option '+(p.hair==='BRN'?'selected':'')+'>BRN</option><option '+(p.hair==='BLD'?'selected':'')+'>BLD</option><option '+(p.hair==='RED'?'selected':'')+'>RED</option><option '+(p.hair==='GRY'?'selected':'')+'>GRY</option><option '+(p.hair==='WHI'?'selected':'')+'>WHI</option><option '+(p.hair==='BAL'?'selected':'')+'>BAL</option></select>'
-      +'<span class="form-label" style="min-width:40px">EYES</span><select class="form-select" id="cp-eyes"><option '+(p.eyes==='BRN'?'selected':'')+'>BRN</option><option '+(p.eyes==='BLU'?'selected':'')+'>BLU</option><option '+(p.eyes==='GRN'?'selected':'')+'>GRN</option><option '+(p.eyes==='HAZ'?'selected':'')+'>HAZ</option><option '+(p.eyes==='BLK'?'selected':'')+'>BLK</option></select></div>'
-      +'<div class="form-row"><span class="form-label">HEIGHT</span><input class="form-input" id="cp-hgt" style="width:60px" value="'+(p.height||'')+'" placeholder="507">'
-      +'<span class="form-label" style="min-width:60px">WEIGHT</span><input class="form-input" id="cp-wgt" style="width:60px" value="'+(p.weight||'')+'" placeholder="165"></div>'
-      +'<br><button class="form-btn green" onclick="civSaveProfile()">SAVE PROFILE</button>'
-      +'<span id="cp-msg" style="margin-left:10px;font-size:11px;color:green"></span></div>';
-  });
+function mdcOpenSisq(){
+  S.currentForm='sisq';
+  showMain('<div class="want-form"><b>**SISQ** — SUBJECT INFORMATION QUERY</b><br><br>'
+    +'<div class="want-row"><span class="want-label">DATE</span><input class="want-input" id="sq-date" style="width:80px"> <span class="want-label" style="min-width:40px">TIME</span><input class="want-input" id="sq-time" style="width:50px"> <span style="font-size:11px;font-weight:bold">TO</span> <input class="want-input" id="sq-time2" style="width:50px"></div>'
+    +'<div class="want-row"><span class="want-label">STA</span><input class="want-input" id="sq-sta" style="width:40px"> <span class="want-label" style="min-width:40px">UNIT</span><input class="want-input" id="sq-unit" style="width:80px"> <span class="want-label" style="min-width:36px">INC #</span><input class="want-input" id="sq-inc" style="width:120px"> <span class="want-label" style="min-width:18px">RD</span><input class="want-input" id="sq-rd" style="width:40px"></div>'
+    +'<div class="want-row"><span class="want-label">LAST</span><input class="want-input" id="sq-last" style="width:160px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="sq-first" style="width:120px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="sq-mi" style="width:24px"></div>'
+    +'<div class="want-row"><span class="want-label">SEX</span><select class="want-select" id="sq-sex"><option></option><option>M</option><option>F</option></select> <span class="want-label" style="min-width:36px">RACE</span><select class="want-select" id="sq-race"><option></option><option>W</option><option>B</option><option>H</option><option>A</option><option>O</option></select> <span class="want-label" style="min-width:30px">HAIR</span><input class="want-input" id="sq-hair" style="width:40px"> <span class="want-label" style="min-width:28px">EYES</span><input class="want-input" id="sq-eyes" style="width:40px"></div>'
+    +'<div class="want-row"><span class="want-label">HEIGHT</span><input class="want-input" id="sq-hgt" style="width:40px"> <span class="want-label" style="min-width:40px">WEIGHT</span><input class="want-input" id="sq-wgt" style="width:40px"> <span class="want-label" style="min-width:28px">AGE</span><input class="want-input" id="sq-age" style="width:36px"> <span class="want-label" style="min-width:28px">DOB</span><input class="want-input dark" id="sq-dob" style="width:80px"></div>'
+    +'<div class="want-row"><span class="want-label">DL #</span><input class="want-input" id="sq-dl" style="width:140px"> <span class="want-label" style="min-width:18px">ST</span><input class="want-input" id="sq-dlst" style="width:28px" value="CA"> <span class="want-label" style="min-width:28px">SSN</span><input class="want-input" id="sq-ssn" style="width:110px"></div>'
+    +'<div class="want-row"><span class="want-label">VEH</span><input class="want-input" id="sq-veh" style="width:80px"> <span class="want-label" style="min-width:18px">ST</span><input class="want-input" id="sq-vst" style="width:28px" value="CA"> <span class="want-label" style="min-width:36px">MAKE</span><input class="want-input" id="sq-mak" style="width:60px"> <span class="want-label" style="min-width:40px">MODEL</span><input class="want-input" id="sq-mod" style="width:60px"> <span class="want-label" style="min-width:18px">YR</span><input class="want-input" id="sq-yr" style="width:36px"></div>'
+    +'<div class="want-row"><span class="want-label">GANG</span><input class="want-input" id="sq-gang" style="width:240px"></div>'
+    +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="submitSisq()">SUBMIT SISQ</div><div class="want-action-btn" style="background:#1976d2;max-width:100px" onclick="eraseForm()">ERASE</div></div></div>');
 }
-function civSaveProfile(){
-  var data={name:gv('cp-name'),dob:gv('cp-dob'),address:gv('cp-addr'),occupation:gv('cp-occ'),sex:gv('cp-sex'),race:gv('cp-race'),hair:gv('cp-hair'),eyes:gv('cp-eyes'),height:gv('cp-hgt'),weight:gv('cp-wgt'),uid:ME.uid,updatedAt:Date.now()};
-  db.ref('civilians/'+ME.uid).update(data).then(function(){
-    var m=document.getElementById('cp-msg'); if(m){m.textContent='✓ Saved!'; setTimeout(function(){if(m)m.textContent='';},3000);}
-  });
-}
-function civShowVehicles(c){
-  db.ref('vehicles').orderByChild('ownerUid').equalTo(ME.uid).once('value',function(snap){
-    var vehs=snap.val()||{};
-    var list=Object.entries(vehs).map(function(e){return Object.assign({_key:e[0]},e[1]);});
-    var vehHtml=list.length===0?'<div style="color:#888;padding:8px;font-size:11px">No vehicles registered.</div>':list.map(function(v){
-      return '<div class="record-card"><div class="record-card-header"><span>'+v.plate+' — '+v.year+' '+v.make+' '+v.model+'</span>'
-        +'<div style="display:flex;gap:6px"><button class="form-btn" style="background:'+(v.stolen?'#2e7d32':'#cc0000')+';padding:2px 8px;font-size:10px" onclick="civToggleStolen(\''+v._key+'\','+(!v.stolen)+')">'+(v.stolen?'MARK CLEAR':'MARK STOLEN')+'</button>'
-        +'<button class="form-btn red" style="padding:2px 8px;font-size:10px" onclick="civDeleteVeh(\''+v._key+'\')">REMOVE</button></div></div>'
-        +'<div style="font-size:10px;line-height:1.8;color:#333">COLOR: '+v.color+' | REG: '+v.name+' | STATUS: <span class="'+(v.stolen?'hit':'clear-txt')+'">'+(v.stolen?'STOLEN':'CLEAR')+'</span></div></div>';
-    }).join('');
-    c.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">MY VEHICLES</h3>'
-      +'<div style="margin-bottom:14px">'+vehHtml+'</div><div class="section-divider"></div>'
-      +'<div style="font-weight:bold;margin-bottom:10px;font-size:11px">REGISTER NEW VEHICLE</div>'
-      +'<div class="form-row"><span class="form-label">PLATE #</span><input class="form-input" id="veh-plate" style="width:100px" placeholder="8NCD412"> <span class="form-label" style="min-width:18px">ST</span><input class="form-input" id="veh-st" style="width:30px" value="CA"></div>'
-      +'<div class="form-row"><span class="form-label">YEAR</span><input class="form-input" id="veh-year" style="width:60px" placeholder="2021"> <span class="form-label" style="min-width:40px">MAKE</span><input class="form-input" id="veh-make" style="width:90px" placeholder="HONDA"> <span class="form-label" style="min-width:50px">MODEL</span><input class="form-input" id="veh-model" style="width:90px" placeholder="ACCORD"></div>'
-      +'<div class="form-row"><span class="form-label">COLOR</span><input class="form-input" id="veh-color" style="width:90px" placeholder="SILVER"></div>'
-      +'<div class="form-row"><span class="form-label">REG NAME</span><input class="form-input" id="veh-regname" style="width:240px" placeholder="LAST, FIRST (registered owner)"></div>'
-      +'<br><button class="form-btn green" onclick="civRegVeh()">REGISTER VEHICLE</button></div>';
-  });
-}
-function civToggleStolen(key,val){ db.ref('vehicles/'+key).update({stolen:val}).then(function(){civShowVehicles(document.getElementById('civ-content'));}); }
-function civRegVeh(){
-  var plate=gv('veh-plate'),year=gv('veh-year'),make=gv('veh-make'),model=gv('veh-model'),color=gv('veh-color'),regname=gv('veh-regname'),st=gv('veh-st');
-  if(!plate||!year||!make||!model){alert('Fill all required fields.');return;}
-  db.ref('vehicles').push({plate:plate.toUpperCase(),state:st||'CA',year:year,make:make.toUpperCase(),model:model.toUpperCase(),color:color.toUpperCase(),name:regname||ME.displayName,ownerUid:ME.uid,stolen:false,createdAt:Date.now()}).then(function(){civShowVehicles(document.getElementById('civ-content'));});
-}
-function civDeleteVeh(key){ if(confirm('Remove vehicle?')) db.ref('vehicles/'+key).remove().then(function(){civShowVehicles(document.getElementById('civ-content'));}); }
-function civShowRecord(c){
-  db.ref('criminalRecords/'+ME.uid).once('value',function(snap){
-    var r=snap.val()||{};
-    var charges=r.charges||[];
-    var chargeHtml=charges.length===0?'<div style="color:#888;padding:8px;font-size:11px">No charges on file.</div>':charges.map(function(ch,i){
-      return '<div class="record-card"><div class="record-card-header"><span>'+ch.code+' — '+ch.description+'</span>'
-        +'<div style="display:flex;gap:4px"><span class="badge '+(ch.status==='CONVICTED'?'badge-red':ch.status==='DISMISSED'?'badge-green':'badge-yellow')+'">'+ch.status+'</span>'
-        +'<button class="form-btn red" style="padding:1px 6px;font-size:9px" onclick="civRemoveCharge('+i+')">✕</button></div></div>'
-        +'<div style="font-size:10px;color:#333">DATE: '+ch.date+' | CASE#: '+ch.caseNum+'</div></div>';
-    }).join('');
-    c.innerHTML='<div class="form-section"><h3 style="margin-bottom:6px;font-size:13px">CRIMINAL RECORD</h3>'
-      +'<div style="font-size:10px;color:#666;margin-bottom:12px">Viewable by LASD when running a priors check.</div>'
-      +'<div style="margin-bottom:14px">'+chargeHtml+'</div><div class="section-divider"></div>'
-      +'<div style="font-weight:bold;margin-bottom:10px;font-size:11px">ADD CHARGE</div>'
-      +'<div class="form-row"><span class="form-label">PENAL CODE</span><input class="form-input" id="cr-code" style="width:80px" placeholder="PC 211"></div>'
-      +'<div class="form-row"><span class="form-label">DESCRIPTION</span><input class="form-input" id="cr-desc" style="width:260px" placeholder="ROBBERY"></div>'
-      +'<div class="form-row"><span class="form-label">CASE #</span><input class="form-input" id="cr-case" style="width:140px" placeholder="2024-CR-04812"></div>'
-      +'<div class="form-row"><span class="form-label">DATE</span><input class="form-input" id="cr-date" style="width:110px" placeholder="MM/DD/YYYY"></div>'
-      +'<div class="form-row"><span class="form-label">STATUS</span><select class="form-select" id="cr-status"><option>CONVICTED</option><option>PLEA</option><option>PENDING</option><option>DISMISSED</option></select></div>'
-      +'<br><button class="form-btn red" onclick="civAddCharge()">ADD CHARGE</button></div>';
-  });
-}
-function civAddCharge(){
-  var code=gv('cr-code'),desc=gv('cr-desc'),caseNum=gv('cr-case'),date=gv('cr-date'),status=gv('cr-status');
-  if(!code||!desc){alert('Enter code and description.');return;}
-  db.ref('criminalRecords/'+ME.uid+'/charges').transaction(function(charges){return (charges||[]).concat([{code:code,description:desc,caseNum:caseNum,date:date,status:status||'PENDING'}]);}).then(function(){civShowRecord(document.getElementById('civ-content'));});
-}
-function civRemoveCharge(idx){
-  if(!confirm('Remove this charge?')) return;
-  db.ref('criminalRecords/'+ME.uid+'/charges').transaction(function(charges){
-    if(!charges) return charges;
-    charges.splice(idx,1); return charges;
-  }).then(function(){civShowRecord(document.getElementById('civ-content'));});
-}
-function civShowIncidentForm(c){
-  c.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">REPORT AN INCIDENT</h3>'
-    +'<div class="form-row"><span class="form-label">INCIDENT TYPE</span><select class="form-select" id="inc-type" style="width:200px"><option>ASSAULT</option><option>ROBBERY</option><option>BURGLARY</option><option>VEHICLE THEFT</option><option>SUSPICIOUS PERSON</option><option>NOISE COMPLAINT</option><option>TRAFFIC INCIDENT</option><option>OTHER</option></select></div>'
-    +'<div class="form-row"><span class="form-label">LOCATION</span><input class="form-input" id="inc-loc" style="width:320px" placeholder="1234 MAIN ST, COMPTON CA"></div>'
-    +'<div class="form-row"><span class="form-label">DATE / TIME</span><input class="form-input" id="inc-dt" style="width:180px" placeholder="MM/DD/YYYY HH:MM"></div>'
-    +'<div class="form-row"><span class="form-label">DESCRIPTION</span></div>'
-    +'<textarea id="inc-desc" style="width:100%;max-width:600px;height:100px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:6px;outline:none;margin-bottom:8px" placeholder="Describe what happened..."></textarea>'
-    +'<div class="form-row"><span class="form-label">SUSPECT DESC</span><input class="form-input" id="inc-susp" style="width:320px" placeholder="BMA, 6ft, BLK hoodie, etc."></div>'
-    +'<br><button class="form-btn red" onclick="civSubmitIncident()">SUBMIT INCIDENT REPORT</button></div>';
-}
-function civSubmitIncident(){
-  var type=gv('inc-type'),loc=gv('inc-loc'),dt=gv('inc-dt'),desc=document.getElementById('inc-desc').value.trim(),susp=gv('inc-susp');
-  if(!loc||!desc){alert('Enter location and description.');return;}
-  db.ref('incidents').push({type:type,location:loc,datetime:dt,description:desc,suspectDesc:susp,reporterUid:ME.uid,reporterName:ME.displayName,status:'OPEN',ts:Date.now()}).then(function(){alert('Incident report submitted!');civNav('myincidents');});
-}
-function civShowMyIncidents(c){
-  db.ref('incidents').orderByChild('reporterUid').equalTo(ME.uid).once('value',function(snap){
-    var list=Object.values(snap.val()||{}).sort(function(a,b){return b.ts-a.ts;});
-    if(!list.length){c.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">MY INCIDENTS</h3><div style="color:#888;font-size:11px">No incidents reported.</div></div>';return;}
-    c.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">MY INCIDENTS</h3>'+list.map(function(inc){
-      return '<div class="record-card"><div class="record-card-header"><span>'+inc.type+' — '+inc.location+'</span><span class="badge badge-blue">'+inc.status+'</span></div>'
-        +'<div style="font-size:10px;color:#333;line-height:1.6">DATE: '+(inc.datetime||'N/A')+'<br>'+inc.description+'</div></div>';
-    }).join('')+'</div>';
-  });
-}
-
-// ══════════════════════════════════════════
-//  DISPATCH HUB
-// ══════════════════════════════════════════
-function launchDispatch(){
-  document.getElementById('disp-win').style.display='flex';
-  document.getElementById('disp-name-display').textContent=ME.displayName;
-  if(ME.isAdmin) document.getElementById('disp-admin-tab').style.display='block';
-  attachDispListeners();
-  dispNav('intake');
-}
-function attachDispListeners(){
-  var l1=db.ref('dispatches').on('value',function(snap){
-    var calls=Object.entries(snap.val()||{}).map(function(e){return Object.assign({_key:e[0]},e[1]);}).sort(function(a,b){return b.ts-a.ts;});
-    renderDispCalls(calls);
-  });
-  var l2=db.ref('units').on('value',function(snap){
-    renderDispUnits(Object.values(snap.val()||{}));
-  });
-  dispState.listeners=[{ref:db.ref('dispatches'),h:l1,e:'value'},{ref:db.ref('units'),h:l2,e:'value'}];
-}
-function detachDispListeners(){ dispState.listeners.forEach(function(l){l.ref.off(l.e,l.h);}); dispState.listeners=[]; }
-function renderDispCalls(calls){
-  var el=document.getElementById('disp-calls-list'); if(!el) return;
-  el.innerHTML=calls.length===0?'<div style="padding:8px;font-size:11px;color:#888">No active calls.</div>':calls.map(function(c){
-    var pc={'A':'priority-a','B':'priority-b','D':'priority-d'}[c.pri]||'priority-d';
-    var sel=dispState.selectedCall===c._key;
-    return '<div class="disp-call-item '+pc+(sel?' selected':'')+'" onclick="dispSelectCall(\''+c._key+'\')">'
-      +'<div style="font-weight:bold">'+c.id+' — CODE '+c.code+'</div>'
-      +'<div style="font-size:10px;color:'+(sel?'#adf':'#555')+'">'+c.addr+'</div>'
-      +'<div style="font-size:10px">UNIT: '+c.unit+' | PRI: '+c.pri+'</div></div>';
-  }).join('');
-}
-function renderDispUnits(units){
-  var el=document.getElementById('disp-units-list'); if(!el) return;
-  el.innerHTML=units.length===0?'<div style="padding:8px;font-size:11px;color:#888">No units online.</div>':units.map(function(u){
-    var dc={'AVAILABLE':'status-avail','BUSY':'status-busy'}[u.status]||'status-offline';
-    return '<div class="unit-status-row"><div class="status-dot '+dc+'"></div><span style="min-width:50px;font-weight:bold">'+u.unit+'</span><span style="flex:1">'+u.name+'</span><span style="font-size:10px;color:#555">'+u.status+'</span></div>';
-  }).join('');
-}
-function dispSelectCall(key){
-  dispState.selectedCall=key;
-  db.ref('dispatches/'+key).once('value',function(snap){
-    var c=snap.val(); if(!c) return;
-    document.getElementById('disp-main').innerHTML='<div class="form-section"><b style="font-size:13px">CALL DETAIL — '+c.id+'</b><br><br>'
-      +'<div class="detail-text">CALL #: '+c.id+'\nTIME:   '+c.time+'\nCODE:   '+c.code+'\nPRIO:   '+c.pri+'\nUNIT:   '+c.unit+'\nADDR:   '+c.addr+'\nRMK:    '+c.rmk+'</div>'
-      +'<br><div style="display:flex;gap:8px;flex-wrap:wrap">'
-      +'<button class="form-btn" onclick="dispAssignUnit(\''+key+'\')">REASSIGN UNIT</button>'
-      +'<button class="form-btn yellow" onclick="dispUpdateCall(\''+key+'\')">ADD SUPPLEMENTAL</button>'
-      +'<button class="form-btn red" onclick="dispCloseCall(\''+key+'\')">CLOSE CALL</button>'
-      +'</div></div>';
-  });
-}
-function dispNav(page){
-  document.querySelectorAll('#disp-nav-bar .nav-tab').forEach(function(t){ t.className='nav-tab'; });
-  var tabs=document.querySelectorAll('#disp-nav-bar .nav-tab');
-  var pages=['intake','calls','units','log','broadcast','users'];
-  var idx=pages.indexOf(page);
-  if(idx>=0&&tabs[idx]) tabs[idx].className='nav-tab active';
-  var main=document.getElementById('disp-main');
-  if(page==='intake') dispShowIntake(main);
-  else if(page==='calls') main.innerHTML='<div class="form-section"><b>Click a call on the left.</b></div>';
-  else if(page==='units') dispShowUnits(main);
-  else if(page==='log') dispShowLog(main);
-  else if(page==='broadcast') dispShowBroadcast(main);
-  else if(page==='users') dispShowUsers(main);
-}
-function dispShowIntake(main){
-  main.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">911 CALL INTAKE</h3>'
-    +'<div class="form-row"><span class="form-label">CALL TYPE</span><select class="form-select" id="di-type" style="width:220px"><option>415 — DISTURBANCE</option><option>459 — BURGLARY</option><option>211 — ROBBERY</option><option>245 — ADW</option><option>10851 — STOLEN VEHICLE</option><option>273 — DOMESTIC VIOLENCE</option><option>487 — GRAND THEFT</option><option>902 — TRAFFIC COLLISION</option><option>647 — DRUNK IN PUBLIC</option><option>WEL CHECK — WELFARE CHECK</option><option>ALARM — ALARM CALL</option></select></div>'
-    +'<div class="form-row"><span class="form-label">LOCATION</span><input class="form-input" id="di-addr" style="width:360px" placeholder="1234 MAIN ST, COMPTON CA"></div>'
-    +'<div class="form-row"><span class="form-label">PRIORITY</span><select class="form-select" id="di-pri"><option value="A">A — EMERGENCY</option><option value="B">B — URGENT</option><option value="D" selected>D — ROUTINE</option></select></div>'
-    +'<div class="form-row"><span class="form-label">ASSIGN UNIT</span><input class="form-input" id="di-unit" style="width:100px" placeholder="4L22"></div>'
-    +'<div class="form-row"><span class="form-label">CALLER INFO</span><input class="form-input" id="di-caller" style="width:260px" placeholder="Name / callback number"></div>'
-    +'<div class="form-row"><span class="form-label">REMARKS</span></div>'
-    +'<textarea id="di-rmk" style="width:100%;max-width:600px;height:80px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:6px;outline:none;margin-bottom:10px"></textarea>'
-    +'<div style="display:flex;gap:8px">'
-    +'<button class="form-btn red" onclick="dispCreateCall()">DISPATCH CALL</button>'
-    +'<button class="form-btn" onclick="dispClearIntake()">CLEAR</button></div></div>';
-}
-function dispCreateCall(){
-  var type=gv('di-type'),code=type.split(' — ')[0],addr=gv('di-addr'),pri=gv('di-pri'),unit=gv('di-unit')||'UNASSIGNED',caller=gv('di-caller'),rmk=document.getElementById('di-rmk').value.trim();
-  if(!addr){alert('Enter a location.');return;}
-  var id='CPT'+Math.floor(Math.random()*9000+1000),t=getTime();
-  db.ref('dispatches').push({id:id,time:t,code:code,pri:pri,unit:unit.toUpperCase(),addr:addr.toUpperCase(),rmk:rmk+(caller?'\nCALLER: '+caller:''),ts:Date.now()});
-  db.ref('messages').push({from:'DISPATCH',text:'NEW CALL — '+code+' '+addr.toUpperCase()+' UNIT: '+unit.toUpperCase(),time:t,date:getTodayDate(),ts:Date.now()});
-  alert('Call dispatched: '+id); dispClearIntake();
-}
-function dispClearIntake(){ ['di-addr','di-unit','di-caller','di-rmk'].forEach(function(id){var e=document.getElementById(id);if(e)e.value='';}); }
-function dispAssignUnit(key){ var u=prompt('Enter unit:'); if(u){db.ref('dispatches/'+key).update({unit:u.toUpperCase()});db.ref('messages').push({from:'DISPATCH',text:'UNIT '+u.toUpperCase()+' ASSIGNED',time:getTime(),date:getTodayDate(),ts:Date.now()});dispSelectCall(key);} }
-function dispUpdateCall(key){ var s=prompt('Supplemental info:'); if(s){db.ref('messages').push({from:'DISPATCH',text:'SUPPLEMENTAL: '+s,time:getTime(),date:getTodayDate(),ts:Date.now()});alert('Added.');} }
-function dispCloseCall(key){ if(!confirm('Close call?')) return; db.ref('dispatches/'+key).remove(); db.ref('messages').push({from:'DISPATCH',text:'CALL CLOSED BY DISPATCH',time:getTime(),date:getTodayDate(),ts:Date.now()}); dispState.selectedCall=null; document.getElementById('disp-main').innerHTML='<div class="form-section"><b>Call closed.</b></div>'; }
-function dispShowUnits(main){ db.ref('units').once('value',function(snap){var us=Object.values(snap.val()||{});main.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">UNIT STATUS BOARD</h3>'+(us.length===0?'<div style="color:#888">No units online.</div>':us.map(function(u){return '<div class="record-card"><div class="record-card-header"><span>'+u.unit+' — '+u.name+'</span><span class="badge '+(u.online?'badge-green':'badge-red')+'">'+(u.online?'ONLINE':'OFFLINE')+'</span></div><div style="font-size:10px">STATUS: '+u.status+'</div></div>';}).join(''))+'</div>';}); }
-function dispShowLog(main){ db.ref('messages').limitToLast(50).once('value',function(snap){var msgs=Object.values(snap.val()||{}).reverse();main.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">MESSAGE / CALL LOG</h3>'+msgs.map(function(m){return '<div class="record-card" style="padding:6px 10px"><span style="font-weight:bold">'+m.from+'</span> <span style="color:#888;font-size:10px">'+m.time+'</span><br><span style="font-size:11px">'+m.text+'</span></div>';}).join('')+'</div>';}); }
-function dispShowBroadcast(main){ main.innerHTML='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">BROADCAST TO ALL UNITS</h3><textarea id="bc-txt" style="width:100%;max-width:600px;height:100px;font-family:Courier New,monospace;font-size:11px;border:2px inset #808080;background:#c8e4ff;padding:6px;outline:none;margin-bottom:10px"></textarea><br><button class="form-btn" onclick="dispSendBroadcast()">SEND BROADCAST</button></div>'; }
-function dispSendBroadcast(){ var t=document.getElementById('bc-txt'); if(t&&t.value.trim()){db.ref('messages').push({from:'DISPATCH BROADCAST',text:t.value.trim(),time:getTime(),date:getTodayDate(),ts:Date.now()});t.value='';alert('Broadcast sent.');} }
-function dispShowUsers(main){
-  if(!ME.isAdmin){main.innerHTML='<div class="form-section">ACCESS DENIED.</div>';return;}
-  db.ref('users').once('value',function(snap){
-    var users=Object.values(snap.val()||{});
-    var pending=users.filter(function(u){return u.status==='pending';});
-    var approved=users.filter(function(u){return u.status==='approved';});
-    var html='<div class="form-section"><h3 style="margin-bottom:14px;font-size:13px">USER MANAGEMENT</h3>';
-    html+='<b style="color:#cc0000">PENDING ('+pending.length+')</b><br><br>';
-    if(!pending.length) html+='<div style="color:#888;font-size:11px;margin-bottom:12px">None pending.</div>';
-    pending.forEach(function(u){
-      html+='<div class="record-card"><div class="record-card-header"><span>'+u.displayName+' ('+u.role.toUpperCase()+') — '+(u.unit||'N/A')+'</span></div>'
-        +'<div style="font-size:10px;margin-bottom:6px">'+u.email+'</div>'
-        +'<button class="form-btn green" style="margin-right:6px" onclick="approveUser(\''+u.uid+'\')">APPROVE</button>'
-        +'<button class="form-btn red" onclick="denyUser(\''+u.uid+'\')">DENY</button></div>';
+function submitSisq(){
+  playSend();
+  showMain('<div class="detail-text">QUERYING SUBJECT INFORMATION SYSTEM...\\nPlease wait...</div>');
+  setTimeout(function(){
+    var last=gv('sq-last');
+    db.ref('civilians').once('value',function(snap){
+      var match=Object.values(snap.val()||{}).find(function(c){return last&&(c.name||'').toUpperCase().indexOf(last.toUpperCase())>=0;});
+      var t=now();
+      if(match){
+        pushPrivate({time:t,from:'SIS',text:'SIS HIT — '+match.name,result:'<div class="detail-text"><b>SIS RESPONSE</b>\\n\\nNAME: '+match.name+'\\nDOB: '+(match.dob||'N/A')+'\\nADDR: '+(match.address||'N/A')+'\\nSEX: '+(match.sex||'N/A')+'  RACE: '+(match.race||'N/A')+'\\nHAIR: '+(match.hair||'N/A')+'  EYES: '+(match.eyes||'N/A')+'\\nHGT: '+(match.height||'N/A')+'  WGT: '+(match.weight||'N/A')+'\\n\\nTIME: '+t+'</div>',isError:false});
+      } else {
+        pushPrivate({time:t,from:'SIS',text:'SIS NO RECORD'+(last?' — '+last.toUpperCase():''),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\\n\\nNO SIS RECORD FOUND\\n\\nTIME: '+t+'</div>',isError:false});
+      }
     });
-    html+='<br><b style="color:#2e7d32">APPROVED ('+approved.length+')</b><br><br>';
-    approved.forEach(function(u){
-      html+='<div class="record-card"><div class="record-card-header"><span>'+u.displayName+' ('+u.role.toUpperCase()+')</span><span class="badge '+(u.isAdmin?'badge-red':'badge-blue')+'">'+(u.isAdmin?'ADMIN':'USER')+'</span></div>'
-        +'<div style="font-size:10px;margin-bottom:6px">'+u.email+' — Unit: '+(u.unit||'N/A')+'</div>'
-        +'<button class="form-btn red" style="margin-right:4px;font-size:10px;padding:2px 8px" onclick="revokeUser(\''+u.uid+'\')">REVOKE</button>'
-        +'<button class="form-btn" style="font-size:10px;padding:2px 8px" onclick="toggleAdminUser(\''+u.uid+'\','+(!u.isAdmin)+')">'+(!u.isAdmin?'MAKE ADMIN':'REMOVE ADMIN')+'</button></div>';
-    });
-    main.innerHTML=html+'</div>';
-  });
+  },1800);
 }
-function approveUser(uid){ db.ref('users/'+uid).update({status:'approved'}).then(function(){dispShowUsers(document.getElementById('disp-main')||document.getElementById('mdc-main'));}); }
-function denyUser(uid){ db.ref('users/'+uid).update({status:'denied'}).then(function(){dispShowUsers(document.getElementById('disp-main')||document.getElementById('mdc-main'));}); }
-function revokeUser(uid){ if(confirm('Revoke access? This will kick them out if logged in.')) db.ref('users/'+uid).update({status:'pending'}).then(function(){dispShowUsers(document.getElementById('disp-main')||document.getElementById('mdc-main'));}); }
-function toggleAdminUser(uid,v){ db.ref('users/'+uid).update({isAdmin:v}).then(function(){dispShowUsers(document.getElementById('disp-main')||document.getElementById('mdc-main'));}); }
 
-// ══════════════════════════════════════════
-//  LASD MDC
-// ══════════════════════════════════════════
-function launchMDC(){
-  document.getElementById('mdc-win').style.display='flex';
-  document.getElementById('mdc-unit-display').textContent=ME.unit+' — '+ME.displayName;
-  if(ME.unit){
-    var uRef=db.ref('units/'+ME.unit);
-    uRef.set({unit:ME.unit,name:ME.displayName,status:'AVAILABLE',online:true,ts:Date.now()});
-    uRef.onDisconnect().update({online:false,status:'OFFLINE'});
-  }
-  attachMdcListeners();
-  mdcShowMain('<div class="detail-text" style="padding:20px;text-align:center;color:#888"><br><br>MDCS — MOBILE DIGITAL COMMUNICATIONS SYSTEM\nv.PCMSS_20121121\n\nMDC13744 — UNIT '+ME.unit+' — '+ME.displayName+'\n\nSELECT A FUNCTION OR CLICK A DISPATCH CALL\nTO BEGIN</div>');
-}
-function attachMdcListeners(){
-  var l1=db.ref('dispatches').on('value',function(snap){
-    mdcState.localDisps=Object.entries(snap.val()||{}).map(function(e){return Object.assign({_key:e[0]},e[1]);}).sort(function(a,b){return b.ts-a.ts;});
-    mdcRenderDisp();
-  });
-  var l2=db.ref('messages').on('child_added',function(snap){
-    var m=snap.val(); m._key=snap.key;
-    var isOwn=m.from===ME.unit;
-    if(!mdcState.isFirstLoad&&!isOwn){m.unread=true;mdcState.unreadCount++;mdcUpdateUnread();if(!mdcMuted)playAlert();}
-    else{m.unread=false;}
-    mdcState.localMsgs.unshift(m);
-    if(mdcState.localMsgs.length>80)mdcState.localMsgs.pop();
-    mdcRenderMsgs();
-  });
-  var l3=db.ref('private/'+ME.uid).on('child_added',function(snap){
-    var m=snap.val(); m._key=snap.key; m.isPrivate=true;
-    if(!mdcState.isFirstLoad){m.unread=true;mdcState.unreadCount++;mdcUpdateUnread();if(!mdcMuted)playAlert();mdcShowQueryResult(m.result,m.text);}
-    else{m.unread=false;}
-    mdcState.localMsgs.unshift(m);
-    if(mdcState.localMsgs.length>80)mdcState.localMsgs.pop();
-    mdcRenderMsgs();
-  });
-  mdcState.listeners=[{ref:db.ref('dispatches'),h:l1,e:'value'},{ref:db.ref('messages'),h:l2,e:'child_added'},{ref:db.ref('private/'+ME.uid),h:l3,e:'child_added'}];
-  setTimeout(function(){mdcState.isFirstLoad=false;},2500);
-}
-function detachMdcListeners(){
-  mdcState.listeners.forEach(function(l){l.ref.off(l.e,l.h);}); mdcState.listeners=[];
-  mdcState.localMsgs=[]; mdcState.localDisps=[]; mdcState.isFirstLoad=true; mdcState.unreadCount=0;
-  document.getElementById('obs-compose-bar').style.display='none';
-}
-function mdcRenderDisp(){
-  var el=document.getElementById('mdc-disp-index'); if(!el) return;
-  el.innerHTML=mdcState.localDisps.map(function(d){
-    var sel=mdcState.selectedDisp===d._key;
-    return '<div class="disp-row'+(sel?' selected':'')+'" onclick="mdcSelectDisp(\''+d._key+'\')">'
-      +'<span style="min-width:36px">'+d.time+'</span><span style="min-width:58px">'+d.id+'</span>'
-      +'<span style="min-width:30px">'+d.code+'</span><span style="min-width:16px">'+d.pri+'</span><span>'+d.unit+'</span></div>';
-  }).join('');
-}
-function mdcSelectDisp(key){
-  mdcState.selectedDisp=key; mdcRenderDisp();
-  var d=mdcState.localDisps.find(function(x){return x._key===key;}); if(!d) return;
-  document.getElementById('mdc-disp-detail').innerHTML='<div class="detail-text">'+d.id+' '+d.code+'\n('+d.pri+') '+d.unit+'\n'+d.addr+'\n'+d.rmk+'</div>';
-  mdcShowMain('<div class="detail-text"><b>--- DISPATCH DETAIL ---</b>\n\nCALL #: '+d.id+'\nTIME:   '+d.time+'\nCODE:   '+d.code+'\nPRIO:   '+d.pri+'\nUNIT:   '+d.unit+'\nADDR:   '+d.addr+'\nRMK:    '+d.rmk+'</div>');
-}
-function mdcRenderMsgs(){
-  var el=document.getElementById('mdc-msg-index'); if(!el) return;
-  el.innerHTML=mdcState.localMsgs.map(function(m,i){
-    var cls='msg-row'+(m.unread?' unread':'');
-    var label=(m.isPrivate?'[Q] ':'')+((m.from?m.from+': ':'')+m.text);
-    return '<div class="'+cls+'" onclick="mdcSelectMsg('+i+')">'
-      +'<span style="min-width:50px;font-size:9px">'+m.time+'</span>'
-      +'<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+label+'</span>'
-      +'<span style="font-size:9px;color:#555">'+m.date+'</span></div>';
-  }).join('');
-  mdcUpdateUnread();
-}
-function mdcSelectMsg(i){
-  var m=mdcState.localMsgs[i]; if(!m) return;
-  if(m.unread){m.unread=false;mdcState.unreadCount=Math.max(0,mdcState.unreadCount-1);mdcRenderMsgs();}
-  if(m.result) mdcShowQueryResult(m.result,m.text);
-  else mdcShowMain('<div class="detail-text"><b>'+(m.from||'')+'</b>'+(m.from?'\n\n':'')+m.text+'\n\nDATE: '+m.date+'\nTIME: '+m.time+'</div>');
-}
-function mdcShowMain(html){ document.getElementById('mdc-main').innerHTML=html; }
-function mdcShowQueryResult(result,fb){ document.getElementById('mdc-main').innerHTML=result||('<div class="detail-text">'+(fb||'')+'</div>'); }
-function mdcUpdateUnread(){ document.getElementById('mdc-unread-count').textContent=mdcState.unreadCount; document.getElementById('mdc-unread-box').style.background=mdcState.unreadCount>0?'#f9a825':'#43a047'; }
-function mdcPushShared(obj){ obj.ts=Date.now();obj.date=getTodayDate();obj.from=ME.unit; db.ref('messages').push(obj); }
-function mdcPushPrivate(obj){ obj.ts=Date.now();obj.date=getTodayDate(); db.ref('private/'+ME.uid).push(obj); }
-function mdcStatus(code){ var t=getTime(); if(ME.unit)db.ref('units/'+ME.unit).update({status:code,ts:Date.now()}); mdcPushShared({time:t,text:'STATUS: '+code}); mdcShowMain('<div class="detail-text"><b>STATUS SENT</b>\n\nUNIT: '+ME.unit+'\nSTATUS: '+code+'\nTIME: '+t+'</div>'); }
-function clearDispWindow(){ mdcState.localDisps=[]; document.getElementById('mdc-disp-index').innerHTML=''; mdcState.selectedDisp=null; }
-function mdcClearDef(){ mdcShowMain(''); document.getElementById('obs-compose-bar').style.display='none'; }
-function mdcDoSend(){
-  var inp=document.getElementById('mdc-msg-input'); var v=inp.value.trim(); if(!v) return;
-  var isQ=['want','veh','dmv','gun','prop','boat','bike','vehreg','priors'].indexOf(mdcState.currentForm)>=0;
-  if(isQ){ playSend(); mdcShowMain('<div class="detail-text">QUERYING...\nPlease wait...</div>'); setTimeout(function(){mdcPushPrivate({time:getTime(),from:'DATABASE',text:'QUERY: '+v,result:'<div class="detail-text">NO RECORD FOUND</div>',isError:false});},1800); }
-  else{ mdcPushShared({time:getTime(),text:v}); mdcShowMain('<div class="detail-text"><b>MESSAGE SENT</b>\n\n'+v+'</div>'); }
-  inp.value='';
-}
-function mdcDoSearch(){ var v=document.getElementById('mdc-msg-input').value.trim(); if(v) mdcShowMain('<div class="detail-text">SEARCH: '+v+'\n\nNo results.</div>'); }
-function mdcGoBack(){ mdcShowMain(''); mdcState.currentForm=''; document.getElementById('obs-compose-bar').style.display='none'; }
-function mdcViewUnread(){ mdcState.unreadCount=0; mdcState.localMsgs.forEach(function(m){m.unread=false;}); mdcRenderMsgs(); }
-function mdcOpenLastForm(){ if(mdcState.lastForm==='want')mdcOpenWant(); else if(mdcState.lastForm==='veh')mdcOpenVeh(); else if(mdcState.lastForm==='dmv')mdcOpenDmv(); }
-function mdcOpenNewMsg(){
-  mdcShowMain('<div class="want-form"><b>NEW MESSAGE</b><br><br>'
-    +'<div class="want-row"><span class="want-label">TO:</span><input class="want-input" id="nm-to" style="width:200px"></div>'
-    +'<div class="want-row"><span class="want-label">MSG:</span><textarea id="nm-msg" style="background:#00bcd4;border:2px inset #006080;width:380px;height:70px;font-family:Courier New,monospace;font-size:11px;padding:4px;outline:none;color:#000"></textarea></div>'
-    +'<br><div class="want-actions"><div class="want-action-btn" onclick="mdcSendNewMsg()">SEND</div><div class="want-action-btn" style="background:#808080" onclick="mdcClearDef()">CANCEL</div></div></div>');
-}
-function mdcSendNewMsg(){ var to=document.getElementById('nm-to'),msg=document.getElementById('nm-msg'); if(!msg||!msg.value.trim()) return; mdcPushShared({time:getTime(),text:'TO '+(to?to.value.toUpperCase():'ALL')+': '+msg.value.trim()}); mdcShowMain('<div class="detail-text"><b>MESSAGE SENT</b></div>'); }
-
-// ── MDC Searches (real civ data) ──────────────
-function mdcOpenWant(){ mdcState.lastForm='want'; mdcState.currentForm='want';
-  document.getElementById('mdc-main').innerHTML='<div class="want-form"><div style="font-weight:bold;font-size:12px;margin-bottom:4px">WANTS/WPS/NCIC/CWS/APPS/CA DMV</div><div style="font-size:11px;font-weight:bold;margin-bottom:8px">USE NAME:</div>'
+// ── WANT9 form — real LASD mask ───────────
+function mdcOpenWant(){
+  S.currentForm='want'; S.lastForm='want';
+  gi('mdc-main').innerHTML='<div class="want-form"><b>WANT9 / WPS / NCIC / CWS / CA DMV</b><br><div style="font-weight:bold;font-size:11px;margin:4px 0 8px">USE DL/NO OR NAME:</div>'
+    +'<div class="want-row"><span class="want-label">DL/NO</span><input class="want-input" id="w-dl" style="width:160px"> <span class="want-label" style="min-width:18px">ST</span><input class="want-input" id="w-st" style="width:28px" value="CA"></div>'
     +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="w-last" style="width:200px"></div>'
     +'<div class="want-row"><span class="want-label">FIRST</span><input class="want-input" id="w-first" style="width:130px"> <span class="want-label" style="min-width:28px">MID</span><input class="want-input" id="w-mid" style="width:30px"></div>'
-    +'<div class="want-row"><span class="want-label">DOB</span><input class="want-input" id="w-dob" style="width:110px;background:#008fa0" placeholder="MM/DD/YYYY"></div>'
-    +'<div class="want-row"><span class="want-label">SEX</span><select class="want-select" id="w-sex"><option></option><option>M</option><option>F</option></select> <span class="want-label" style="min-width:34px">RACE</span><select class="want-select" id="w-race"><option></option><option>W</option><option>B</option><option>H</option><option>A</option><option>O</option></select></div>'
-    +'<div class="want-note">(SEARCHES REAL CIVILIAN PROFILES ONLY)</div>'
-    +'<div class="want-actions"><div class="want-action-btn" style="background:#2e7d32" onclick="mdcSubmitWant()">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2" onclick="eraseWantData()">ERASE DATA</div></div></div>';
+    +'<div class="want-row"><span class="want-label">ADDRESS: STREET #</span><input class="want-input" id="w-addr" style="width:140px"></div>'
+    +'<div class="want-row"><span class="want-label">NAME</span><input class="want-input" id="w-name2" style="width:140px"> <span class="want-label" style="min-width:36px">TYPE</span><select class="want-select" id="w-typ"><option></option><option>BUS</option><option>AKA</option></select></div>'
+    +'<div class="want-row"><span class="want-label">APT #</span><input class="want-input" id="w-apt" style="width:50px"> <span class="want-label" style="min-width:28px">CITY</span><input class="want-input" id="w-city" style="width:160px"></div>'
+    +'<div class="want-row"><span class="want-label">SEX</span><select class="want-select" id="w-sex"><option></option><option>M</option><option>F</option></select> <span class="want-label" style="min-width:36px">RACE</span><select class="want-select" id="w-race"><option></option><option>W</option><option>B</option><option>H</option><option>A</option><option>I</option><option>Z</option><option>D</option><option>C</option><option>F</option><option>G</option><option>U</option><option>J</option><option>K</option><option>L</option><option>P</option><option>S</option><option>V</option><option>A</option><option>O</option><option>X</option></select> <span class="want-label" style="min-width:28px">HAIR</span><select class="want-select" id="w-hair" style="width:50px"><option></option><option>BLK</option><option>BRN</option><option>BLD</option><option>RED</option><option>GRY</option><option>WHI</option><option>BAL</option></select> <span class="want-label" style="min-width:28px">EYE</span><select class="want-select" id="w-eyes" style="width:50px"><option></option><option>BRN</option><option>BLU</option><option>GRN</option><option>HAZ</option><option>BLK</option></select></div>'
+    +'<div class="want-row"><span class="want-label">HGT</span><input class="want-input dark" id="w-hgt" style="width:40px"> <span class="want-label" style="min-width:28px">WGT</span><input class="want-input dark" id="w-wgt" style="width:40px"></div>'
+    +'<div class="want-note">(DOB REQUIRED FOR NCIC)</div>'
+    +'<div class="want-note">(DOB OR AGE REQUIRED FOR CWS)</div>'
+    +'<div class="want-row"><span class="want-label">DOB</span><input class="want-input dark" id="w-dob" style="width:90px" placeholder="MM/DD/YY"> <span class="want-label" style="min-width:50px">OR AGE</span><input class="want-input" id="w-age" style="width:36px"></div>'
+    +'<div class="want-note">(OPTIONAL)</div>'
+    +'<div class="want-row"><span class="want-label">AKA LAST</span><input class="want-input" id="w-aka-last" style="width:160px"></div>'
+    +'<div class="want-row"><span class="want-label">FIRST</span><input class="want-input" id="w-aka-first" style="width:130px"> <span class="want-label" style="min-width:28px">MID</span><input class="want-input" id="w-aka-mid" style="width:30px"></div>'
+    +'<div class="want-row"><span class="want-label">WARR/COPS #</span><input class="want-input" id="w-warr" style="width:160px"></div>'
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#2e7d32" onclick="submitWant()">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>';
 }
-function eraseWantData(){ document.querySelectorAll('.want-input,.want-select').forEach(function(e){e.value='';}); }
-function mdcSubmitWant(){
-  var last=gv('w-last'),first=gv('w-first'),dob=gv('w-dob');
-  if(!last){alert('Enter Last Name.');return;}
-  playSend(); mdcShowMain('<div class="detail-text">QUERYING WANTS/WPS/NCIC/CWS...\n\nPlease wait...</div>');
+function submitWant(){
+  var last=gv('w-last'),dl=gv('w-dl'); if(!last&&!dl){alert('Enter Last Name or DL#.');return;}
+  playSend(); showMain('<div class="detail-text">QUERYING WANTS/WPS/NCIC/CWS/CA DMV...\\n\\nPlease wait...</div>');
   db.ref('civilians').once('value',function(snap){
     var civs=Object.values(snap.val()||{});
     var match=civs.find(function(c){
-      var parts=(c.name||'').split(',');
-      var civLast=(parts[0]||'').trim().toUpperCase();
-      var civFirst=(parts[1]||'').trim().toUpperCase();
-      return civLast===last.toUpperCase()&&(!first||civFirst.indexOf(first.toUpperCase())>=0)&&(!dob||c.dob===dob);
+      if(!c.name)return false;
+      var pts=(c.name).split(','); var cl=(pts[0]||'').trim().toUpperCase(); var cf=(pts[1]||'').trim().toUpperCase();
+      return cl===last.toUpperCase()&&(!gv('w-first')||cf.indexOf(gv('w-first').toUpperCase())>=0);
     });
-    var t=getTime();
+    var t=now();
     if(match){
       db.ref('criminalRecords/'+match.uid).once('value',function(rsnap){
         var charges=(rsnap.val()||{}).charges||[];
         var warrants=charges.filter(function(ch){return ch.status==='PENDING';});
-        var chargeHtml=charges.length?charges.map(function(ch){return '  '+ch.code+' — '+ch.description+' ('+ch.status+')';}).join('\n'):'  NONE ON FILE';
-        var txt='RECORD FOUND: '+match.name;
+        var txt=(warrants.length?'*** HIT *** ':'RECORD FOUND: ')+match.name;
         var html='<div class="detail-text">'+(warrants.length?'<span class="hit">*** HIT — ACTIVE WARRANT ***</span>':'<span class="clear-txt">*** RECORD FOUND — NO ACTIVE WARRANTS ***</span>')
-          +'\n\nNAME:    '+match.name+'\nDOB:     '+(match.dob||'N/A')+'\nSEX:     '+(match.sex||'N/A')+'   RACE: '+(match.race||'N/A')+'\nHAIR:    '+(match.hair||'N/A')+'  EYES: '+(match.eyes||'N/A')
-          +'\nHGT:     '+(match.height||'N/A')+'  WGT:  '+(match.weight||'N/A')+'\nADDR:    '+(match.address||'N/A')+'\nOCC:     '+(match.occupation||'N/A')
-          +'\n\nCHARGES:\n'+chargeHtml
-          +(warrants.length?'\n\n<span class="hit">ACTIVE WARRANTS:\n'+warrants.map(function(w){return '  '+w.code+' — '+w.description;}).join('\n')+'</span>':'')
-          +'\n\nTIME: '+t+'</div>';
-        mdcPushPrivate({time:t,from:'PERS DATABASE',text:txt,result:html,isError:warrants.length>0});
+          +'\\n\\nNAME:  '+match.name+'\\nDOB:   '+(match.dob||'N/A')+'\\nSEX:   '+(match.sex||'N/A')+'  RACE: '+(match.race||'N/A')+'\\nHAIR:  '+(match.hair||'N/A')+'  EYES: '+(match.eyes||'N/A')
+          +'\\nHGT:   '+(match.height||'N/A')+'  WGT: '+(match.weight||'N/A')+'\\nADDR:  '+(match.address||'N/A')
+          +'\\n\\nCHARGES:\\n'+(charges.length?charges.map(function(c){return '  '+c.code+' — '+c.description+' ('+c.status+')';}).join('\\n'):'  NONE ON FILE')
+          +(warrants.length?'\\n\\n<span class="hit">ACTIVE WARRANTS:\\n'+warrants.map(function(w){return '  '+w.code+' — '+w.description;}).join('\\n')+'</span>':'')
+          +'\\n\\nTIME: '+t+'</div>';
+        pushPrivate({time:t,from:'PERS DATABASE',text:txt,result:html,isError:warrants.length>0,isHit:warrants.length>0});
       });
     } else {
-      mdcPushPrivate({time:t,from:'PERS DATABASE',text:'NO RECORD — '+last.toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNAME: '+last.toUpperCase()+'\n\nNO CIVILIAN PROFILE ON FILE\nWANTS: NONE  WARRANTS: NONE\n\nTIME: '+t+'</div>',isError:false});
+      pushPrivate({time:t,from:'PERS DATABASE',text:'NO RECORD — '+(last||dl).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\\n\\nNAME: '+(last||dl).toUpperCase()+'\\n\\nWANTS: NONE  WARRANTS: NONE\\nNCIC: NO RECORD  CWS: NO RECORD\\n\\nTIME: '+t+'</div>',isError:false,isHit:false});
     }
   });
 }
-function mdcOpenVeh(){ mdcState.lastForm='veh'; mdcState.currentForm='veh';
-  mdcShowMain('<div class="want-form"><b style="font-size:12px">VEHICLE INQUIRY</b><br><br>'
-    +'<div class="want-row"><span class="want-label">PLATE:</span><input class="want-input" id="v-plate" style="width:120px"> <span class="want-label" style="min-width:18px">ST</span><input class="want-input" id="v-st" style="width:30px" value="CA"></div>'
-    +'<div class="want-row"><span class="want-label">MAKE:</span><input class="want-input" id="v-make" style="width:100px"> <span class="want-label" style="min-width:50px">COLOR</span><input class="want-input" id="v-color" style="width:80px"></div>'
-    +'<div class="want-note">(SEARCHES REAL REGISTERED VEHICLES ONLY)</div>'
-    +'<div class="want-actions"><div class="want-action-btn" style="background:#cc0000" onclick="mdcSubmitVeh()">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2" onclick="eraseWantData()">ERASE DATA</div></div></div>');
+
+// ── VEH form — real LASD mask ──────────────
+function mdcOpenVeh(){
+  S.currentForm='veh'; S.lastForm='veh';
+  showMain('<div class="want-form"><b>VEH — VEHICLE INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+    +'<div class="want-row"><span class="want-label">LIC #</span><input class="want-input" id="v-lic" style="width:100px"> <span class="want-label" style="min-width:18px">ST</span><input class="want-input" id="v-st" style="width:28px" value="CA"> <span class="want-label" style="min-width:60px">LIC CODE</span><input class="want-input" id="v-lc" style="width:24px"></div>'
+    +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="v-dmvwip"> <label style="font-size:11px;margin-left:4px">DMV WORK IN PROCESS FILE</label></div>'
+    +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="v-pvi"> <label style="font-size:11px;margin-left:4px">PARKING VIOLATION INFO</label></div>'
+    +'<div class="want-row"><span class="want-label">VIN #</span><input class="want-input" id="v-vin" style="width:200px"></div>'
+    +'<div class="want-row"><span class="want-label">ENG #</span><input class="want-input" id="v-eng" style="width:200px"></div>'
+    +'<div class="want-row"><span class="want-label">MAKE</span><input class="want-input" id="v-make" style="width:100px"> <span style="font-size:10px;color:#666">(OPTIONAL WITH VIN)</span></div>'
+    +'<div class="want-row"><span class="want-label">SVRN #</span><input class="want-input" id="v-svrn" style="width:100px"></div>'
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#cc0000" onclick="submitVeh()">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
-function mdcSubmitVeh(){
-  var plate=gv('v-plate'); if(!plate){alert('Enter plate.');return;}
-  playSend(); mdcShowMain('<div class="detail-text">QUERYING CLETS/NCIC...\n\nPlease wait...</div>');
-  db.ref('vehicles').orderByChild('plate').equalTo(plate.toUpperCase()).once('value',function(snap){
+function submitVeh(){
+  var lic=gv('v-lic'),vin=gv('v-vin'); if(!lic&&!vin){alert('Enter plate or VIN.');return;}
+  playSend(); showMain('<div class="detail-text">QUERYING SVS/DMV/NCIC/CWS/SVRN...\\n\\nPlease wait...</div>');
+  db.ref('vehicles').orderByChild('plate').equalTo(lic.toUpperCase()).once('value',function(snap){
     var vehs=Object.values(snap.val()||{});
-    var t=getTime();
+    var t=now(); var html,txt;
     if(vehs.length){
       var v=vehs[0];
-      var txt=(v.stolen?'HIT — STOLEN: ':'CLEAR — ')+plate.toUpperCase();
-      var html='<div class="detail-text">'+(v.stolen?'<span class="hit">*** STOLEN VEHICLE — BOLO ACTIVE ***</span>':'<span class="clear-txt">*** VEHICLE — NO WANTS ***</span>')
-        +'\n\nPLATE: '+v.plate+' '+v.state+'\nYEAR:  '+v.year+'  MAKE: '+v.make+'  MODEL: '+v.model+'\nCOLOR: '+v.color+'\n\nREG:   '+v.name
-        +'\nSTATUS: '+(v.stolen?'<span class="hit">STOLEN</span>':'<span class="clear-txt">CLEAR</span>')+'\n\nTIME: '+t+'</div>';
-      mdcPushPrivate({time:t,from:'VEH DATABASE',text:txt,result:html,isError:v.stolen});
+      txt=(v.stolen?'HIT — STOLEN: ':'CLEAR — ')+lic.toUpperCase();
+      html='<div class="detail-text">'+(v.stolen?'<span class="hit">*** STOLEN VEHICLE — BOLO ACTIVE ***</span>':'<span class="clear-txt">*** VEHICLE — NO WANTS ***</span>')
+        +'\\n\\nPLATE: '+v.plate+' '+v.state+'\\nYEAR:  '+v.year+'  MAKE: '+v.make+'  MODEL: '+v.model+'\\nCOLOR: '+v.color
+        +'\\n\\nREG:   '+v.name+'\\nSTATUS: '+(v.stolen?'<span class="hit">STOLEN</span>':'<span class="clear-txt">CLEAR</span>')+'\\n\\nTIME: '+t+'</div>';
+      pushPrivate({time:t,from:'VEH DATABASE',text:txt,result:html,isError:v.stolen,isHit:v.stolen});
     } else {
-      mdcPushPrivate({time:t,from:'VEH DATABASE',text:'NO RECORD — '+plate.toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nPLATE: '+plate.toUpperCase()+'\n\nNOT REGISTERED IN SYSTEM\n\nTIME: '+t+'</div>',isError:false});
+      pushPrivate({time:t,from:'VEH DATABASE',text:'NO RECORD — '+(lic||vin).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\\n\\nPLATE: '+(lic||vin).toUpperCase()+'\\n\\nNOT REGISTERED IN SYSTEM\\n\\nTIME: '+t+'</div>',isError:false,isHit:false});
     }
   });
 }
-function mdcOpenVehReg(){ mdcState.currentForm='vehreg';
-  mdcShowMain('<div class="want-form"><b style="font-size:12px">VEHICLE REGISTRATION</b><br><br>'
-    +'<div class="want-row"><span class="want-label">LAST NAME:</span><input class="want-input" id="vr-last" style="width:180px"></div>'
-    +'<div class="want-row"><span class="want-label">FIRST:</span><input class="want-input" id="vr-first" style="width:140px"></div>'
-    +'<div class="want-note">(SEARCHES REGISTERED VEHICLES BY OWNER NAME)</div>'
-    +'<div class="want-actions"><div class="want-action-btn" style="background:#cc0000" onclick="mdcSubmitVehReg()">SUBMIT QUERY</div></div></div>');
+
+// ── VEH REG form ───────────────────────────
+function mdcOpenVehReg(){
+  S.currentForm='vehreg'; S.lastForm='vehreg';
+  showMain('<div class="want-form"><b>REG / DMV — VEHICLE REGISTRATION</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+    +'<div class="want-row"><span class="want-label">CA LIC NO</span><input class="want-input" id="vr-lic" style="width:100px"> <span class="want-label" style="min-width:60px">LIC CODE</span><input class="want-input" id="vr-lc" style="width:24px"></div>'
+    +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="vr-wip"> <label style="font-size:11px;margin-left:4px">DMV WORK IN PROCESS FILE</label></div>'
+    +'<div class="want-row"><span class="want-label">VIN / HULL</span><input class="want-input" id="vr-vin" style="width:200px"></div>'
+    +'<div class="want-row"><span class="want-label">(OPT) YEAR</span><input class="want-input" id="vr-yr" style="width:36px"> <span class="want-label" style="min-width:40px">MAKE</span><input class="want-input" id="vr-make" style="width:80px"></div>'
+    +'<div style="font-size:11px;font-weight:bold;margin:8px 0 4px">CALIF VEHICLES AND VESSELS REGISTERED TO:</div>'
+    +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="vr-last" style="width:180px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="vr-first" style="width:120px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="vr-mi" style="width:24px"></div>'
+    +'<div class="want-row"><span class="want-label">OR COMPANY</span><input class="want-input" id="vr-co" style="width:260px"></div>'
+    +'<div class="want-row"><span class="want-label">(OPT) ADDR</span><input class="want-input" id="vr-addr" style="width:40px"> <span class="want-label" style="min-width:40px">CITY</span><input class="want-input" id="vr-city" style="width:140px"></div>'
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#cc0000" onclick="submitVehReg()">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
-function mdcSubmitVehReg(){
-  var last=gv('vr-last'); if(!last){alert('Enter Last Name.');return;}
-  playSend(); mdcShowMain('<div class="detail-text">QUERYING VEHICLE REGISTRATION...\nPlease wait...</div>');
+function submitVehReg(){
+  var last=gv('vr-last'),lic=gv('vr-lic'); if(!last&&!lic){alert('Enter name or plate.');return;}
+  playSend(); showMain('<div class="detail-text">QUERYING CA DMV REGISTRATION...\\nPlease wait...</div>');
   db.ref('vehicles').once('value',function(snap){
-    var vehs=Object.values(snap.val()||{}).filter(function(v){return (v.name||'').toUpperCase().indexOf(last.toUpperCase())>=0;});
-    var t=getTime();
+    var vehs=Object.values(snap.val()||{}).filter(function(v){
+      if(lic) return v.plate===lic.toUpperCase();
+      return (v.name||'').toUpperCase().indexOf(last.toUpperCase())>=0;
+    });
+    var t=now();
     if(vehs.length){
-      var txt='VEH REG — '+last.toUpperCase()+' ('+vehs.length+' vehicles)';
-      var html='<div class="detail-text"><b>VEHICLE REGISTRATION RESULTS</b>\n\nNAME QUERY: '+last.toUpperCase()+'\nVEHICLES ON FILE: '+vehs.length+'\n\n'+vehs.map(function(v){return 'PLATE: '+v.plate+' '+v.state+'\n  '+v.year+' '+v.make+' '+v.model+' — '+v.color+'\n  STATUS: '+(v.stolen?'STOLEN':'CLEAR');}).join('\n\n')+'\n\nTIME: '+t+'</div>';
-      mdcPushPrivate({time:t,from:'VEH REG DATABASE',text:txt,result:html,isError:false});
+      var txt='VEH REG — '+(last||lic).toUpperCase()+' ('+vehs.length+' vehicle'+(vehs.length>1?'s':'')+')';
+      var html='<div class="detail-text"><b>VEHICLE REGISTRATION RESULTS</b>\\n\\nQUERY: '+(last||lic).toUpperCase()+'\\nVEHICLES ON FILE: '+vehs.length+'\\n\\n'+vehs.map(function(v){return 'PLATE: '+v.plate+' '+v.state+'\\n  '+v.year+' '+v.make+' '+v.model+' — '+v.color+'\\n  REG: '+v.name+'\\n  STATUS: '+(v.stolen?'STOLEN':'CLEAR');}).join('\\n\\n')+'\\n\\nTIME: '+t+'</div>';
+      pushPrivate({time:t,from:'VEH REG DATABASE',text:txt,result:html,isError:false});
     } else {
-      mdcPushPrivate({time:t,from:'VEH REG DATABASE',text:'NO VEHICLES — '+last.toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNO VEHICLES REGISTERED UNDER: '+last.toUpperCase()+'\n\nTIME: '+t+'</div>',isError:false});
+      pushPrivate({time:t,from:'VEH REG DATABASE',text:'NO VEHICLES — '+(last||lic).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\\n\\nNO VEHICLES REGISTERED UNDER: '+(last||lic).toUpperCase()+'\\n\\nTIME: '+t+'</div>',isError:false});
     }
   });
 }
-function mdcOpenDmv(){ mdcState.lastForm='dmv'; mdcState.currentForm='dmv';
-  mdcShowMain('<div class="want-form"><b style="font-size:12px">CA DMV INQUIRY</b><br><br>'
-    +'<div class="want-row"><span class="want-label">LAST:</span><input class="want-input" id="d-last" style="width:160px"></div>'
-    +'<div class="want-row"><span class="want-label">FIRST:</span><input class="want-input" id="d-first" style="width:130px"></div>'
-    +'<div class="want-row"><span class="want-label">DOB:</span><input class="want-input" id="d-dob" style="width:110px" placeholder="MM/DD/YYYY"></div>'
-    +'<div class="want-note">(SEARCHES REAL CIVILIAN PROFILES ONLY)</div>'
-    +'<div class="want-actions"><div class="want-action-btn" style="background:#f9a825;color:#000" onclick="mdcSubmitDmv()">SUBMIT DMV QUERY</div><div class="want-action-btn" style="background:#1976d2" onclick="eraseWantData()">ERASE DATA</div></div></div>');
+
+// ── DMV form — real LASD mask ──────────────
+function mdcOpenDmv(){
+  S.currentForm='dmv'; S.lastForm='dmv';
+  showMain('<div class="want-form"><b>DRIVER / DMV — DRIVER HISTORY INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+    +'<div class="want-row"><span class="want-label">DRIVER\'S LIC #</span><input class="want-input" id="d-dl" style="width:120px"></div>'
+    +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="d-last" style="width:180px"></div>'
+    +'<div class="want-row"><span class="want-label">FIRST</span><input class="want-input" id="d-first" style="width:140px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="d-mi" style="width:24px"></div>'
+    +'<div class="want-row"><span class="want-label">SUF</span><input class="want-input" id="d-suf" style="width:30px"></div>'
+    +'<div style="font-size:11px;color:#666;margin-bottom:6px">( OPTIONAL )</div>'
+    +'<div class="want-row"><span class="want-label">DOB</span><input class="want-input dark" id="d-dob" style="width:80px" placeholder="MM/DD/YY"> <span class="want-label" style="min-width:50px">OR AGE</span><input class="want-input" id="d-age" style="width:36px"></div>'
+    +'<div class="want-row"><span class="want-label">ADDRESS</span><input class="want-input" id="d-addr" style="width:200px"></div>'
+    +'<div class="want-row"><span class="want-label">CITY</span><input class="want-input" id="d-city" style="width:160px"></div>'
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#f9a825;color:#000" onclick="submitDmv()">SUBMIT DMV QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
-function mdcSubmitDmv(){
-  var last=gv('d-last'); if(!last){alert('Enter Last Name.');return;}
-  playSend(); mdcShowMain('<div class="detail-text">QUERYING CA DMV...\nPlease wait...</div>');
+function submitDmv(){
+  var dl=gv('d-dl'),last=gv('d-last'); if(!dl&&!last){alert('Enter DL# or Last Name.');return;}
+  playSend(); showMain('<div class="detail-text">QUERYING CA DRIVER HISTORY...\\nPlease wait...</div>');
   db.ref('civilians').once('value',function(snap){
-    var match=Object.values(snap.val()||{}).find(function(c){return (c.name||'').toUpperCase().indexOf(last.toUpperCase())>=0;});
-    var t=getTime();
+    var match=Object.values(snap.val()||{}).find(function(c){return last?(c.name||'').toUpperCase().indexOf(last.toUpperCase())>=0:false;});
+    var t=now();
     if(match){
-      var txt='DMV RECORD — '+match.name;
-      var html='<div class="detail-text">DMV RESPONSE:\n\nNAME:  '+match.name+'\nDOB:   '+(match.dob||'N/A')+'\nADDR:  '+(match.address||'N/A')+'\nSEX:   '+(match.sex||'N/A')+'   RACE: '+(match.race||'N/A')+'\n\n<span class="clear-txt">STATUS: ON FILE</span>\n\nTIME: '+t+'</div>';
-      mdcPushPrivate({time:t,from:'DMV',text:txt,result:html,isError:false});
+      pushPrivate({time:t,from:'DMV',text:'DMV RECORD — '+match.name,result:'<div class="detail-text">DMV RESPONSE:\\n\\nNAME:  '+match.name+'\\nDOB:   '+(match.dob||'N/A')+'\\nADDR:  '+(match.address||'N/A')+'\\nSEX:   '+(match.sex||'N/A')+'  RACE: '+(match.race||'N/A')+'\\nHGT:   '+(match.height||'N/A')+'  WGT: '+(match.weight||'N/A')+'\\n\\n<span class="clear-txt">STATUS: ON FILE</span>\\n\\nTIME: '+t+'</div>',isError:false});
     } else {
-      mdcPushPrivate({time:t,from:'DMV',text:'NO RECORD — '+last.toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNAME: '+last.toUpperCase()+'\n\nNOT ON FILE IN DMV DATABASE\n\nTIME: '+t+'</div>',isError:false});
+      pushPrivate({time:t,from:'DMV',text:'DMV NO RECORD — '+(last||dl).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\\n\\nNAME: '+(last||dl).toUpperCase()+'\\n\\nNOT ON FILE IN DMV DATABASE\\n\\nTIME: '+t+'</div>',isError:false});
     }
   });
 }
-function mdcOpenGun(){ mdcState.currentForm='gun';
-  mdcShowMain('<div class="want-form"><b>FIREARM INQUIRY</b><br><br><div class="want-row"><span class="want-label">SERIAL #:</span><input class="want-input" id="g-ser" style="width:180px"></div><div class="want-row"><span class="want-label">MAKE:</span><input class="want-input" id="g-make" style="width:120px"> <span class="want-label">CAL</span><input class="want-input" id="g-cal" style="width:50px"></div><br><div class="want-actions"><div class="want-action-btn" style="background:#6a1b9a" onclick="mdcSubmitGenericQuery(\'GUN\',\'NCIC FIREARMS\')">SUBMIT QUERY</div></div></div>');
+
+// ── PROP9 form ─────────────────────────────
+function mdcOpenProp(){
+  S.currentForm='prop'; S.lastForm='prop';
+  showMain('<div class="want-form"><b>PROP9 / APS / NCIC — PROPERTY INQUIRY</b><br><br>'
+    +'<div class="want-row"><span class="want-label">ARTICLE</span><input class="want-input" id="pr-art" style="width:80px"> <span class="want-label" style="min-width:50px">BRAND</span><input class="want-input" id="pr-brand" style="width:100px"></div>'
+    +'<div class="want-row"><span class="want-label">SER #</span><input class="want-input" id="pr-ser" style="width:180px"></div>'
+    +'<div class="want-row"><span class="want-label">OR OAN</span><input class="want-input" id="pr-oan" style="width:180px"></div>'
+    +'<div class="want-row"><span class="want-label">CATEGORY</span><input class="want-input" id="pr-cat" style="width:24px"></div>'
+    +'<div class="want-row"><span class="want-label">OR MISC #</span></div>'
+    +'<div class="want-row"><span class="want-label">TYPE</span><input class="want-input" id="pr-type" style="width:40px"> <span class="want-label" style="min-width:50px">MISC #</span><input class="want-input" id="pr-misc" style="width:120px"></div>'
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#00838f" onclick="submitGenericQuery(\'PROPERTY\',\'APS/NCIC PROPERTY\')">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
-function mdcOpenProp(){ mdcState.currentForm='prop';
-  mdcShowMain('<div class="want-form"><b>PROPERTY INQUIRY</b><br><br><div class="want-row"><span class="want-label">SERIAL #:</span><input class="want-input" id="p-ser" style="width:180px"></div><div class="want-row"><span class="want-label">DESCRIPTION:</span><input class="want-input" id="p-desc" style="width:240px"></div><br><div class="want-actions"><div class="want-action-btn" style="background:#00838f" onclick="mdcSubmitGenericQuery(\'PROPERTY\',\'NCIC PROPERTY\')">SUBMIT QUERY</div></div></div>');
+
+// ── GUN form ───────────────────────────────
+function mdcOpenGun(){
+  S.currentForm='gun'; S.lastForm='gun';
+  showMain('<div class="want-form"><b>GUN / AFS / NCIC — FIREARMS INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+    +'<div style="font-size:11px;font-weight:bold;margin-bottom:6px">SERIAL # SEARCH:</div>'
+    +'<div class="want-row"><span class="want-label">SER #</span><input class="want-input" id="gn-ser" style="width:200px"></div>'
+    +'<div class="want-row"><span class="want-label">(OPT) TYPE</span><input class="want-input" id="gn-type" style="width:24px"> <span class="want-label" style="min-width:36px">MAKE</span><input class="want-input" id="gn-make" style="width:60px"> <span class="want-label" style="min-width:50px">CALIBER</span><input class="want-input" id="gn-cal" style="width:50px"> <span class="want-label" style="min-width:80px">DOC CODE</span><input class="want-input" id="gn-doc" style="width:24px"></div>'
+    +'<div style="font-size:11px;font-weight:bold;margin:8px 0 6px">NAME SEARCH:</div>'
+    +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="gn-exact"> <label style="font-size:11px;margin-left:4px">EXACT NAME ONLY</label></div>'
+    +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="gn-last" style="width:180px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="gn-first" style="width:120px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="gn-mi" style="width:24px"></div>'
+    +'<div class="want-row"><span class="want-label">DOB</span><input class="want-input dark" id="gn-dob" style="width:80px"> <span class="want-label" style="min-width:50px">OR AGE</span><input class="want-input" id="gn-age" style="width:36px"></div>'
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#6a1b9a" onclick="submitGenericQuery(\'FIREARM\',\'AFS/NCIC FIREARMS\')">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
-function mdcOpenBoat(){ mdcState.currentForm='boat';
-  mdcShowMain('<div class="want-form"><b>VESSEL INQUIRY</b><br><br><div class="want-row"><span class="want-label">VESSEL #:</span><input class="want-input" id="b-num" style="width:150px"> <span class="want-label">ST</span><input class="want-input" id="b-st" style="width:30px" value="CA"></div><br><div class="want-actions"><div class="want-action-btn" style="background:#2e7d32" onclick="mdcSubmitGenericQuery(\'VESSEL\',\'VESSEL DATABASE\')">SUBMIT QUERY</div></div></div>');
+
+// ── BOAT form ──────────────────────────────
+function mdcOpenBoat(){
+  S.currentForm='boat'; S.lastForm='boat';
+  showMain('<div class="want-form"><b>BOAT / ABS / DMV / NCIC — VESSEL INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+    +'<div style="font-size:11px;font-weight:bold;margin-bottom:4px">CA REGISTRATION AND STOLEN:</div>'
+    +'<div class="want-row"><span class="want-label">CA REG #</span><span style="font-size:11px;margin-right:4px">CF</span><input class="want-input" id="bt-ca" style="width:100px"></div>'
+    +'<div style="font-size:11px;font-weight:bold;margin:6px 0 4px">STOLEN INQUIRY:</div>'
+    +'<div class="want-row"><span class="want-label">REG #</span><input class="want-input" id="bt-reg" style="width:100px"> <span class="want-label" style="min-width:40px">STATE</span><input class="want-input" id="bt-st" style="width:28px" value="CA"></div>'
+    +'<div class="want-row"><span class="want-label">HULL #</span><input class="want-input" id="bt-hull" style="width:180px"></div>'
+    +'<div class="want-row"><span class="want-label">OAN #</span><input class="want-input" id="bt-oan" style="width:180px"></div>'
+    +'<div class="want-row"><span class="want-label">ENG #</span><input class="want-input" id="bt-eng" style="width:180px"></div>'
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#2e7d32" onclick="submitGenericQuery(\'VESSEL\',\'ABS/DMV/NCIC BOAT\')">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
-function mdcOpenBike(){ mdcState.currentForm='bike';
-  mdcShowMain('<div class="want-form"><b>BICYCLE INQUIRY</b><br><br><div class="want-row"><span class="want-label">SERIAL #:</span><input class="want-input" id="bk-ser" style="width:180px"></div><div class="want-row"><span class="want-label">MAKE:</span><input class="want-input" id="bk-make" style="width:120px"> <span class="want-label">COLOR</span><input class="want-input" id="bk-color" style="width:80px"></div><br><div class="want-actions"><div class="want-action-btn" style="background:#1565c0" onclick="mdcSubmitGenericQuery(\'BICYCLE\',\'BICYCLE DATABASE\')">SUBMIT QUERY</div></div></div>');
+
+// ── BIKE9 form ─────────────────────────────
+function mdcOpenBike(){
+  S.currentForm='bike'; S.lastForm='bike';
+  showMain('<div class="want-form"><b>BIKE9 / APS / NCIC — BICYCLE INQUIRY</b><br><br>'
+    +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="bk-boys"> <label style="font-size:11px;margin-left:4px">BOYS</label></div>'
+    +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="bk-girls"> <label style="font-size:11px;margin-left:4px">GIRLS</label></div>'
+    +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="bk-undef"> <label style="font-size:11px;margin-left:4px">UNDEFINED</label></div>'
+    +'<div class="want-row"><span class="want-label">SPEED</span><input class="want-input" id="bk-speed" style="width:40px"></div>'
+    +'<div class="want-row"><span class="want-label">SER #</span><input class="want-input" id="bk-ser" style="width:180px"></div>'
+    +'<div class="want-row"><span class="want-label">OR OAN</span><input class="want-input" id="bk-oan" style="width:180px"></div>'
+    +'<div class="want-row"><span class="want-label">BRAND</span><input class="want-input" id="bk-brand" style="width:120px"></div>'
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#1565c0" onclick="submitGenericQuery(\'BICYCLE\',\'APS/NCIC BICYCLE\')">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
-function mdcSubmitGenericQuery(type,dbName){
-  playSend(); mdcShowMain('<div class="detail-text">QUERYING '+dbName+'...\nPlease wait...</div>');
+
+// ── Generic query (for forms without live DB) ──
+function submitGenericQuery(type,dbName){
+  playSend(); showMain('<div class="detail-text">QUERYING '+dbName+'...\\nPlease wait...</div>');
   setTimeout(function(){
-    var t=getTime();
-    mdcPushPrivate({time:t,from:dbName,text:'CLEAR — NO STOLEN RECORD ('+type+')',result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\n'+type+': NOT ON STOLEN FILE\n\nTIME: '+t+'</div>',isError:false});
+    var t=now();
+    pushPrivate({time:t,from:dbName,text:'NO RECORD — '+type+' NOT ON STOLEN FILE',result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\\n\\n'+type+': NOT ON STOLEN FILE\\n\\nTIME: '+t+'</div>',isError:false,isHit:false});
   },1800);
 }
-function mdcOpenPriors(){
-  mdcState.currentForm='priors';
-  mdcShowMain('<div class="want-form"><b>PRIORS CHECK</b><br><br>'
-    +'<div class="want-row"><span class="want-label">LAST:</span><input class="want-input" id="pr-last" style="width:160px"></div>'
-    +'<div class="want-row"><span class="want-label">FIRST:</span><input class="want-input" id="pr-first" style="width:130px"></div>'
-    +'<div class="want-note">(SEARCHES REAL CIVILIAN CRIMINAL RECORDS)</div>'
-    +'<div class="want-actions"><div class="want-action-btn" style="background:#2e7d32" onclick="mdcSubmitPriors()">CHECK PRIORS</div></div></div>');
+
+// ── NEW MESSAGE ─────────────────────────────
+function mdcOpenNewMsg(){
+  showMain('<div class="want-form"><b>NEW MESSAGE</b><br><div style="font-size:10px;color:#666;margin:4px 0 8px">Format: TO/UNIT/TEXT — Example: TO/136A/10-22</div>'
+    +'<div class="want-row"><span class="want-label">TO:</span><input class="want-input" id="nm-to" style="width:200px" placeholder="UNIT / GROUP / STATION"></div>'
+    +'<div class="want-row"><span class="want-label">MSG:</span><textarea id="nm-msg" style="background:#00bcd4;border:2px inset #006080;width:380px;height:70px;font-family:Courier New,monospace;font-size:11px;padding:4px;outline:none;color:#000"></textarea></div>'
+    +'<br><div style="display:flex;gap:0"><div class="want-action-btn" onclick="sendNewMsg()">SEND</div><div class="want-action-btn" style="background:#808080;max-width:100px" onclick="mdcClearDef()">CANCEL</div></div></div>');
 }
-function mdcSubmitPriors(){
-  var last=gv('pr-last'); if(!last){alert('Enter Last Name.');return;}
-  playSend(); mdcShowMain('<div class="detail-text">QUERYING CRIMINAL HISTORY...\nPlease wait...</div>');
-  db.ref('civilians').once('value',function(snap){
-    var match=Object.values(snap.val()||{}).find(function(c){return (c.name||'').toUpperCase().indexOf(last.toUpperCase())>=0;});
-    var t=getTime();
-    if(match){
-      db.ref('criminalRecords/'+match.uid).once('value',function(rsnap){
-        var charges=(rsnap.val()||{}).charges||[];
-        var txt='PRIORS: '+match.name;
-        var html='<div class="detail-text"><b>PRIORS RESPONSE</b>\n\nNAME: '+match.name+'\nDOB:  '+(match.dob||'N/A')+'\n\nCHARGES ON FILE: '+charges.length+'\n\n'+(charges.length?charges.map(function(c){return '  '+c.code+' — '+c.description+' ('+c.status+') '+c.date;}).join('\n'):'  NONE ON FILE')+'\n\nTIME: '+t+'</div>';
-        mdcPushPrivate({time:t,from:'PRIORS DATABASE',text:txt,result:html,isError:charges.length>0});
-      });
-    } else {
-      mdcPushPrivate({time:t,from:'PRIORS DATABASE',text:'NO RECORD — '+last.toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNO CIVILIAN PROFILE ON FILE\n\nTIME: '+t+'</div>',isError:false});
-    }
+function sendNewMsg(){
+  var to=gi('nm-to'),msg=gi('nm-msg'); if(!msg||!msg.value.trim())return;
+  var toVal=to?to.value.toUpperCase():'ALL';
+  pushShared({time:now(),text:'TO/'+toVal+'/'+msg.value.trim()});
+  showMain('<div class="detail-text"><b>MESSAGE SENT</b>\\n\\nTO: '+toVal+'\\nMSG: '+msg.value+'\\nTIME: '+now()+'</div>');
+}
+
+// ── SEND (bottom bar) ──────────────────────
+function mdcDoSend(){
+  var inp=gi('mdc-msg-input'); var v=inp.value.trim(); if(!v)return;
+  var queryForms=['want','veh','dmv','gun','prop','boat','bike','vehreg','urn','booking','sisi','sisq'];
+  if(queryForms.indexOf(S.currentForm)>=0){
+    playSend(); showMain('<div class="detail-text">QUERYING...\\nPlease wait...</div>');
+    setTimeout(function(){pushPrivate({time:now(),from:'DATABASE',text:'QUERY: '+v.toUpperCase(),result:'<div class="detail-text">QUERY: '+v.toUpperCase()+'\\n\\nNO RECORD FOUND</div>',isError:false});},1800);
+  } else {
+    pushShared({time:now(),text:v});
+    showMain('<div class="detail-text"><b>MESSAGE SENT</b>\\n\\n'+v+'</div>');
+  }
+  inp.value='';
+}
+function mdcDoSearch(){ var v=gi('mdc-msg-input').value.trim(); if(v)showMain('<div class="detail-text">SEARCH: '+v+'\\n\\nNo results.</div>'); }
+function mdcGoBack(){ showMain(''); S.currentForm=''; gi('mdc-compose-bar').textContent=''; }
+function mdcViewUnread(){ S.unreadCount=0; S.localMsgs.forEach(function(m){m.unread=false;}); renderMsgs(); }
+function mdcOpenLastForm(){
+  var lf=S.lastForm;
+  if(lf==='want')mdcOpenWant(); else if(lf==='veh')mdcOpenVeh(); else if(lf==='dmv')mdcOpenDmv();
+  else if(lf==='prop')mdcOpenProp(); else if(lf==='gun')mdcOpenGun(); else if(lf==='boat')mdcOpenBoat();
+  else if(lf==='bike')mdcOpenBike(); else if(lf==='vehreg')mdcOpenVehReg(); else if(lf==='urn')mdcOpenUrn();
+  else if(lf==='booking')mdcBooking();
+}
+function eraseForm(){ document.querySelectorAll('.want-input,.want-select,.obs-rmk').forEach(function(e){if(e.id&&e.id.indexOf('-st')>=0||e.id&&e.id.indexOf('-dlst')>=0||e.id&&e.id.indexOf('v-st')>=0)e.value='CA'; else if(e.tagName!=='SELECT')e.value=''; else e.selectedIndex=0;}); }
+
+// ── User management (admin) ────────────────
+function openUserMgmt(){
+  var main=gi('mdc-main'); if(!main)return;
+  if(!ME.isAdmin){showMain('<div class="detail-text">ACCESS DENIED.</div>');return;}
+  db.ref('users').once('value',function(snap){
+    var users=Object.values(snap.val()||{});
+    var pending=users.filter(function(u){return u.status==='pending';});
+    var approved=users.filter(function(u){return u.status==='approved';});
+    var html='<div class="want-form"><b>USER MANAGEMENT</b><br><br>';
+    html+='<b style="color:#cc0000">PENDING ('+pending.length+')</b><br><br>';
+    if(!pending.length) html+='<div style="color:#888;font-size:11px;margin-bottom:10px">None pending.</div>';
+    pending.forEach(function(u){
+      html+='<div style="background:#fff9e6;border:1px solid #c8b400;padding:8px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'
+        +'<b>'+u.unit+'</b> — '+u.name+' ('+u.station+')<br><span style="font-size:10px;color:#666">'+u.email+'</span><br><br>'
+        +'<button onclick="approveUser(\''+u.uid+'\')" style="background:#2e7d32;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;margin-right:6px;font-size:11px">APPROVE</button>'
+        +'<button onclick="denyUser(\''+u.uid+'\')" style="background:#cc0000;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;font-size:11px">DENY</button></div>';
+    });
+    html+='<br><b style="color:#2e7d32">APPROVED ('+approved.length+')</b><br><br>';
+    approved.forEach(function(u){
+      html+='<div style="background:#f0fff0;border:1px solid #2e7d32;padding:8px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'
+        +'<b>'+u.unit+'</b> — '+u.name+(u.isAdmin?' [ADMIN]':'')+'<br><span style="font-size:10px;color:#666">'+u.email+'</span><br><br>'
+        +'<button onclick="revokeUser(\''+u.uid+'\')" style="background:#cc0000;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer;margin-right:4px">REVOKE</button>'
+        +'<button onclick="toggleAdmin(\''+u.uid+'\','+(!u.isAdmin)+')" style="background:#1565c0;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer">'+(!u.isAdmin?'MAKE ADMIN':'REMOVE ADMIN')+'</button></div>';
+    });
+    main.innerHTML=html+'</div>';
   });
 }
-function mdcOpenIncidents(){
-  mdcShowMain('<div class="detail-text">LOADING INCIDENT REPORTS...\nPlease wait...</div>');
-  db.ref('incidents').limitToLast(20).once('value',function(snap){
-    var incs=Object.values(snap.val()||{}).sort(function(a,b){return b.ts-a.ts;});
-    if(!incs.length){mdcShowMain('<div class="detail-text">NO INCIDENT REPORTS ON FILE.</div>');return;}
-    mdcShowMain('<div class="want-form"><b>INCIDENT REPORTS</b><br><br>'+incs.map(function(inc){
-      return '<div style="background:#fff;border:1px solid #ccc;padding:8px;margin-bottom:6px;font-family:Courier New,monospace;font-size:10px;line-height:1.6">'
-        +'<b>'+inc.type+'</b> — '+inc.location+' | DATE: '+(inc.datetime||'N/A')+'\nREPORTED BY: '+(inc.reporterName||'ANON')+' | STATUS: '+inc.status
-        +(inc.suspectDesc?'\nSUSPECT: '+inc.suspectDesc:'')+'\n'+inc.description+'</div>';
-    }).join('')+'</div>');
-  });
-}
-function mdcOpenUserMgmt(){ dispShowUsers(document.getElementById('mdc-main')); }
-function openAdminPanel(){ launchDispatch(); setTimeout(function(){dispNav('users');},300); }
+function approveUser(uid){ db.ref('users/'+uid).update({status:'approved'}).then(function(){openUserMgmt();}); }
+function denyUser(uid){ db.ref('users/'+uid).update({status:'denied'}).then(function(){openUserMgmt();}); }
+function revokeUser(uid){ if(confirm('Revoke access? User will be kicked out instantly.')) db.ref('users/'+uid).update({status:'pending'}).then(function(){openUserMgmt();}); }
+function toggleAdmin(uid,v){ db.ref('users/'+uid).update({isAdmin:v}).then(function(){openUserMgmt();}); }
 
-// ── Audio ──────────────────────────────────────
-function playAlert(){ if(mdcMuted) return; try{var a=document.getElementById('snd-alert');a.currentTime=0;a.play();}catch(e){} }
-function playSend(){  try{var a=document.getElementById('snd-send'); a.currentTime=0;a.play();}catch(e){} }
-
-// ── Utils ──────────────────────────────────────
-function gv(id){ var e=document.getElementById(id); return e?e.value.trim():''; }
-function getTime(){ var n=new Date(); return n.toLocaleTimeString('en-US',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
-function getTodayDate(){ var d=new Date(); return (d.getMonth()+1).toString().padStart(2,'0')+'/'+(d.getDate()).toString().padStart(2,'0')+'/'+d.getFullYear().toString().slice(2); }
+// ── Utilities ──────────────────────────────
+function gi(id){ return document.getElementById(id); }
+function gv(id){ var e=gi(id); return e?e.value.trim():''; }
+function now(){ var n=new Date(); return n.toLocaleTimeString('en-US',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+function today(){ var d=new Date(); return (d.getMonth()+1).toString().padStart(2,'0')+'/'+(d.getDate()).toString().padStart(2,'0')+'/'+d.getFullYear().toString().slice(2); }
 </script>
 <!--
-════════════════════════════════════════════════════
+════════════════════════════════════════════════════════════
   SETUP
-════════════════════════════════════════════════════
-1. Paste your Firebase config into FIREBASE_CONFIG
-2. Firebase Auth: enable Email/Password
-3. Database Rules (paste in Firebase console → Realtime Database → Rules):
+════════════════════════════════════════════════════════════
+1. Paste your Firebase config into FIREBASE_CONFIG above
+2. Firebase Auth → enable Email/Password
+3. Database Rules (Realtime Database → Rules):
 {
   "rules": {
     "users":     { "$uid": { ".read": "$uid === auth.uid", ".write": "$uid === auth.uid" } },
     "civilians": { ".read": "auth != null", ".write": "auth != null" },
     "vehicles":  { ".read": "auth != null", ".write": "auth != null" },
-    "criminalRecords": { "$uid": { ".read": "auth != null", ".write": "$uid === auth.uid" } },
-    "incidents": { ".read": "auth != null", ".write": "auth != null" },
     "dispatches":{ ".read": "auth != null", ".write": "auth != null" },
     "messages":  { ".read": "auth != null", ".write": "auth != null" },
     "units":     { ".read": "auth != null", ".write": "auth != null" },
     "private":   { "$uid": { ".read": "$uid === auth.uid", ".write": "auth != null" } }
   }
 }
-4. SESSION_HOURS at the top controls how long before auto-logout (default: 8)
-5. Revoking a user in User Management kicks them out instantly
-6. To approve yourself: Firebase console → Realtime Database → users → your UID
-   → set status: "approved" and isAdmin: true
-════════════════════════════════════════════════════
+4. SESSION_HOURS controls auto-logout (default 8 hours)
+5. Revoking a user kicks them out instantly via real-time listener
+6. To approve yourself: Firebase → Realtime Database → Data → users
+   → your UID → set status: "approved" and isAdmin: true
+7. User Management: sign in → available in OTHER FUNCTIONS → SISQ
+   (admin only, accessible from the Other Functions popup)
+════════════════════════════════════════════════════════════
 -->
 </body>
-</html>"""
+</html>""")
