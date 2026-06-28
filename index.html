@@ -454,7 +454,7 @@ function renderDisp(){
   var el=gi('mdc-disp-index'); if(!el)return;
   el.innerHTML=S.localDisps.map(function(d){
     var sel=S.selectedDisp===d._key;
-    return '<div class="disp-row'+(sel?' selected':'')+'" onclick="selectDisp(''+d._key+'')">'
+    return '<div class="disp-row'+(sel?' selected':'')+'" data-key="+d._key+" onclick="selectDisp(this.dataset.key)">'
       +'<span style="min-width:36px">'+d.time+'</span>'
       +'<span style="min-width:60px">'+d.id+'</span>'
       +'<span style="min-width:32px">'+d.code+'</span>'
@@ -529,16 +529,16 @@ gi('popup-overlay').addEventListener('click',function(e){ if(e.target===gi('popu
 function openStatusTxtPopup(){
   openPopup('STATUS FUNCTIONS','STATUS TXT:',
     '<div class="popup-grid cols3">'
-    +'<div class="grid-btn" onclick="mdcStatus('10-7');closePopup()">10-7</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('10-97');closePopup()">10-97</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('HITS');closePopup()">HITS</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('10-98');closePopup()">10-98</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('STA');closePopup()">STA</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('10-8');closePopup()">10-8</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('902H');closePopup()">902H</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('10-10');closePopup()">10-10</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('10-15');closePopup()">10-15</div>'
-    +'<div class="grid-btn" onclick="mdcStatus('UTH');closePopup()">UTH</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;10-7&#39;);closePopup()">10-7</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;10-97&#39;);closePopup()">10-97</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;HITS&#39;);closePopup()">HITS</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;10-98&#39;);closePopup()">10-98</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;STA&#39;);closePopup()">STA</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;10-8&#39;);closePopup()">10-8</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;902H&#39;);closePopup()">902H</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;10-10&#39;);closePopup()">10-10</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;10-15&#39;);closePopup()">10-15</div>'
+    +'<div class="grid-btn" onclick="mdcStatus(&#39;UTH&#39;);closePopup()">UTH</div>'
     +'<div class="grid-btn bold" onclick="mdcEmer()" style="color:#cc0000;grid-column:span 2">EMER</div>'
     +'</div>');
 }
@@ -919,7 +919,7 @@ function mdcOpenProp(){
     +'<div class="want-row"><span class="want-label">CATEGORY</span><input class="want-input" id="pr-cat" style="width:24px"></div>'
     +'<div class="want-row"><span class="want-label">OR MISC #</span></div>'
     +'<div class="want-row"><span class="want-label">TYPE</span><input class="want-input" id="pr-type" style="width:40px"> <span class="want-label" style="min-width:50px">MISC #</span><input class="want-input" id="pr-misc" style="width:120px"></div>'
-    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#00838f" onclick="submitGenericQuery('PROPERTY','APS/NCIC PROPERTY')">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#00838f" data-t="PROPERTY" data-d="APS/NCIC PROPERTY" onclick="submitGenericQuery(this.dataset.t,this.dataset.d)">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
 
 // ── GUN form ───────────────────────────────
@@ -933,7 +933,7 @@ function mdcOpenGun(){
     +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="gn-exact"> <label style="font-size:11px;margin-left:4px">EXACT NAME ONLY</label></div>'
     +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="gn-last" style="width:180px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="gn-first" style="width:120px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="gn-mi" style="width:24px"></div>'
     +'<div class="want-row"><span class="want-label">DOB</span><input class="want-input dark" id="gn-dob" style="width:80px"> <span class="want-label" style="min-width:50px">OR AGE</span><input class="want-input" id="gn-age" style="width:36px"></div>'
-    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#6a1b9a" onclick="submitGenericQuery('FIREARM','AFS/NCIC FIREARMS')">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#6a1b9a" data-t="FIREARM" data-d="AFS/NCIC FIREARMS" onclick="submitGenericQuery(this.dataset.t,this.dataset.d)">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
 
 // ── BOAT form ──────────────────────────────
@@ -947,7 +947,7 @@ function mdcOpenBoat(){
     +'<div class="want-row"><span class="want-label">HULL #</span><input class="want-input" id="bt-hull" style="width:180px"></div>'
     +'<div class="want-row"><span class="want-label">OAN #</span><input class="want-input" id="bt-oan" style="width:180px"></div>'
     +'<div class="want-row"><span class="want-label">ENG #</span><input class="want-input" id="bt-eng" style="width:180px"></div>'
-    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#2e7d32" onclick="submitGenericQuery('VESSEL','ABS/DMV/NCIC BOAT')">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#2e7d32" data-t="VESSEL" data-d="ABS/DMV/NCIC BOAT" onclick="submitGenericQuery(this.dataset.t,this.dataset.d)">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
 
 // ── BIKE9 form ─────────────────────────────
@@ -961,7 +961,7 @@ function mdcOpenBike(){
     +'<div class="want-row"><span class="want-label">SER #</span><input class="want-input" id="bk-ser" style="width:180px"></div>'
     +'<div class="want-row"><span class="want-label">OR OAN</span><input class="want-input" id="bk-oan" style="width:180px"></div>'
     +'<div class="want-row"><span class="want-label">BRAND</span><input class="want-input" id="bk-brand" style="width:120px"></div>'
-    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#1565c0" onclick="submitGenericQuery('BICYCLE','APS/NCIC BICYCLE')">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
+    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#1565c0" data-t="BICYCLE" data-d="APS/NCIC BICYCLE" onclick="submitGenericQuery(this.dataset.t,this.dataset.d)">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
 
 // ── Generic query (for forms without live DB) ──
@@ -1025,16 +1025,17 @@ function openUserMgmt(){
     if(!pending.length) html+='<div style="color:#888;font-size:11px;margin-bottom:10px">None pending.</div>';
     pending.forEach(function(u){
       html+='<div style="background:#fff9e6;border:1px solid #c8b400;padding:8px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'
-        +'<b>'+u.unit+'</b> — '+u.name+' ('+u.station+')<br><span style="font-size:10px;color:#666">'+u.email+'</span><br><br>'
-+'<button onclick="approveUser(\''+u.uid+'\')" style="background:#2e7d32;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;margin-right:6px;font-size:11px">APPROVE</button>'
-+'<button onclick="denyUser(\''+u.uid+'\')" style="background:#cc0000;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;font-size:11px">DENY</button></div>';
+        +'<b>'+u.unit+'</b> -- '+u.name+'<br><span style="font-size:10px;color:#666">'+u.email+'</span><br><br>'
+        +'<button data-uid="'+u.uid+'" onclick="approveUser(this.dataset.uid)" style="background:#2e7d32;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;margin-right:6px;font-size:11px">APPROVE</button>'
+        +'<button data-uid="'+u.uid+'" onclick="denyUser(this.dataset.uid)" style="background:#cc0000;color:#fff;border:none;padding:3px 10px;font-weight:bold;cursor:pointer;font-size:11px">DENY</button></div>';
     });
     html+='<br><b style="color:#2e7d32">APPROVED ('+approved.length+')</b><br><br>';
     approved.forEach(function(u){
+      var isAdm=u.isAdmin===true;
       html+='<div style="background:#f0fff0;border:1px solid #2e7d32;padding:8px;margin-bottom:6px;font-family:Courier New,monospace;font-size:11px">'
-        +'<b>'+u.unit+'</b> — '+u.name+(u.isAdmin?' [ADMIN]':'')+'<br><span style="font-size:10px;color:#666">'+u.email+'</span><br><br>'
-        +'<button onclick="revokeUser(\''+u.uid+'\')" style="background:#cc0000;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer;margin-right:4px">REVOKE</button>'
-        +'<button onclick="toggleAdmin(\''+u.uid+'\','+(!u.isAdmin)+')" style="background:#1565c0;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer">'+(!u.isAdmin?'MAKE ADMIN':'REMOVE ADMIN')+'</button></div>';
+        +'<b>'+u.unit+'</b> -- '+u.name+(isAdm?' [ADMIN]':'')+'<br><span style="font-size:10px;color:#666">'+u.email+'</span><br><br>'
+        +'<button data-uid="'+u.uid+'" onclick="revokeUser(this.dataset.uid)" style="background:#cc0000;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer;margin-right:4px">REVOKE</button>'
+        +'<button data-uid="'+u.uid+'" data-adm="'+(isAdm?'false':'true')+'" onclick="toggleAdmin(this.dataset.uid,this.dataset.adm)" style="background:#1565c0;color:#fff;border:none;padding:3px 8px;font-size:10px;font-weight:bold;cursor:pointer">'+(isAdm?'REMOVE ADMIN':'MAKE ADMIN')+'</button></div>';
     });
     main.innerHTML=html+'</div>';
   });
