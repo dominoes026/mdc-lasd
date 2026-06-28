@@ -337,7 +337,7 @@ var nightMode=false, mdcMuted=false, sessionTimer=null;
 // -- Session --------------------------------
 function saveSession(){ localStorage.setItem('mdcs_sess',JSON.stringify({uid:ME.uid,t:Date.now()})); }
 function clearSession(){ localStorage.removeItem('mdcs_sess'); }
-function sessionExpired(){ try{ var s=JSON.parse(localStorage.getItem('mdcs_sess')||'{}'); return !s.t||(Date.now()-s.t)>SESSION_DURATION; }catch(e){return true;} }
+function sessionExpired(){ try{ var raw=localStorage.getItem('mdcs_sess'); if(!raw) return false; var s=JSON.parse(raw); return !s.t||(Date.now()-s.t)>SESSION_DURATION; }catch(e){return false;} }
 function startSessionTimer(){
   if(sessionTimer) clearTimeout(sessionTimer);
   sessionTimer=setTimeout(function(){ alert('Session expired after '+SESSION_HOURS+' hours. Please sign in again.'); doSignOut(); }, SESSION_DURATION);
