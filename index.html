@@ -11,7 +11,7 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;width:100%;overflow:hidden;background:#1a1a2e;font-family:Arial,sans-serif;font-size:12px}
 
-/* ── Night mode ── */
+/* -- Night mode -- */
 body.night{background:#000}
 body.night .win{background:#111;border-color:#222}
 body.night .win-titlebar{background:linear-gradient(to right,#000,#003300)}
@@ -45,7 +45,7 @@ body.night .grid-btn:hover{background:#002200}
 body.night .obs-input{background:#003300;color:#ff0;border-color:#005500}
 body.night .want-action-btn{border-color:#333}
 
-/* ── Auth ── */
+/* -- Auth -- */
 .auth-wrap{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;width:420px;box-shadow:6px 6px 20px rgba(0,0,0,.8);position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
 .auth-titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;padding:4px 10px;font-size:12px;font-weight:bold}
 .auth-body{padding:24px 28px 20px}
@@ -63,7 +63,7 @@ body.night .want-action-btn{border-color:#333}
 .auth-note{font-size:10px;color:#555;text-align:center;margin-top:8px;line-height:1.5}
 .pending-wrap{background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;width:380px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
 
-/* ── MDC Window — full screen ── */
+/* -- MDC Window  -- full screen -- */
 .win{
   position:fixed;top:0;left:0;right:0;bottom:0;
   background:#d4d0c8;
@@ -71,14 +71,14 @@ body.night .want-action-btn{border-color:#333}
   display:none;flex-direction:column;
 }
 
-/* ── Titlebar ── */
+/* -- Titlebar -- */
 .win-titlebar{background:linear-gradient(to right,#000080,#1084d0);color:#fff;padding:3px 8px;display:flex;align-items:center;justify-content:space-between;user-select:none;height:22px;flex-shrink:0}
 .win-title{font-size:11px;font-weight:bold}
 .win-btns{display:flex;gap:2px}
 .wbtn{width:16px;height:14px;background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;display:flex;align-items:center;justify-content:center;font-size:9px;cursor:pointer;font-weight:bold}
 .wbtn.red{background:#c0392b;color:#fff;font-size:8px}
 
-/* ── Top buttons ── */
+/* -- Top buttons -- */
 .mdc-topbtns{display:flex;background:#1a6fbd;flex-shrink:0}
 .tbtn{flex:1;background:#2196f3;color:#fff;border-top:1px solid #64b5f6;border-left:1px solid #64b5f6;border-right:1px solid #0d47a1;border-bottom:1px solid #0d47a1;padding:4px 2px;text-align:center;font-size:10px;font-weight:bold;cursor:pointer;line-height:1.2;text-transform:uppercase;min-height:46px;display:flex;align-items:center;justify-content:center;white-space:pre-line}
 .tbtn:hover{background:#1976d2}
@@ -86,18 +86,18 @@ body.night .want-action-btn{border-color:#333}
 .tbtn.white-btn{background:#e0e0e0;color:#000;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080}
 .tbtn.white-btn:hover{background:#d0d0d0}
 
-/* ── Shared ── */
+/* -- Shared -- */
 .sec-label{background:#fffacd;border-top:1px solid #c8b400;border-bottom:1px solid #c8b400;padding:1px 4px;font-size:10px;font-weight:bold;text-align:center;color:#000;flex-shrink:0}
 .panel{background:#fff;border:2px inset #808080;overflow-y:auto}
 .detail-text{padding:6px;font-family:'Courier New',monospace;font-size:11px;line-height:1.7;white-space:pre-wrap}
 
-/* ── Main area ── */
+/* -- Main area -- */
 .mdc-content{display:flex;flex:1;overflow:hidden;min-height:0}
 .mdc-left{width:340px;flex-shrink:0;border-right:1px solid #808080;display:flex;flex-direction:column}
 .mdc-mid{flex:1;display:flex;flex-direction:column;overflow:hidden}
 .mdc-right{width:96px;flex-shrink:0;display:flex;flex-direction:column}
 
-/* ── Right sidebar buttons ── */
+/* -- Right sidebar buttons -- */
 .rbtn{flex:1;color:#fff;font-weight:bold;font-size:13px;text-align:center;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid rgba(0,0,0,.3);text-transform:uppercase;line-height:1.2;user-select:none}
 .rbtn:active{filter:brightness(.82)}
 .rbtn.red{background:#cc0000}
@@ -107,7 +107,7 @@ body.night .want-action-btn{border-color:#333}
 .rbtn.blue2{background:#0d47a1;font-size:9px;line-height:1.3}
 .rbtn.purple{background:#6a1b9a}
 
-/* ── Bottom bar ── */
+/* -- Bottom bar -- */
 .mdc-bottombar{display:grid;grid-template-columns:1fr 34px 34px 150px 1fr 1fr;background:#d4d0c8;border-top:1px solid #808080;height:46px;align-items:center;flex-shrink:0}
 .msg-input-box{background:#c8e4ff;border:2px inset #808080;margin:5px;height:32px;display:flex;align-items:center;padding:0 6px}
 .msg-input-box input{border:none;background:transparent;width:100%;font-size:11px;outline:none;color:#000;font-family:'Courier New',monospace}
@@ -115,7 +115,7 @@ body.night .want-action-btn{border-color:#333}
 .unread-box{background:#f9a825;margin:4px;height:36px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid #c8880a;font-weight:bold;font-size:8px;line-height:1.2;color:#000}
 .plain-btn{background:#d4d0c8;border-top:1px solid #fff;border-left:1px solid #fff;border-right:1px solid #808080;border-bottom:1px solid #808080;font-size:9px;font-weight:bold;text-align:center;display:flex;align-items:center;justify-content:center;margin:4px;cursor:pointer;line-height:1.3;color:#000;padding:2px;height:36px}
 
-/* ── Dispatch/Msg rows ── */
+/* -- Dispatch/Msg rows -- */
 .disp-row{display:flex;gap:4px;padding:2px 4px;cursor:pointer;font-size:10px;font-family:'Courier New',monospace;border-bottom:1px solid #f0f0f0;user-select:none}
 .disp-row:hover{background:#c8deff}
 .disp-row.selected{background:#000080;color:#fff}
@@ -124,7 +124,7 @@ body.night .want-action-btn{border-color:#333}
 .msg-row.unread{font-weight:bold}
 .msg-row.is-hit{color:#cc0000;font-weight:bold}
 
-/* ── Forms ── */
+/* -- Forms -- */
 .want-form{padding:8px 10px;font-size:11px;overflow-y:auto;height:100%}
 .want-form b{font-size:12px}
 .want-row{display:flex;align-items:center;gap:4px;margin-bottom:5px;flex-wrap:wrap}
@@ -147,7 +147,7 @@ body.night .want-action-btn{border-color:#333}
 .clear-txt{color:#006600;font-weight:bold}
 .disabled-btn{background:#555!important;cursor:not-allowed!important;color:#aaa!important}
 
-/* ── Popup dialogs ── */
+/* -- Popup dialogs -- */
 .popup-overlay{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:500;pointer-events:none}
 .popup-overlay.active{display:block;pointer-events:all}
 .popup{position:absolute;background:#d4d0c8;border-top:2px solid #fff;border-left:2px solid #fff;border-right:2px solid #404040;border-bottom:2px solid #404040;box-shadow:4px 4px 12px rgba(0,0,0,.5);user-select:none;min-width:420px}
@@ -163,7 +163,7 @@ body.night .want-action-btn{border-color:#333}
 .grid-btn:active{border-top-color:#808080;border-left-color:#808080;border-right-color:#fff;border-bottom-color:#fff;background:#b0aca4}
 .grid-btn.bold{font-size:14px;font-weight:900}
 
-/* ── Scrollbar ── */
+/* -- Scrollbar -- */
 ::-webkit-scrollbar{width:14px;background:#d4d0c8}
 ::-webkit-scrollbar-thumb{background:#808080;border:1px solid #fff}
 ::-webkit-scrollbar-button{background:#d4d0c8;height:14px;border:1px solid #fff}
@@ -180,7 +180,7 @@ body.night .want-action-btn{border-color:#333}
   <div class="popup" id="active-popup" style="top:110px;left:160px">
     <div class="popup-titlebar" id="popup-titlebar" onmousedown="startDrag(event)">
       <span id="popup-title">POPUP</span>
-      <div class="popup-close" onclick="closePopup()">✕</div>
+      <div class="popup-close" onclick="closePopup()">X</div>
     </div>
     <div id="popup-subtitle-bar" class="popup-subtitle" style="display:none"></div>
     <div id="popup-body"></div>
@@ -190,7 +190,7 @@ body.night .want-action-btn{border-color:#333}
 <!-- ════ AUTH ════ -->
 <div id="auth-screen">
   <div class="auth-wrap">
-    <div class="auth-titlebar">MDCS — Mobile Digital Communications System v.PCMSS_20121121</div>
+    <div class="auth-titlebar">MDCS  -- Mobile Digital Communications System v.PCMSS_20121121</div>
     <div class="auth-body">
       <div class="auth-tabs">
         <div class="auth-tab active" id="tab-login" onclick="switchTab('login')">SIGN IN</div>
@@ -227,7 +227,7 @@ body.night .want-action-btn{border-color:#333}
 <!-- ════ PENDING ════ -->
 <div id="pending-screen" style="display:none">
   <div class="pending-wrap">
-    <div class="auth-titlebar">MDCS — Access Pending</div>
+    <div class="auth-titlebar">MDCS  -- Access Pending</div>
     <div style="padding:28px;text-align:center">
       <div style="font-size:30px;margin-bottom:12px">⏳</div>
       <div style="font-weight:bold;font-size:13px;margin-bottom:8px">ACCOUNT PENDING APPROVAL</div>
@@ -245,13 +245,13 @@ body.night .want-action-btn{border-color:#333}
       <span id="mdc-unit-display" style="font-size:10px;color:#adf;font-family:'Courier New',monospace"></span>
       <div class="win-btns">
         <div class="wbtn">_</div>
-        <div class="wbtn">□</div>
-        <div class="wbtn red" onclick="doSignOut()">✕</div>
+        <div class="wbtn">[]</div>
+        <div class="wbtn red" onclick="doSignOut()">X</div>
       </div>
     </div>
   </div>
 
-  <!-- Top status/function buttons — real LASD layout -->
+  <!-- Top status/function buttons  -- real LASD layout -->
   <div class="mdc-topbtns">
     <div class="tbtn" onclick="clearDispWindow()">CLEAR&#10;DISP&#10;WINDOW</div>
     <div class="tbtn" onclick="mdcStatus('ACK')">ACK</div>
@@ -334,7 +334,7 @@ var ME = { uid:'', email:'', name:'', unit:'', station:'', isAdmin:false };
 var S = { selectedDisp:null, unreadCount:0, currentForm:'', lastForm:'', localMsgs:[], localDisps:[], firstLoad:true, listeners:[] };
 var nightMode=false, mdcMuted=false, sessionTimer=null;
 
-// ── Session ────────────────────────────────
+// -- Session --------------------------------
 function saveSession(){ localStorage.setItem('mdcs_sess',JSON.stringify({uid:ME.uid,t:Date.now()})); }
 function clearSession(){ localStorage.removeItem('mdcs_sess'); }
 function sessionExpired(){ try{ var s=JSON.parse(localStorage.getItem('mdcs_sess')||'{}'); return !s.t||(Date.now()-s.t)>SESSION_DURATION; }catch(e){return true;} }
@@ -343,7 +343,7 @@ function startSessionTimer(){
   sessionTimer=setTimeout(function(){ alert('Session expired after '+SESSION_HOURS+' hours. Please sign in again.'); doSignOut(); }, SESSION_DURATION);
 }
 
-// ── Auth state ─────────────────────────────
+// -- Auth state -----------------------------
 auth.onAuthStateChanged(function(user){
   if(!user){ show('auth'); return; }
   if(sessionExpired()){ auth.signOut(); return; }
@@ -369,7 +369,7 @@ function show(s){
   document.getElementById('mdc-win').style.display        = s==='mdc'     ?'flex' :'none';
 }
 
-// ── Auth actions ───────────────────────────
+// -- Auth actions ---------------------------
 function switchTab(t){
   document.getElementById('panel-login').style.display  = t==='login' ?'block':'none';
   document.getElementById('panel-signup').style.display = t==='signup'?'block':'none';
@@ -402,20 +402,20 @@ function doSignOut(){
   auth.signOut();
 }
 
-// ── Launch MDC ─────────────────────────────
+// -- Launch MDC -----------------------------
 function launchMDC(){
   show('mdc');
-  gi('mdc-unit-display').textContent=ME.unit+' — '+ME.name;
+  gi('mdc-unit-display').textContent=ME.unit+'  -- '+ME.name;
   if(ME.unit){
     var uRef=db.ref('units/'+ME.unit);
     uRef.set({unit:ME.unit,name:ME.name,station:ME.station,status:'AVAILABLE',online:true,ts:Date.now()});
     uRef.onDisconnect().update({online:false,status:'OFFLINE'});
   }
   attachListeners();
-  showMain('<div class="detail-text" style="padding:24px;text-align:center;color:#888"><br><br>MDCS — MOBILE DIGITAL COMMUNICATIONS SYSTEM\nv.PCMSS_20121121\n\nMDC13744 — UNIT '+ME.unit+' — '+ME.name+'\n\nSELECT A FUNCTION OR CLICK A DISPATCH CALL\nTO BEGIN</div>');
+  showMain('<div class="detail-text" style="padding:24px;text-align:center;color:#888"><br><br>MDCS  -- MOBILE DIGITAL COMMUNICATIONS SYSTEM\nv.PCMSS_20121121\n\nMDC13744  -- UNIT '+ME.unit+'  -- '+ME.name+'\n\nSELECT A FUNCTION OR CLICK A DISPATCH CALL\nTO BEGIN</div>');
 }
 
-// ── Firebase listeners ─────────────────────
+// -- Firebase listeners ---------------------
 function attachListeners(){
   var l1=db.ref('dispatches').on('value',function(snap){
     S.localDisps=Object.entries(snap.val()||{}).map(function(e){return Object.assign({_key:e[0]},e[1]);}).sort(function(a,b){return b.ts-a.ts;});
@@ -444,12 +444,12 @@ function detachListeners(){
   S.localMsgs=[]; S.localDisps=[]; S.firstLoad=true; S.unreadCount=0;
 }
 
-// ── Push helpers ───────────────────────────
+// -- Push helpers ---------------------------
 function pushShared(obj){ obj.ts=Date.now();obj.date=today();obj.from=ME.unit; db.ref('messages').push(obj); }
 function pushPrivate(obj){ obj.ts=Date.now();obj.date=today(); db.ref('private/'+ME.uid).push(obj); }
 function pushDispatch(obj){ obj.ts=Date.now(); db.ref('dispatches').push(obj); }
 
-// ── Render ─────────────────────────────────
+// -- Render ---------------------------------
 function renderDisp(){
   var el=gi('mdc-disp-index'); if(!el)return;
   el.innerHTML=S.localDisps.map(function(d){
@@ -490,12 +490,12 @@ function showMain(html){ gi('mdc-main').innerHTML=html; gi('mdc-compose-bar').te
 function showQueryResult(r,fb){ gi('mdc-main').innerHTML=r||('<div class="detail-text">'+(fb||'')+'</div>'); }
 function updUnread(){ gi('mdc-unread-count').textContent=S.unreadCount; gi('mdc-unread-box').style.background=S.unreadCount>0?'#f9a825':'#43a047'; }
 
-// ── Audio ──────────────────────────────────
+// -- Audio ----------------------------------
 function playAlert(){ if(mdcMuted)return; try{var a=gi('snd-alert');a.currentTime=0;a.play();}catch(e){} }
 function playDispatch(){ if(mdcMuted)return; try{var a=gi('snd-dispatch');a.currentTime=0;a.play();}catch(e){} }
 function playSend(){  try{var a=gi('snd-send'); a.currentTime=0;a.play();}catch(e){} }
 
-// ── Status functions ───────────────────────
+// -- Status functions -----------------------
 function mdcStatus(code){
   var t=now();
   if(ME.unit) db.ref('units/'+ME.unit).update({status:code,ts:Date.now()});
@@ -505,7 +505,7 @@ function mdcStatus(code){
 function clearDispWindow(){ S.localDisps=[]; gi('mdc-disp-index').innerHTML=''; S.selectedDisp=null; }
 function mdcClearDef(){ showMain(''); S.currentForm=''; gi('mdc-compose-bar').textContent=''; }
 
-// ── POPUP SYSTEM ───────────────────────────
+// -- POPUP SYSTEM ---------------------------
 var dragOX=0,dragOY=0,dragging=false;
 function openPopup(title,subtitle,bodyHtml){
   gi('popup-title').textContent=title;
@@ -525,7 +525,7 @@ function startDrag(e){
 }
 gi('popup-overlay').addEventListener('click',function(e){ if(e.target===gi('popup-overlay'))closePopup(); });
 
-// ── STATUS TXT popup (real LASD shift keys) ──
+// -- STATUS TXT popup (real LASD shift keys) --
 function openStatusTxtPopup(){
   openPopup('STATUS FUNCTIONS','STATUS TXT:',
     '<div class="popup-grid cols3">'
@@ -544,13 +544,13 @@ function openStatusTxtPopup(){
 }
 function mdcEmer(){
   closePopup();
-  pushShared({time:now(),text:'*** EMERGENCY STATUS — UNIT '+ME.unit+' ***'});
+  pushShared({time:now(),text:'*** EMERGENCY STATUS  -- UNIT '+ME.unit+' ***'});
   showMain('<div class="detail-text" style="background:#cc0000;color:#fff;padding:20px;text-align:center"><br><b>*** EMERGENCY STATUS TRANSMITTED ***</b><br><br>UNIT: '+ME.unit+'<br>TIME: '+now()+'<br><br>CONTINUOUSLY TRANSMITTING...<br><br><button onclick="cancelEmer()" style="background:#fff;color:#cc0000;border:none;padding:8px 20px;font-weight:bold;cursor:pointer">CANCEL EMERGENCY</button></div>');
   playAlert(); setTimeout(playAlert,600); setTimeout(playAlert,1200);
 }
-function cancelEmer(){ pushShared({time:now(),text:'EMERGENCY CANCELLED — '+ME.unit}); showMain('<div class="detail-text">EMERGENCY CANCELLED.\n\nTIME: '+now()+'</div>'); }
+function cancelEmer(){ pushShared({time:now(),text:'EMERGENCY CANCELLED  -- '+ME.unit}); showMain('<div class="detail-text">EMERGENCY CANCELLED.\n\nTIME: '+now()+'</div>'); }
 
-// ── OBS form — real LASD mask ──────────────
+// -- OBS form  -- real LASD mask --------------
 function openObsForm(){
   S.currentForm='obs';
   gi('mdc-main').innerHTML='<div class="obs-form">'
@@ -565,12 +565,12 @@ function openObsForm(){
     +'<div class="obs-row"><span class="obs-label">10/98</span><span style="font-size:11px;font-weight:bold;margin-right:4px">TIME</span><input class="obs-input" id="obs-98t" style="width:60px"></div>'
     +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32;max-width:180px" onclick="submitObs()">SEND OBS</div><div class="want-action-btn" style="background:#1976d2;max-width:100px" onclick="clearObs()">CLEAR</div><div class="want-action-btn" style="background:#808080;max-width:100px" onclick="mdcClearDef()">CANCEL</div></div>'
     +'</div>';
-  gi('mdc-compose-bar').textContent='OBS MODE — Fill form and press SEND OBS';
+  gi('mdc-compose-bar').textContent='OBS MODE  -- Fill form and press SEND OBS';
 }
 function submitObs(){
   var loc=gv('obs-loc1'),rmk=gi('obs-rmk').value.trim();
   if(!loc){alert('Enter location.');return;}
-  var msg='OBS — LOC: '+loc+(gv('obs-loc2')?' / '+gv('obs-loc2'):'')
+  var msg='OBS  -- LOC: '+loc+(gv('obs-loc2')?' / '+gv('obs-loc2'):'')
     +(gv('obs-code1')?' CODE: '+gv('obs-code1')+(gv('obs-code2')?' '+gv('obs-code2'):'')+(gv('obs-code3')?' '+gv('obs-code3'):''):'')
     +(gv('obs-veh')?' VEH: '+gv('obs-veh')+' '+gv('obs-st')+(gv('obs-lc')?' LC:'+gv('obs-lc'):'')+(gv('obs-srch')?' SRCH:'+gv('obs-srch'):''):'')
     +(rmk?' RMK: '+rmk:'');
@@ -581,7 +581,7 @@ function submitObs(){
 }
 function clearObs(){ ['obs-loc1','obs-loc2','obs-code1','obs-code2','obs-code3','obs-veh','obs-lc','obs-srch','obs-97t','obs-97d','obs-98t'].forEach(function(id){var e=gi(id);if(e)e.value='';}); gi('obs-rmk').value=''; gi('obs-st').value='CA'; }
 
-// ── INQUIRIES popup (real LASD layout) ────
+// -- INQUIRIES popup (real LASD layout) ----
 function openInquiriesPopup(){
   openPopup('INQUIRIES','',
     '<div class="popup-grid cols4">'
@@ -596,7 +596,7 @@ function openInquiriesPopup(){
     +'</div>');
 }
 
-// ── CALL & LOG popup (real LASD layout) ───
+// -- CALL & LOG popup (real LASD layout) ---
 function openCallLogPopup(){
   openPopup('CALL & LOG FUNCTIONS','',
     '<div class="popup-grid cols4">'
@@ -620,7 +620,7 @@ function mdcChangeLog(){
     +'<br><div style="display:flex;gap:0"><div class="want-action-btn" style="background:#2e7d32" onclick="submitChgl()">SEND CHGL</div></div></div>');
 }
 function submitChgl(){
-  pushShared({time:now(),text:'CHGL — UNIT: '+gv('cl-unit')+' SHIFT: '+gv('cl-shift')+' CLASS: '+gv('cl-class')+' TON: '+gv('cl-ton')+' TOFF: '+gv('cl-toff')+' VEH: '+gv('cl-veh')+' BEG: '+gv('cl-bmile')+' END: '+gv('cl-emile')});
+  pushShared({time:now(),text:'CHGL  -- UNIT: '+gv('cl-unit')+' SHIFT: '+gv('cl-shift')+' CLASS: '+gv('cl-class')+' TON: '+gv('cl-ton')+' TOFF: '+gv('cl-toff')+' VEH: '+gv('cl-veh')+' BEG: '+gv('cl-bmile')+' END: '+gv('cl-emile')});
   showMain('<div class="detail-text">MODIFY LOG SUCCESSFUL\n\nTIME: '+now()+'</div>');
 }
 function mdcWorksheet(){
@@ -648,17 +648,17 @@ function mdcLogOnOff(){
 }
 function submitLogon(){
   var on=gv('lo-on'),off=gv('lo-off');
-  pushShared({time:now(),text:(on?'MDT SIGNED ON':'MDT SIGNED OFF')+' — UNIT: '+gv('lo-unit')+' CLASS: '+gv('lo-class')+' VEH: '+gv('lo-veh')});
+  pushShared({time:now(),text:(on?'MDT SIGNED ON':'MDT SIGNED OFF')+'  -- UNIT: '+gv('lo-unit')+' CLASS: '+gv('lo-class')+' VEH: '+gv('lo-veh')});
   showMain('<div class="detail-text">'+(on?'MDT SIGNED ON':'MDT SIGNED OFF')+'\n\nUNIT: '+gv('lo-unit')+'\nTIME: '+now()+'</div>');
 }
-function mdcSignOn(){ pushShared({time:now(),text:ME.unit+' — SIGN ON'}); showMain('<div class="detail-text"><b>MDT SIGNED ON</b>\n\nUNIT: '+ME.unit+'\nTIME: '+now()+'</div>'); }
+function mdcSignOn(){ pushShared({time:now(),text:ME.unit+'  -- SIGN ON'}); showMain('<div class="detail-text"><b>MDT SIGNED ON</b>\n\nUNIT: '+ME.unit+'\nTIME: '+now()+'</div>'); }
 function mdcSignOff(save){
   if(!save){S.localMsgs=[];renderMsgs();}
-  pushShared({time:now(),text:ME.unit+' — SIGN OFF'+(save?' (SAVE)':'')});
+  pushShared({time:now(),text:ME.unit+'  -- SIGN OFF'+(save?' (SAVE)':'')});
   showMain('<div class="detail-text"><b>MDT SIGNED OFF</b>\n\nUNIT: '+ME.unit+'\nTIME: '+now()+'</div>');
 }
 
-// ── OTHER FUNCTIONS popup (real LASD layout) ──
+// -- OTHER FUNCTIONS popup (real LASD layout) --
 function openOtherPopup(){
   openPopup('Other Functions','',
     '<div class="popup-grid cols4">'
@@ -675,7 +675,7 @@ function openOtherPopup(){
 function mdcDayNight(){ nightMode=!nightMode; document.body.className=nightMode?'night':''; showMain('<div class="detail-text">'+(nightMode?'NIGHT MODE ACTIVE\n\nDisplay darkened for low-light operation.':'DAY MODE ACTIVE\n\nDisplay restored to normal.')+'</div>'); }
 function mdcToggleMute(){ mdcMuted=!mdcMuted; showMain('<div class="detail-text"><b>SOUND '+(mdcMuted?'MUTED':'ENABLED')+'</b>\n\nAudible alerts are '+(mdcMuted?'OFF':'ON')+'.</div>'); }
 function mdcClearRead(){ S.localMsgs=S.localMsgs.filter(function(m){return m.unread;}); renderMsgs(); showMain('<div class="detail-text">READ MESSAGES CLEARED.\n\nTIME: '+now()+'</div>'); }
-function mdcCritical(){ showMain('<div class="detail-text"><b>CRITICAL LOCATIONS — '+ME.station.toUpperCase()+' STATION</b>\n\nHOSPITAL: MLK COMMUNITY HOSPITAL\n  1680 E 120TH ST, LOS ANGELES\n\nJAIL: CENTURY REGIONAL DETENTION\n  11705 S ALAMEDA ST, LYNWOOD\n\nCORONER: DEPT OF MEDICAL EXAMINER\n  1104 N MISSION RD, LOS ANGELES\n\nEMERGENCY: 911\nNON-EMERGENCY: (323) 564-4151</div>'); }
+function mdcCritical(){ showMain('<div class="detail-text"><b>CRITICAL LOCATIONS  -- '+ME.station.toUpperCase()+' STATION</b>\n\nHOSPITAL: MLK COMMUNITY HOSPITAL\n  1680 E 120TH ST, LOS ANGELES\n\nJAIL: CENTURY REGIONAL DETENTION\n  11705 S ALAMEDA ST, LYNWOOD\n\nCORONER: DEPT OF MEDICAL EXAMINER\n  1104 N MISSION RD, LOS ANGELES\n\nEMERGENCY: 911\nNON-EMERGENCY: (323) 564-4151</div>'); }
 function mdcOpenUrn(){
   S.currentForm='urn'; S.lastForm='urn';
   showMain('<div class="want-form"><b>URN NUMBER REQUEST</b><br><br>'
@@ -716,7 +716,7 @@ function submitBooking(){
 }
 function mdcOpenSisi(){
   S.currentForm='sisi';
-  showMain('<div class="want-form"><b>**SISI** — SUBJECT INFORMATION INPUT</b><br><br>'
+  showMain('<div class="want-form"><b>**SISI**  -- SUBJECT INFORMATION INPUT</b><br><br>'
     +'<div class="want-row"><span class="want-label">INC #</span><input class="want-input" id="si-inc" style="width:160px"></div>'
     +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="si-last" style="width:180px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="si-first" style="width:120px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="si-mi" style="width:24px"></div>'
     +'<div class="want-row"><span class="want-label">AKA LAST</span><input class="want-input" id="si-aka" style="width:180px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="si-akaf" style="width:120px"></div>'
@@ -733,12 +733,12 @@ function mdcOpenSisi(){
 function submitSisi(){
   playSend();
   var last=gv('si-last'),first=gv('si-first');
-  pushShared({time:now(),text:'SISI — '+last+', '+first+' INC: '+gv('si-inc')});
+  pushShared({time:now(),text:'SISI  -- '+last+', '+first+' INC: '+gv('si-inc')});
   showMain('<div class="detail-text">SISI INPUT SENT\n\nSUBJECT: '+last+', '+first+'\nTIME: '+now()+'</div>');
 }
 function mdcOpenSisq(){
   S.currentForm='sisq';
-  showMain('<div class="want-form"><b>**SISQ** — SUBJECT INFORMATION QUERY</b><br><br>'
+  showMain('<div class="want-form"><b>**SISQ**  -- SUBJECT INFORMATION QUERY</b><br><br>'
     +'<div class="want-row"><span class="want-label">DATE</span><input class="want-input" id="sq-date" style="width:80px"> <span class="want-label" style="min-width:40px">TIME</span><input class="want-input" id="sq-time" style="width:50px"> <span style="font-size:11px;font-weight:bold">TO</span> <input class="want-input" id="sq-time2" style="width:50px"></div>'
     +'<div class="want-row"><span class="want-label">STA</span><input class="want-input" id="sq-sta" style="width:40px"> <span class="want-label" style="min-width:40px">UNIT</span><input class="want-input" id="sq-unit" style="width:80px"> <span class="want-label" style="min-width:36px">INC #</span><input class="want-input" id="sq-inc" style="width:120px"> <span class="want-label" style="min-width:18px">RD</span><input class="want-input" id="sq-rd" style="width:40px"></div>'
     +'<div class="want-row"><span class="want-label">LAST</span><input class="want-input" id="sq-last" style="width:160px"> <span class="want-label" style="min-width:36px">FIRST</span><input class="want-input" id="sq-first" style="width:120px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="sq-mi" style="width:24px"></div>'
@@ -758,15 +758,15 @@ function submitSisq(){
       var match=Object.values(snap.val()||{}).find(function(c){return last&&(c.name||'').toUpperCase().indexOf(last.toUpperCase())>=0;});
       var t=now();
       if(match){
-        pushPrivate({time:t,from:'SIS',text:'SIS HIT — '+match.name,result:'<div class="detail-text"><b>SIS RESPONSE</b>\n\nNAME: '+match.name+'\nDOB: '+(match.dob||'N/A')+'\nADDR: '+(match.address||'N/A')+'\nSEX: '+(match.sex||'N/A')+'  RACE: '+(match.race||'N/A')+'\nHAIR: '+(match.hair||'N/A')+'  EYES: '+(match.eyes||'N/A')+'\nHGT: '+(match.height||'N/A')+'  WGT: '+(match.weight||'N/A')+'\n\nTIME: '+t+'</div>',isError:false});
+        pushPrivate({time:t,from:'SIS',text:'SIS HIT  -- '+match.name,result:'<div class="detail-text"><b>SIS RESPONSE</b>\n\nNAME: '+match.name+'\nDOB: '+(match.dob||'N/A')+'\nADDR: '+(match.address||'N/A')+'\nSEX: '+(match.sex||'N/A')+'  RACE: '+(match.race||'N/A')+'\nHAIR: '+(match.hair||'N/A')+'  EYES: '+(match.eyes||'N/A')+'\nHGT: '+(match.height||'N/A')+'  WGT: '+(match.weight||'N/A')+'\n\nTIME: '+t+'</div>',isError:false});
       } else {
-        pushPrivate({time:t,from:'SIS',text:'SIS NO RECORD'+(last?' — '+last.toUpperCase():''),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNO SIS RECORD FOUND\n\nTIME: '+t+'</div>',isError:false});
+        pushPrivate({time:t,from:'SIS',text:'SIS NO RECORD'+(last?'  -- '+last.toUpperCase():''),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNO SIS RECORD FOUND\n\nTIME: '+t+'</div>',isError:false});
       }
     });
   },1800);
 }
 
-// ── WANT9 form — real LASD mask ───────────
+// -- WANT9 form  -- real LASD mask -----------
 function mdcOpenWant(){
   S.currentForm='want'; S.lastForm='want';
   gi('mdc-main').innerHTML='<div class="want-form"><b>WANT9 / WPS / NCIC / CWS / CA DMV</b><br><div style="font-weight:bold;font-size:11px;margin:4px 0 8px">USE DL/NO OR NAME:</div>'
@@ -803,24 +803,24 @@ function submitWant(){
         var charges=(rsnap.val()||{}).charges||[];
         var warrants=charges.filter(function(ch){return ch.status==='PENDING';});
         var txt=(warrants.length?'*** HIT *** ':'RECORD FOUND: ')+match.name;
-        var html='<div class="detail-text">'+(warrants.length?'<span class="hit">*** HIT — ACTIVE WARRANT ***</span>':'<span class="clear-txt">*** RECORD FOUND — NO ACTIVE WARRANTS ***</span>')
+        var html='<div class="detail-text">'+(warrants.length?'<span class="hit">*** HIT  -- ACTIVE WARRANT ***</span>':'<span class="clear-txt">*** RECORD FOUND  -- NO ACTIVE WARRANTS ***</span>')
           +'\n\nNAME:  '+match.name+'\nDOB:   '+(match.dob||'N/A')+'\nSEX:   '+(match.sex||'N/A')+'  RACE: '+(match.race||'N/A')+'\nHAIR:  '+(match.hair||'N/A')+'  EYES: '+(match.eyes||'N/A')
           +'\nHGT:   '+(match.height||'N/A')+'  WGT: '+(match.weight||'N/A')+'\nADDR:  '+(match.address||'N/A')
-          +'\n\nCHARGES:\n'+(charges.length?charges.map(function(c){return '  '+c.code+' — '+c.description+' ('+c.status+')';}).join('\n'):'  NONE ON FILE')
-          +(warrants.length?'\n\n<span class="hit">ACTIVE WARRANTS:\n'+warrants.map(function(w){return '  '+w.code+' — '+w.description;}).join('\n')+'</span>':'')
+          +'\n\nCHARGES:\n'+(charges.length?charges.map(function(c){return '  '+c.code+'  -- '+c.description+' ('+c.status+')';}).join('\n'):'  NONE ON FILE')
+          +(warrants.length?'\n\n<span class="hit">ACTIVE WARRANTS:\n'+warrants.map(function(w){return '  '+w.code+'  -- '+w.description;}).join('\n')+'</span>':'')
           +'\n\nTIME: '+t+'</div>';
         pushPrivate({time:t,from:'PERS DATABASE',text:txt,result:html,isError:warrants.length>0,isHit:warrants.length>0});
       });
     } else {
-      pushPrivate({time:t,from:'PERS DATABASE',text:'NO RECORD — '+(last||dl).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNAME: '+(last||dl).toUpperCase()+'\n\nWANTS: NONE  WARRANTS: NONE\nNCIC: NO RECORD  CWS: NO RECORD\n\nTIME: '+t+'</div>',isError:false,isHit:false});
+      pushPrivate({time:t,from:'PERS DATABASE',text:'NO RECORD  -- '+(last||dl).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNAME: '+(last||dl).toUpperCase()+'\n\nWANTS: NONE  WARRANTS: NONE\nNCIC: NO RECORD  CWS: NO RECORD\n\nTIME: '+t+'</div>',isError:false,isHit:false});
     }
   });
 }
 
-// ── VEH form — real LASD mask ──────────────
+// -- VEH form  -- real LASD mask --------------
 function mdcOpenVeh(){
   S.currentForm='veh'; S.lastForm='veh';
-  showMain('<div class="want-form"><b>VEH — VEHICLE INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+  showMain('<div class="want-form"><b>VEH  -- VEHICLE INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
     +'<div class="want-row"><span class="want-label">LIC #</span><input class="want-input" id="v-lic" style="width:100px"> <span class="want-label" style="min-width:18px">ST</span><input class="want-input" id="v-st" style="width:28px" value="CA"> <span class="want-label" style="min-width:60px">LIC CODE</span><input class="want-input" id="v-lc" style="width:24px"></div>'
     +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="v-dmvwip"> <label style="font-size:11px;margin-left:4px">DMV WORK IN PROCESS FILE</label></div>'
     +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="v-pvi"> <label style="font-size:11px;margin-left:4px">PARKING VIOLATION INFO</label></div>'
@@ -838,21 +838,21 @@ function submitVeh(){
     var t=now(); var html,txt;
     if(vehs.length){
       var v=vehs[0];
-      txt=(v.stolen?'HIT — STOLEN: ':'CLEAR — ')+lic.toUpperCase();
-      html='<div class="detail-text">'+(v.stolen?'<span class="hit">*** STOLEN VEHICLE — BOLO ACTIVE ***</span>':'<span class="clear-txt">*** VEHICLE — NO WANTS ***</span>')
+      txt=(v.stolen?'HIT  -- STOLEN: ':'CLEAR  -- ')+lic.toUpperCase();
+      html='<div class="detail-text">'+(v.stolen?'<span class="hit">*** STOLEN VEHICLE  -- BOLO ACTIVE ***</span>':'<span class="clear-txt">*** VEHICLE  -- NO WANTS ***</span>')
         +'\n\nPLATE: '+v.plate+' '+v.state+'\nYEAR:  '+v.year+'  MAKE: '+v.make+'  MODEL: '+v.model+'\nCOLOR: '+v.color
         +'\n\nREG:   '+v.name+'\nSTATUS: '+(v.stolen?'<span class="hit">STOLEN</span>':'<span class="clear-txt">CLEAR</span>')+'\n\nTIME: '+t+'</div>';
       pushPrivate({time:t,from:'VEH DATABASE',text:txt,result:html,isError:v.stolen,isHit:v.stolen});
     } else {
-      pushPrivate({time:t,from:'VEH DATABASE',text:'NO RECORD — '+(lic||vin).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nPLATE: '+(lic||vin).toUpperCase()+'\n\nNOT REGISTERED IN SYSTEM\n\nTIME: '+t+'</div>',isError:false,isHit:false});
+      pushPrivate({time:t,from:'VEH DATABASE',text:'NO RECORD  -- '+(lic||vin).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nPLATE: '+(lic||vin).toUpperCase()+'\n\nNOT REGISTERED IN SYSTEM\n\nTIME: '+t+'</div>',isError:false,isHit:false});
     }
   });
 }
 
-// ── VEH REG form ───────────────────────────
+// -- VEH REG form ---------------------------
 function mdcOpenVehReg(){
   S.currentForm='vehreg'; S.lastForm='vehreg';
-  showMain('<div class="want-form"><b>REG / DMV — VEHICLE REGISTRATION</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+  showMain('<div class="want-form"><b>REG / DMV  -- VEHICLE REGISTRATION</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
     +'<div class="want-row"><span class="want-label">CA LIC NO</span><input class="want-input" id="vr-lic" style="width:100px"> <span class="want-label" style="min-width:60px">LIC CODE</span><input class="want-input" id="vr-lc" style="width:24px"></div>'
     +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="vr-wip"> <label style="font-size:11px;margin-left:4px">DMV WORK IN PROCESS FILE</label></div>'
     +'<div class="want-row"><span class="want-label">VIN / HULL</span><input class="want-input" id="vr-vin" style="width:200px"></div>'
@@ -873,19 +873,19 @@ function submitVehReg(){
     });
     var t=now();
     if(vehs.length){
-      var txt='VEH REG — '+(last||lic).toUpperCase()+' ('+vehs.length+' vehicle'+(vehs.length>1?'s':'')+')';
-      var html='<div class="detail-text"><b>VEHICLE REGISTRATION RESULTS</b>\n\nQUERY: '+(last||lic).toUpperCase()+'\nVEHICLES ON FILE: '+vehs.length+'\n\n'+vehs.map(function(v){return 'PLATE: '+v.plate+' '+v.state+'\n  '+v.year+' '+v.make+' '+v.model+' — '+v.color+'\n  REG: '+v.name+'\n  STATUS: '+(v.stolen?'STOLEN':'CLEAR');}).join('\n\n')+'\n\nTIME: '+t+'</div>';
+      var txt='VEH REG  -- '+(last||lic).toUpperCase()+' ('+vehs.length+' vehicle'+(vehs.length>1?'s':'')+')';
+      var html='<div class="detail-text"><b>VEHICLE REGISTRATION RESULTS</b>\n\nQUERY: '+(last||lic).toUpperCase()+'\nVEHICLES ON FILE: '+vehs.length+'\n\n'+vehs.map(function(v){return 'PLATE: '+v.plate+' '+v.state+'\n  '+v.year+' '+v.make+' '+v.model+'  -- '+v.color+'\n  REG: '+v.name+'\n  STATUS: '+(v.stolen?'STOLEN':'CLEAR');}).join('\n\n')+'\n\nTIME: '+t+'</div>';
       pushPrivate({time:t,from:'VEH REG DATABASE',text:txt,result:html,isError:false});
     } else {
-      pushPrivate({time:t,from:'VEH REG DATABASE',text:'NO VEHICLES — '+(last||lic).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNO VEHICLES REGISTERED UNDER: '+(last||lic).toUpperCase()+'\n\nTIME: '+t+'</div>',isError:false});
+      pushPrivate({time:t,from:'VEH REG DATABASE',text:'NO VEHICLES  -- '+(last||lic).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNO VEHICLES REGISTERED UNDER: '+(last||lic).toUpperCase()+'\n\nTIME: '+t+'</div>',isError:false});
     }
   });
 }
 
-// ── DMV form — real LASD mask ──────────────
+// -- DMV form  -- real LASD mask --------------
 function mdcOpenDmv(){
   S.currentForm='dmv'; S.lastForm='dmv';
-  showMain('<div class="want-form"><b>DRIVER / DMV — DRIVER HISTORY INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+  showMain('<div class="want-form"><b>DRIVER / DMV  -- DRIVER HISTORY INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
     +'<div class="want-row"><span class="want-label">DRIVERS LIC #</span><input class="want-input" id="d-dl" style="width:120px"></div>'
     +'<div class="want-row"><span class="want-label">LAST NAME</span><input class="want-input" id="d-last" style="width:180px"></div>'
     +'<div class="want-row"><span class="want-label">FIRST</span><input class="want-input" id="d-first" style="width:140px"> <span class="want-label" style="min-width:18px">MI</span><input class="want-input" id="d-mi" style="width:24px"></div>'
@@ -903,17 +903,17 @@ function submitDmv(){
     var match=Object.values(snap.val()||{}).find(function(c){return last?(c.name||'').toUpperCase().indexOf(last.toUpperCase())>=0:false;});
     var t=now();
     if(match){
-      pushPrivate({time:t,from:'DMV',text:'DMV RECORD — '+match.name,result:'<div class="detail-text">DMV RESPONSE:\n\nNAME:  '+match.name+'\nDOB:   '+(match.dob||'N/A')+'\nADDR:  '+(match.address||'N/A')+'\nSEX:   '+(match.sex||'N/A')+'  RACE: '+(match.race||'N/A')+'\nHGT:   '+(match.height||'N/A')+'  WGT: '+(match.weight||'N/A')+'\n\n<span class="clear-txt">STATUS: ON FILE</span>\n\nTIME: '+t+'</div>',isError:false});
+      pushPrivate({time:t,from:'DMV',text:'DMV RECORD  -- '+match.name,result:'<div class="detail-text">DMV RESPONSE:\n\nNAME:  '+match.name+'\nDOB:   '+(match.dob||'N/A')+'\nADDR:  '+(match.address||'N/A')+'\nSEX:   '+(match.sex||'N/A')+'  RACE: '+(match.race||'N/A')+'\nHGT:   '+(match.height||'N/A')+'  WGT: '+(match.weight||'N/A')+'\n\n<span class="clear-txt">STATUS: ON FILE</span>\n\nTIME: '+t+'</div>',isError:false});
     } else {
-      pushPrivate({time:t,from:'DMV',text:'DMV NO RECORD — '+(last||dl).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNAME: '+(last||dl).toUpperCase()+'\n\nNOT ON FILE IN DMV DATABASE\n\nTIME: '+t+'</div>',isError:false});
+      pushPrivate({time:t,from:'DMV',text:'DMV NO RECORD  -- '+(last||dl).toUpperCase(),result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\nNAME: '+(last||dl).toUpperCase()+'\n\nNOT ON FILE IN DMV DATABASE\n\nTIME: '+t+'</div>',isError:false});
     }
   });
 }
 
-// ── PROP9 form ─────────────────────────────
+// -- PROP9 form -----------------------------
 function mdcOpenProp(){
   S.currentForm='prop'; S.lastForm='prop';
-  showMain('<div class="want-form"><b>PROP9 / APS / NCIC — PROPERTY INQUIRY</b><br><br>'
+  showMain('<div class="want-form"><b>PROP9 / APS / NCIC  -- PROPERTY INQUIRY</b><br><br>'
     +'<div class="want-row"><span class="want-label">ARTICLE</span><input class="want-input" id="pr-art" style="width:80px"> <span class="want-label" style="min-width:50px">BRAND</span><input class="want-input" id="pr-brand" style="width:100px"></div>'
     +'<div class="want-row"><span class="want-label">SER #</span><input class="want-input" id="pr-ser" style="width:180px"></div>'
     +'<div class="want-row"><span class="want-label">OR OAN</span><input class="want-input" id="pr-oan" style="width:180px"></div>'
@@ -923,10 +923,10 @@ function mdcOpenProp(){
     +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#00838f" data-t="PROPERTY" data-d="APS/NCIC PROPERTY" onclick="submitGenericQuery(this.dataset.t,this.dataset.d)">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
 
-// ── GUN form ───────────────────────────────
+// -- GUN form -------------------------------
 function mdcOpenGun(){
   S.currentForm='gun'; S.lastForm='gun';
-  showMain('<div class="want-form"><b>GUN / AFS / NCIC — FIREARMS INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+  showMain('<div class="want-form"><b>GUN / AFS / NCIC  -- FIREARMS INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
     +'<div style="font-size:11px;font-weight:bold;margin-bottom:6px">SERIAL # SEARCH:</div>'
     +'<div class="want-row"><span class="want-label">SER #</span><input class="want-input" id="gn-ser" style="width:200px"></div>'
     +'<div class="want-row"><span class="want-label">(OPT) TYPE</span><input class="want-input" id="gn-type" style="width:24px"> <span class="want-label" style="min-width:36px">MAKE</span><input class="want-input" id="gn-make" style="width:60px"> <span class="want-label" style="min-width:50px">CALIBER</span><input class="want-input" id="gn-cal" style="width:50px"> <span class="want-label" style="min-width:80px">DOC CODE</span><input class="want-input" id="gn-doc" style="width:24px"></div>'
@@ -937,10 +937,10 @@ function mdcOpenGun(){
     +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#6a1b9a" data-t="FIREARM" data-d="AFS/NCIC FIREARMS" onclick="submitGenericQuery(this.dataset.t,this.dataset.d)">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
 
-// ── BOAT form ──────────────────────────────
+// -- BOAT form ------------------------------
 function mdcOpenBoat(){
   S.currentForm='boat'; S.lastForm='boat';
-  showMain('<div class="want-form"><b>BOAT / ABS / DMV / NCIC — VESSEL INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
+  showMain('<div class="want-form"><b>BOAT / ABS / DMV / NCIC  -- VESSEL INQUIRY</b><br><div style="font-size:11px;font-weight:bold;margin:4px 0 8px">USE ONE ONLY:</div>'
     +'<div style="font-size:11px;font-weight:bold;margin-bottom:4px">CA REGISTRATION AND STOLEN:</div>'
     +'<div class="want-row"><span class="want-label">CA REG #</span><span style="font-size:11px;margin-right:4px">CF</span><input class="want-input" id="bt-ca" style="width:100px"></div>'
     +'<div style="font-size:11px;font-weight:bold;margin:6px 0 4px">STOLEN INQUIRY:</div>'
@@ -951,10 +951,10 @@ function mdcOpenBoat(){
     +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#2e7d32" data-t="VESSEL" data-d="ABS/DMV/NCIC BOAT" onclick="submitGenericQuery(this.dataset.t,this.dataset.d)">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
 
-// ── BIKE9 form ─────────────────────────────
+// -- BIKE9 form -----------------------------
 function mdcOpenBike(){
   S.currentForm='bike'; S.lastForm='bike';
-  showMain('<div class="want-form"><b>BIKE9 / APS / NCIC — BICYCLE INQUIRY</b><br><br>'
+  showMain('<div class="want-form"><b>BIKE9 / APS / NCIC  -- BICYCLE INQUIRY</b><br><br>'
     +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="bk-boys"> <label style="font-size:11px;margin-left:4px">BOYS</label></div>'
     +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="bk-girls"> <label style="font-size:11px;margin-left:4px">GIRLS</label></div>'
     +'<div class="want-row" style="margin-left:6px"><input type="checkbox" id="bk-undef"> <label style="font-size:11px;margin-left:4px">UNDEFINED</label></div>'
@@ -965,18 +965,18 @@ function mdcOpenBike(){
     +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#1565c0" data-t="BICYCLE" data-d="APS/NCIC BICYCLE" onclick="submitGenericQuery(this.dataset.t,this.dataset.d)">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
 }
 
-// ── Generic query (for forms without live DB) ──
+// -- Generic query (for forms without live DB) --
 function submitGenericQuery(type,dbName){
   playSend(); showMain('<div class="detail-text">QUERYING '+dbName+'...\nPlease wait...</div>');
   setTimeout(function(){
     var t=now();
-    pushPrivate({time:t,from:dbName,text:'NO RECORD — '+type+' NOT ON STOLEN FILE',result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\n'+type+': NOT ON STOLEN FILE\n\nTIME: '+t+'</div>',isError:false,isHit:false});
+    pushPrivate({time:t,from:dbName,text:'NO RECORD  -- '+type+' NOT ON STOLEN FILE',result:'<div class="detail-text"><span class="clear-txt">*** NO RECORD ***</span>\n\n'+type+': NOT ON STOLEN FILE\n\nTIME: '+t+'</div>',isError:false,isHit:false});
   },1800);
 }
 
-// ── NEW MESSAGE ─────────────────────────────
+// -- NEW MESSAGE -----------------------------
 function mdcOpenNewMsg(){
-  showMain('<div class="want-form"><b>NEW MESSAGE</b><br><div style="font-size:10px;color:#666;margin:4px 0 8px">Format: TO/UNIT/TEXT — Example: TO/136A/10-22</div>'
+  showMain('<div class="want-form"><b>NEW MESSAGE</b><br><div style="font-size:10px;color:#666;margin:4px 0 8px">Format: TO/UNIT/TEXT  -- Example: TO/136A/10-22</div>'
     +'<div class="want-row"><span class="want-label">TO:</span><input class="want-input" id="nm-to" style="width:200px" placeholder="UNIT / GROUP / STATION"></div>'
     +'<div class="want-row"><span class="want-label">MSG:</span><textarea id="nm-msg" style="background:#00bcd4;border:2px inset #006080;width:380px;height:70px;font-family:Courier New,monospace;font-size:11px;padding:4px;outline:none;color:#000"></textarea></div>'
     +'<br><div style="display:flex;gap:0"><div class="want-action-btn" onclick="sendNewMsg()">SEND</div><div class="want-action-btn" style="background:#808080;max-width:100px" onclick="mdcClearDef()">CANCEL</div></div></div>');
@@ -988,7 +988,7 @@ function sendNewMsg(){
   showMain('<div class="detail-text"><b>MESSAGE SENT</b>\n\nTO: '+toVal+'\nMSG: '+msg.value+'\nTIME: '+now()+'</div>');
 }
 
-// ── SEND (bottom bar) ──────────────────────
+// -- SEND (bottom bar) ----------------------
 function mdcDoSend(){
   var inp=gi('mdc-msg-input'); var v=inp.value.trim(); if(!v)return;
   var queryForms=['want','veh','dmv','gun','prop','boat','bike','vehreg','urn','booking','sisi','sisq'];
@@ -1013,7 +1013,7 @@ function mdcOpenLastForm(){
 }
 function eraseForm(){ document.querySelectorAll('.want-input,.want-select,.obs-rmk').forEach(function(e){if(e.id&&e.id.indexOf('-st')>=0||e.id&&e.id.indexOf('-dlst')>=0||e.id&&e.id.indexOf('v-st')>=0)e.value='CA'; else if(e.tagName!=='SELECT')e.value=''; else e.selectedIndex=0;}); }
 
-// ── User management (admin) ────────────────
+// -- User management (admin) ----------------
 function openUserMgmt(){
   var main=gi('mdc-main'); if(!main)return;
   if(!ME.isAdmin){showMain('<div class="detail-text">ACCESS DENIED.</div>');return;}
@@ -1046,7 +1046,7 @@ function denyUser(uid){ db.ref('users/'+uid).update({status:'denied'}).then(func
 function revokeUser(uid){ if(confirm('Revoke access? User will be kicked out instantly.')) db.ref('users/'+uid).update({status:'pending'}).then(function(){openUserMgmt();}); }
 function toggleAdmin(uid,v){ db.ref('users/'+uid).update({isAdmin:v}).then(function(){openUserMgmt();}); }
 
-// ── Utilities ──────────────────────────────
+// -- Utilities ------------------------------
 function gi(id){ return document.getElementById(id); }
 function gv(id){ var e=gi(id); return e?e.value.trim():''; }
 function now(){ var n=new Date(); return n.toLocaleTimeString('en-US',{hour12:false,hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
