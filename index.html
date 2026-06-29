@@ -349,8 +349,8 @@ function startSessionTimer(){
 
 // -- Auth state -----------------------------
 auth.onAuthStateChanged(function(user){
-  if(!user){ show('auth'); return; }
-  if(sessionExpired()){ auth.signOut(); return; }
+  if(!user){ _signingIn=false; show('auth'); return; }
+  if(sessionExpired()){ clearSession(); auth.signOut(); return; }
   db.ref('users/'+user.uid).once('value',function(snap){
     var p=snap.val(); if(!p){ doSignOut(); return; }
     if(p.status!=='approved'){ show('pending'); return; }
@@ -362,6 +362,7 @@ auth.onAuthStateChanged(function(user){
       }
     });
     db.ref('users/'+user.uid+'/isAdmin').on('value',function(as){ ME.isAdmin=as.val()===true||ADMIN_EMAILS.indexOf(ME.email)>=0; });
+    _signingIn=false;
     saveSession(); startSessionTimer();
     launchMDC();
   });
@@ -380,10 +381,17 @@ function switchTab(t){
   document.getElementById('tab-login').className  ='auth-tab'+(t==='login' ?' active':'');
   document.getElementById('tab-signup').className ='auth-tab'+(t==='signup'?' active':'');
 }
+var _signingIn=false;
 function doSignIn(){
+  if(_signingIn) return;
   var e=gi('li-email').value.trim(),p=gi('li-pass').value,err=gi('li-err');
   err.textContent=''; if(!e||!p){err.textContent='Enter email and password.';return;}
-  auth.signInWithEmailAndPassword(e,p).catch(function(){err.textContent='Invalid email or password.';});
+  _signingIn=true;
+  gi('li-err').textContent='Signing in...';
+  auth.signInWithEmailAndPassword(e,p).catch(function(){
+    err.textContent='Invalid email or password.';
+    _signingIn=false;
+  });
 }
 function doSignUp(){
   var e=gi('su-email').value.trim(),p=gi('su-pass').value,n=gi('su-dname').value.trim().toUpperCase(),u=gi('su-unit').value.trim().toUpperCase(),st=gi('su-station').value;
@@ -396,7 +404,7 @@ function doSignUp(){
     err.textContent=ex.code==='auth/email-already-in-use'?'Email already registered.':ex.message;
   });
 }
-function doSignOut(){
+function doSignOut(){ _signingIn=false;
   clearSession(); if(sessionTimer)clearTimeout(sessionTimer);
   closePopup();
   if(ME.uid){ db.ref('users/'+ME.uid+'/status').off(); db.ref('users/'+ME.uid+'/isAdmin').off(); }
