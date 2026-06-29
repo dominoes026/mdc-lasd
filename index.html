@@ -289,9 +289,9 @@ body.night .want-action-btn{border-color:#333}
 
     <!-- Right sidebar -->
     <div class="mdc-right">
-      <div class="rbtn red"    onclick="mdcOpenVeh()">VEH</div>
-      <div class="rbtn green"  onclick="mdcOpenWant()">WANT</div>
-      <div class="rbtn yellow" onclick="mdcOpenDmv()">DMV</div>
+      <div class="rbtn red"    onclick="playVehicle();mdcOpenVeh()">VEH</div>
+      <div class="rbtn green"  onclick="playWant();mdcOpenWant()">WANT</div>
+      <div class="rbtn yellow" onclick="playDmv();mdcOpenDmv()">DMV</div>
       <div class="rbtn blue"   onclick="openInquiriesPopup()">INQUIRIES</div>
       <div class="rbtn blue2"  onclick="openCallLogPopup()">CALL &amp; LOG<br>FUNCTIONS</div>
       <div class="rbtn blue2"  onclick="openOtherPopup()">OTHER<br>FUNCTIONS</div>
@@ -808,13 +808,18 @@ function mdcOpenWant(){
     +'<div class="want-note">(OPTIONAL)</div>'
     +'<div class="want-row"><span class="want-label">AKA LAST</span><input class="want-input" id="w-aka-last" style="width:160px"></div>'
     +'<div class="want-row"><span class="want-label">FIRST</span><input class="want-input" id="w-aka-first" style="width:130px"> <span class="want-label" style="min-width:28px">MID</span><input class="want-input" id="w-aka-mid" style="width:30px"></div>'
-    +'<div class="want-row"><span class="want-label">WARR/COPS #</span><input class="want-input" id="w-warr" style="width:160px"></div>'
-    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#2e7d32" onclick="submitWant()">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>';
+    +'<div class="want-row"><span class="want-label">WARR/COPS #</span><input class="want-input" id="w-warr" style="width:160px"></div>';
+}
+
+function civiliansPermErr(){
+  var t=now();
+  showMain('<div class="detail-text" style="color:#cc0000"><b>PERMISSION DENIED</b>\n\nFix Firebase Rules:\n  Firebase Console -> Realtime Database -> Rules\n  Set civilians: .read: auth != null\n\nTIME: '+t+'</div>');
 }
 function submitWant(){
   var last=gv('w-last'),dl=gv('w-dl'); if(!last&&!dl){alert('Enter Last Name or DL#.');return;}
   playSend(); showMain('<div class="detail-text">QUERYING WANTS/WPS/NCIC/CWS/CA DMV...\n\nPlease wait...</div>');
   db.ref('civilians').once('value',function(snap){
+    if(!snap.val()&&snap.val()!==false){return;}
     var civs=Object.values(snap.val()||{});
     var match=civs.find(function(c){
       if(!c.name)return false;
@@ -851,8 +856,7 @@ function mdcOpenVeh(){
     +'<div class="want-row"><span class="want-label">VIN #</span><input class="want-input" id="v-vin" style="width:200px"></div>'
     +'<div class="want-row"><span class="want-label">ENG #</span><input class="want-input" id="v-eng" style="width:200px"></div>'
     +'<div class="want-row"><span class="want-label">MAKE</span><input class="want-input" id="v-make" style="width:100px"> <span style="font-size:10px;color:#666">(OPTIONAL WITH VIN)</span></div>'
-    +'<div class="want-row"><span class="want-label">SVRN #</span><input class="want-input" id="v-svrn" style="width:100px"></div>'
-    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#cc0000" onclick="submitVeh()">SUBMIT QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
+    +'<div class="want-row"><span class="want-label">SVRN #</span><input class="want-input" id="v-svrn" style="width:100px"></div>');
 }
 function submitVeh(){
   var lic=gv('v-lic'),vin=gv('v-vin'); if(!lic&&!vin){alert('Enter plate or VIN.');return;}
@@ -917,8 +921,7 @@ function mdcOpenDmv(){
     +'<div style="font-size:11px;color:#666;margin-bottom:6px">( OPTIONAL )</div>'
     +'<div class="want-row"><span class="want-label">DOB</span><input class="want-input dark" id="d-dob" style="width:80px" placeholder="MM/DD/YY"> <span class="want-label" style="min-width:50px">OR AGE</span><input class="want-input" id="d-age" style="width:36px"></div>'
     +'<div class="want-row"><span class="want-label">ADDRESS</span><input class="want-input" id="d-addr" style="width:200px"></div>'
-    +'<div class="want-row"><span class="want-label">CITY</span><input class="want-input" id="d-city" style="width:160px"></div>'
-    +'<div style="display:flex;gap:0;margin-top:8px"><div class="want-action-btn" style="background:#f9a825;color:#000" onclick="submitDmv()">SUBMIT DMV QUERY</div><div class="want-action-btn" style="background:#1976d2;max-width:120px" onclick="eraseForm()">ERASE DATA</div></div></div>');
+    +'<div class="want-row"><span class="want-label">CITY</span><input class="want-input" id="d-city" style="width:160px"></div>');
 }
 function submitDmv(){
   var dl=gv('d-dl'),last=gv('d-last'); if(!dl&&!last){alert('Enter DL# or Last Name.');return;}
@@ -1017,10 +1020,9 @@ function mdcDoSend(){
   var inp=gi('mdc-msg-input'); var v=inp.value.trim(); if(!v)return;
   var queryForms=['want','veh','dmv','gun','prop','boat','bike','vehreg','urn','booking','sisi','sisq'];
   if(queryForms.indexOf(S.currentForm)>=0){
-    if(S.currentForm==='want') playWant();
-    else if(S.currentForm==='veh') playVehicle();
-    else if(S.currentForm==='dmv') playDmv();
-    else playSend();
+    if(S.currentForm==='want'){playWant();submitWant();inp.value='';return;}
+    else if(S.currentForm==='veh'){playVehicle();submitVeh();inp.value='';return;}
+    else if(S.currentForm==='dmv'){playDmv();submitDmv();inp.value='';return;}
     playSend(); showMain('<div class="detail-text">QUERYING...\nPlease wait...</div>');
     setTimeout(function(){pushPrivate({time:now(),from:'DATABASE',text:'QUERY: '+v.toUpperCase(),result:'<div class="detail-text">QUERY: '+v.toUpperCase()+'\n\nNO RECORD FOUND</div>',isError:false});},1800);
   } else {
